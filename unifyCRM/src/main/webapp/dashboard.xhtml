@@ -1,0 +1,261 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">仪表盘</ui:define>
+
+    <ui:define name="content">
+        <div class="dashboard">
+			<h:form id="rqxzForm">
+            <div class="ui-g">
+                <div class="col-12 lg:col-12 product-statistics">
+	                <p:panel header="销售简报"  toggleSpeed="500"
+	                	closeSpeed="500" widgetVar="panel">
+							<div class="ui-g overview-boxes">
+				                <div class="col-12 md:col-12 lg:col-4">
+				                    <div class="widget-overview overview-box-1">
+				                        <div class="overview-box-title">
+				                            <span>合同数</span>
+				                        </div>
+				                        <div class="overview-box-count">
+				                        	<h:outputText value="#{reportController.selectedReport.contractNumber}"  />
+				                        </div>
+				                    </div>
+				                </div>
+				                <div class="col-12 md:col-12 lg:col-4">
+				                    <div class="widget-overview overview-box-1">
+				                        <div class="overview-box-title">
+				                            <span>合同总金额</span>
+				                        </div>
+				                        <div class="overview-box-count">
+				                        	￥<h:outputText value="#{reportController.selectedReport.contractAmount}"  />
+				                        </div>
+				                    </div>
+				                </div>
+				                <div class="col-12 md:col-12 lg:col-4">
+				                    <div class="widget-overview overview-box-1">
+				                        <div class="overview-box-title">
+				                            <span>已回款金额</span>
+				                        </div>
+				                        <div class="overview-box-count">￥<h:outputText value="#{reportController.selectedReport.amountPaidBack}"  /></div>
+				                    </div>
+				                </div>
+				                <div class="col-12 md:col-12 lg:col-4">
+				                    <div class="widget-overview overview-box-2">
+				                        <div class="overview-box-title">
+				                            <span>赢单数</span>
+				                        </div>
+				                        <div class="overview-box-count">
+				                        	<h:outputText value="#{reportController.selectedReport.signTheSingular} "  />
+				                        </div>
+				                    </div>
+				                </div>
+				                <div class="col-12 md:col-12 lg:col-4">
+				                    <div class="widget-overview overview-box-2">
+				                        <div class="overview-box-title">
+				                            <span>赢单金额</span>
+				                        </div>
+				                        <div class="overview-box-count">
+				                        	￥<h:outputText value="#{reportController.selectedReport.signTheBillAmount}"  />
+				                        </div>
+				                    </div>
+				                </div>
+				                <div class="col-12 md:col-12 lg:col-4">
+				                    <div class="widget-overview overview-box-2">
+				                        <div class="overview-box-title">
+				                            <span>计划回款金额</span>
+				                        </div>
+				                        <div class="overview-box-count">
+				                        	￥<h:outputText value="#{reportController.selectedReport.amountOfPlannedPaymentCollection}"  />
+				                        </div>
+				                    </div>
+				                </div>
+				                <div class="col-12 md:col-12 lg:col-4">
+				                    <div class="widget-overview overview-box-3">
+				                        <div class="overview-box-title">
+				                            <span>线索数</span>
+				                        </div>
+				                        <div class="overview-box-count">
+				                        	<h:outputText value="#{reportController.selectedReport.clueNumber}"  /></div>
+				                    </div>
+				                </div>
+				                <div class="col-12 md:col-12 lg:col-4">
+				                    <div class="widget-overview overview-box-3">
+				                        <div class="overview-box-title">
+				                            <span>客户数</span>
+				                        </div>
+				                        <div class="overview-box-count">
+				                        	<h:outputText value="#{reportController.selectedReport.customerNumber}"  /></div>
+				                    </div>
+				                </div>
+				                <div class="col-12 md:col-12 lg:col-4">
+				                    <div class="widget-overview overview-box-3">
+				                        <div class="overview-box-title">
+				                            <span>商机数</span>
+				                        </div>
+				                        <div class="overview-box-count">
+				                        	<h:outputText value="#{reportController.selectedReport.businessOpportunitiesNumber}"  /></div>
+				                    </div>
+				                </div>
+				            </div>
+				    </p:panel>
+                </div>
+            </div>
+            
+            <div class="ui-g">
+                
+                <div class="col-12 lg:col-6 product-statistics">
+                <p:panel header="部门荣誉榜"  toggleSpeed="500"
+                	closeSpeed="500" widgetVar="panel">
+						<div class="ui-g overview-boxes">
+			                <div class="col-12 md:col-12 lg:col-12">
+								<div class="field col-12 md:col-4">
+									 <p:selectOneMenu 
+										value="#{reportController.selectedReport.resultsType}" required="false">
+							            <f:selectItem itemLabel="合同金额" itemValue="合同金额"/>
+							            <f:selectItem itemLabel="合同回款金额" itemValue="合同回款金额"/>
+							            <f:selectItem itemLabel="合同数" itemValue="合同"/>	
+							            <f:selectItem itemLabel="赢单商机数" itemValue="赢单商机"/>	
+							            <f:selectItem itemLabel="赢单商机金额" itemValue="赢单商机金额"/>	
+								        <p:ajax update="datalists" listener="#{reportController.calcs}" />
+									</p:selectOneMenu>
+								</div>
+				                <div class="col-12 md:col-12 lg:col-12">
+								<p:dataTable id="datalists" var="item"
+									value="#{reportController.itemsDepartmentHonor}"
+									selection="#{reportController.selectedReport}" editable="true"
+									style="margin-bottom:20px" rowKey="#{item.id}" reflow="true"
+									resizableColumns="true" showGridlines="true"
+									scrollHeight="100%"  emptyMessage="无记录">
+									<p:column sortBy="#{item.ranking}" filterBy="#{item.ranking}"
+										filterMatchMode="contains" >
+										<f:facet name="header">
+											<h:outputText value="排名" />
+										</f:facet>
+										<h:outputText value="#{item.ranking}" />
+									</p:column>
+									<p:column sortBy="#{item.departmentName}" filterBy="#{item.departmentName}"
+										filterMatchMode="contains" >
+										<f:facet name="header">
+											<h:outputText value="部门" />
+										</f:facet>
+										<h:outputText value="#{item.departmentName}" />
+									</p:column>
+									<p:column sortBy="#{item.aggregateAmount}" filterBy="#{item.aggregateAmount}"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="业绩类型" />
+										</f:facet>
+										<h:outputText value="#{item.aggregateAmount}" />
+									</p:column>
+								</p:dataTable>
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode">
+									<p:commandButton value="是" type="button"
+										styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+									<p:commandButton value="否" type="button"
+										styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+								</p:confirmDialog>
+								</div>
+			                </div>
+			            </div>
+			            
+			
+				        <f:facet name="options">
+				            <p:menu>
+				                <p:submenu label="查询">
+				                    <p:menuitem value="今天" url="#" icon="pi pi-clone"/>
+				                    <p:menuitem value="昨天" url="#" icon="pi pi-times"/>
+				                </p:submenu>
+				            </p:menu>
+				        </f:facet>
+			    </p:panel>
+                </div>
+                <div class="col-12 lg:col-6 product-statistics">
+               <p:panel header="个人荣誉榜"  toggleSpeed="500"
+                	closeSpeed="500" widgetVar="panel">
+						<div class="ui-g overview-boxes">
+			                <div class="col-12 md:col-12 lg:col-12">
+								<div class="field col-12 md:col-4">
+									 <p:selectOneMenu 
+										value="#{reportController.selectedReport.resultsType}" required="false">
+							            <f:selectItem itemLabel="合同金额" itemValue="合同金额"/>
+							            <f:selectItem itemLabel="合同回款金额" itemValue="合同回款金额"/>
+							            <f:selectItem itemLabel="合同数" itemValue="合同"/>	
+							            <f:selectItem itemLabel="赢单商机数" itemValue="赢单商机"/>	
+							            <f:selectItem itemLabel="赢单商机金额" itemValue="赢单商机金额"/>	
+								        <p:ajax update="datalist" listener="#{reportController.calcs}" />
+									</p:selectOneMenu> 
+								</div> 
+				                <div class="col-12 md:col-12 lg:col-12">
+								<p:dataTable id="datalist" var="item"
+							value="#{reportController.itemsPersonalHonor}"
+							selection="#{reportController.selectedReport}" editable="true"
+							style="margin-bottom:20px" rowKey="#{item.id}" reflow="true"
+							resizableColumns="true" showGridlines="true"
+							scrollHeight="100%" emptyMessage="无记录">
+							<p:column sortBy="#{item.ranking}" filterBy="#{item.ranking}"
+								filterMatchMode="contains" >
+								<f:facet name="header">
+									<h:outputText value="排名" />
+								</f:facet>
+								<h:outputText value="#{item.ranking}" />
+							</p:column>
+							<p:column sortBy="#{item.username}" filterBy="#{item.username}"
+								filterMatchMode="contains" >
+								<f:facet name="header">
+									<h:outputText value="姓名" />
+								</f:facet>
+								<h:outputText value="#{item.username}" />
+							</p:column>
+							<p:column sortBy="#{item.departmentName}" filterBy="#{item.departmentName}"
+								filterMatchMode="contains" >
+								<f:facet name="header">
+									<h:outputText value="部门" />
+								</f:facet>
+								<h:outputText value="#{item.departmentName}" />
+							</p:column>
+							<p:column sortBy="#{item.aggregateAmount}" filterBy="#{item.aggregateAmount}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="业绩类型" />
+								</f:facet>
+								<h:outputText value="#{item.aggregateAmount}" />
+							</p:column>
+						</p:dataTable>
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode">
+									<p:commandButton value="是" type="button"
+										styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+									<p:commandButton value="否" type="button"
+										styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+								</p:confirmDialog>
+			                </div>
+			                </div>
+			            </div>
+			            
+			
+				        <f:facet name="options">
+				            <p:menu>
+				                <p:submenu label="查询">
+				                    <p:menuitem value="今天" url="#" icon="pi pi-clone"/>
+				                    <p:menuitem value="昨天" url="#" icon="pi pi-times"/>
+				                </p:submenu>
+				            </p:menu>
+				        </f:facet>
+			    </p:panel>
+                </div>
+            </div>    
+            
+            
+            
+            </h:form>
+        </div>
+        
+    </ui:define>
+
+</ui:composition>

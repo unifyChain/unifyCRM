@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+    	<c:set var="base" value="#{request.contextPath}" />
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0,shrink-to-fit=no"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+		<!-- Favicon -->
+		  <link rel="shortcut icon" href="${base}/images/favicon.ico"/>
+		  	
+		
+		  <!-- Font -->
+		  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600" rel="stylesheet"/>
+		
+		  <!-- CSS Implementing Plugins -->
+		  <link rel="stylesheet" href="${base}/resources/unify-layout/vendor/bootstrap-icons/font/bootstrap-icons.css"/>
+		  <link rel="stylesheet" href="${base}/resources/unify-layout/vendor/hs-mega-menu/dist/hs-mega-menu.min.css"/>
+		  <link rel="stylesheet" href="${base}/resources/unify-layout/vendor/swiper/swiper-bundle.min.css"/>
+		  
+		  
+		
+		  <!-- CSS Unify Template -->
+		  <link rel="stylesheet" href="${base}/resources/unify-layout/css/theme.min.css"/>  
+        
+        <title><ui:insert name="title">大风起</ui:insert></title>
+        <ui:insert name="head"/>
+    </h:head>
+
+    <h:body>
+        <!-- ========== HEADER ========== -->
+  <header id="header" class="navbar navbar-expand-lg navbar-end navbar-light navbar-absolute-top navbar-show-hide"
+          data-hs-header-options='{
+            "fixMoment": 0,
+            "fixEffect": "slide"
+          }'>
+    <div class="container">
+      <nav class="js-mega-menu navbar-nav-wrap">
+        <!-- Default Logo -->
+        <a class="navbar-brand" href="${base}/index.xhtml" aria-label="Unify">
+          <img class="navbar-brand-logo" src="${base}/resources/unify-layout/svg/logos/logo.svg"  alt="大风起·云向兮"/>
+        </a> 
+        <!-- End Default Logo -->
+
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-default">
+            <i class="bi-list"></i>
+          </span>
+          <span class="navbar-toggler-toggled">
+            <i class="bi-x"></i>
+          </span>
+        </button>
+        <!-- End Toggler -->
+      
+        <!-- Collapse -->
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <div class="navbar-absolute-top-scroller">
+            <ul class="navbar-nav nav-pills">
+              <!-- Landings -->
+              <li class="hs-has-mega-menu nav-item"
+                  data-hs-mega-menu-item-options='{
+                    "desktop": {
+                      "maxWidth": "40rem"
+                    }
+                  }'>
+                <a id="landingsMegaMenu" class="hs-mega-menu-invoker nav-link dropdown-toggle " aria-current="page" href="#" role="button" aria-expanded="false">产品服务</a>
+
+                <!-- Mega Menu -->
+                <div class="hs-mega-menu dropdown-menu" aria-labelledby="landingsMegaMenu" style="min-width: 25rem;">
+                  <!-- Main Content -->
+                  <div class="row">
+                    <div class="col-lg d-none d-lg-block">
+                      <div class="d-flex align-items-start flex-column bg-light rounded-3 h-100 p-4">
+                        <span class="fs-3 fw-bold d-block">产品服务</span>
+                        <p class="text-body">加快企业大规模建设现代化系统的速度。</p>
+                        <div class="mt-auto">
+                          <p class="mb-1"><a class="link link-dark link-pointer" href="${base}/login.xhtml">立即注册</a></p>
+                          <p class="mb-1"><a class="link link-dark link-pointer" href="${base}/signup.xhtml">为什么使用大风起</a></p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm">
+                      <div class="navbar-dropdown-menu-inner">
+                        <span class="dropdown-header">产品服务</span>
+                        <a class="dropdown-item " href="${base}/landing-consulting.xhtml"><i class="bi-chat-right-dots me-2"></i> 咨询 <span class="badge text-primary">New</span></a>
+                        <a class="dropdown-item " href="${base}/landing-services.xhtml"><i class="bi-gear me-2"></i> 服务</a>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Main Content -->
+                </div>
+                <!-- End Mega Menu -->
+              </li>
+              <!-- End Landings -->
+              
+			  <!-- Blog -->
+              <li class="hs-has-mega-menu nav-item"
+                  data-hs-mega-menu-item-options='{
+                    "desktop": {
+                      "maxWidth": "50rem"
+                    }
+                  }'>
+                <a id="blogMegaMenu" class="hs-mega-menu-invoker nav-link dropdown-toggle " href="#" role="button" aria-expanded="false">开源合作</a>
+
+                <!-- Mega Menu -->
+                <div class="hs-mega-menu dropdown-menu" aria-labelledby="blogMegaMenu" style="min-width: 12rem;">
+                  <!-- Main Content -->
+                  <div class="row">
+                    <div class="col-lg d-none d-lg-block">
+                      <div class="bg-light rounded-3 h-100 p-4">
+                        <span class="d-block fs-4 fw-bold text-dark mb-3">unify(统一)开源系统
+                        </span>
+
+                        <div class="row">
+                          <div class="col-md-6 mb-3 mb-md-0">
+                            <!-- Card -->
+                            <a class="d-block" href="${base}/documentation/index.xhtml">
+                              <img class="img-fluid rounded-2 mb-2" src="${base}/resources/unify-layout/svg/components/card-1.svg"  alt="大风起·云向兮"/>
+
+                              <span class="fs-4 fw-medium text-dark text-inherit">文档</span>
+                              <p class="fs-6 text-body">使用Unify构建项目的开发指南</p>
+                              <span class="link link-pointer">github</span>
+                            </a>
+                            <!-- End Card -->
+                          </div>
+                          <!-- End Col -->
+
+                          <div class="col-md-6">
+                            <!-- Card -->
+                            <a class="d-block" href="${base}/snippets/index.xhtml">
+                              <img class="img-fluid rounded-2 mb-2" src="${base}/resources/unify-layout/svg/components/card-2.svg"  alt="大风起·云向兮"/>
+
+                              <span class="fs-4 fw-medium text-dark text-inherit">代码</span>
+                              <p class="fs-6 text-body">使用“开源到商业”功能快速实施</p>
+                              <span class="link link-pointer">gitee</span>
+                            </a>
+                            <!-- End Card -->
+                          </div>
+                          <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                      <div class="navbar-dropdown-menu-inner">
+                        <span class="dropdown-header">产品</span>
+                        <a class="dropdown-item " href="${base}/unifyCRM.xhtml">unifyCRM(统一CRM) <span class="badge text-primary">New</span></a>
+                        <a class="dropdown-item " href="${base}/unifySCM.xhtml">unifySCM(统一SCM) <span class="badge text-primary">New</span></a>
+                       
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Main Content -->
+                </div>
+                <!-- End Mega Menu -->
+              </li>
+              <!-- End Blog -->
+              
+              <!-- Pages -->
+              <li class="hs-has-mega-menu nav-item">
+                <a id="pagesMegaMenu" class="hs-mega-menu-invoker nav-link dropdown-toggle " href="#" role="button" aria-expanded="false">大风起</a>
+
+                <!-- Mega Menu -->
+                <div class="hs-mega-menu hs-position-right dropdown-menu w-100" aria-labelledby="pagesMegaMenu" style="min-width: 42rem;">
+                  <!-- Main Content -->
+                  <div class="navbar-dropdown-menu-inner">
+                    <div class="row">
+                      <div class="col-sm-6 col-lg-3">
+                        <span class="dropdown-header">公司</span>
+                        <a class="dropdown-item " href="${base}/about.xhtml">关于</a>
+                        <a class="dropdown-item " href="${base}/pricing.xhtml">价格</a>
+                        <a class="dropdown-item " href="${base}/customer-stories.xhtml">客户案例</a>
+                      </div>
+
+                      <div class="col-sm-6 col-lg-3 mt-n5 mt-sm-0 mb-3 mb-lg-0">
+                        <span class="dropdown-header ">招募</span>
+                        <a class="dropdown-item " href="${base}/careers.xhtml">招募</a>
+                      </div>
+
+                      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-0">
+                        <span class="dropdown-header">咨询</span>
+                        <a class="dropdown-item " href="${base}/hire-us.xhtml">咨询</a>
+                      </div>
+
+                      <div class="col-sm-6 col-lg-3">
+                        <span class="dropdown-header">关于云向</span>
+                        <a class="dropdown-item " href="${base}/contacts.xhtml">联系我们</a>
+                        <!-- <a class="dropdown-item " href="${base}/terms.xhtml">服务条款</a>
+                        <a class="dropdown-item " href="${base}/privacy.xhtml">隐私政策</a> -->
+                      </div>
+                    </div>
+                    <!-- End Row -->
+                  </div>
+                  <!-- End Main Content -->
+                </div>
+                <!-- End Mega Menu -->
+              </li>
+              <!-- End Pages -->
+
+              
+		      
+
+              <!-- Log in -->
+              <li class="nav-item ms-lg-auto">
+                <a class="btn btn-ghost-dark me-2 me-lg-0" href="${base}/login.xhtml">登录</a>
+              </li>
+              <!-- End Log in -->
+
+              <!-- Sign up -->
+              <!-- End Sign up -->
+            </ul>
+          </div>
+        </div>
+        <!-- End Collapse -->
+      </nav>
+    </div>
+  </header>
+		
+		  <!-- ========== END HEADER ========== -->
+          <!-- ========== MAIN CONTENT ========== -->
+  			<main id="content" role="main">
+				<p:growl id="growl" life="5000" />
+                <ui:insert name="content"/>
+            </main>
+        
+        
+        <!-- ========== FOOTER ========== -->
+  <footer class="bg-dark">
+    <div class="container">
+      <div class="row align-items-center pt-8 pb-4">
+        <div class="col-md mb-5 mb-md-0">
+          <h2 class="fw-medium text-white-70 mb-0">加入成长的<br/><span class="fw-bold text-white">大风起</span> 商业代理 <span class="fs-6 fw-bold text-primary">We're hiring</span></h2>
+        </div>
+        <!-- End Col -->
+      
+        <div class="col-md-auto">
+          <div class="d-grid d-sm-flex gap-3">
+            <a class="btn btn-primary" href="#">申请演示</a>
+            <a class="btn btn-ghost-light btn-pointer" href="${base}/signup.xhtml">免费注册</a>
+          </div>
+        </div>
+        <!-- End Col -->
+      </div>
+      <!-- End Row -->
+
+      <div class="border-bottom border-white-10">
+        <div class="row py-6">
+          <div class="col-6 col-sm-4 col-lg mb-7 mb-lg-0">
+            <span class="text-cap text-white">资源</span>
+
+            <!-- List -->
+            <ul class="list-unstyled list-py-1 mb-0">
+              <li><a class="link link-light link-light-75" href="#">指导</a></li>
+              <li><a class="link link-light link-light-75" href="#">支持 <i class="bi-box-arrow-up-right ms-1"></i></a></li>
+              <li><a class="link link-light link-light-75" href="#">API</a></li>
+            </ul>
+            <!-- End List -->
+          </div>
+          <!-- End Col -->
+
+          <div class="col-6 col-sm-4 col-lg mb-7 mb-lg-0">
+            <span class="text-cap text-white">公司</span>
+
+            <!-- List -->
+            <ul class="list-unstyled list-py-1 mb-0">
+              <li><a class="link link-light link-light-75" href="${base}/about.xhtml">关于我们 <i class="bi-box-arrow-up-right ms-1"></i></a></li>
+              <li><a class="link link-light link-light-75" href="${base}/careers.xhtml">招聘</a> <span class="fs-6 fw-bold text-primary">We're hiring</span></li>
+              <li><a class="link link-light link-light-75" href="${base}/contacts.xthml">联系我们</a></li>
+            </ul>
+            <!-- End List -->
+          </div>
+          <!-- End Col -->
+
+          <div class="col-6 col-sm-4 col-lg mb-7 mb-sm-0">
+            <span class="text-cap text-white">平台</span>
+
+            <!-- List -->
+            <ul class="list-unstyled list-py-1 mb-0">
+              <li><a class="link link-light link-light-75" href="#">Web</a></li>
+              <li><a class="link link-light link-light-75" href="#">手机</a></li>
+              <li><a class="link link-light link-light-75" href="#">iOS</a></li>
+              <li><a class="link link-light link-light-75" href="#">Android</a></li>
+            </ul>
+            <!-- End List -->
+          </div>
+          <!-- End Col -->
+
+          <div class="col-6 col-sm-4 col-lg mb-7 mb-sm-0">
+            <span class="text-cap text-white">其他</span>
+
+            <!-- List -->
+            <ul class="list-unstyled list-py-1 mb-5">
+              <li><a class="link link-light link-light-75" href="#">使用条款</a></li>
+              <li><a class="link link-light link-light-75" href="#">隐私政策</a></li>
+            </ul>
+            <!-- End List -->
+
+            <span class="text-cap text-white">文件</span>
+
+            <!-- List -->
+            <ul class="list-unstyled list-py-1 mb-0">
+              <li><a class="link link-light link-light-75" href="#">文档</a></li>
+              <li><a class="link link-light link-light-75" href="#">代码段</a></li>
+            </ul>
+            <!-- End List -->
+          </div>
+          <!-- End Col -->
+
+          <div class="col-6 col-sm-4 col-lg">
+            <span class="text-cap text-white">联系我们</span>
+
+            <!-- List -->
+            <ul class="list-unstyled list-py-2 mb-0">
+              <li><a class="link link-light link-light-75" href="#">
+                <div class="d-flex">
+                  <div class="flex-shrink-0">
+                    <i class="bi-envelope-open-fill"></i>
+                  </div>
+
+                  <div class="flex-grow-1 ms-2">
+                    <span>23400601#qq.com</span>
+                  </div>
+                </div>
+              </a></li>
+			  
+            
+              <li><a class="link link-light link-light-75" href="#">
+                <div class="d-flex">
+                  <div class="flex-shrink-0">
+                    <i class="bi bi-telephone"></i>
+                  </div>
+
+                  <div class="flex-grow-1 ms-2">
+                    <span>139 1122 1833</span>
+                  </div>
+                </div>
+              </a></li>
+            
+              
+              
+            </ul>
+            <!-- End List -->
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+      </div>
+
+      <div class="row align-items-md-center py-6">
+        <div class="col-md mb-3 mb-md-0">
+          <!-- List -->
+          <ul class="list-inline list-px-2 mb-0">
+            <li class="list-inline-item"><a class="link link-light link-light-75" href="#">隐私政策</a></li>
+            <li class="list-inline-item"><a class="link link-light link-light-75" href="#">条款</a></li>
+            <li class="list-inline-item">
+              <!-- Button Group -->
+              <div class="btn-group">
+                <a class="link link-light link-light-75" href="javascript:;" id="selectLanguage" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span class="d-flex align-items-center">
+                    <img class="avatar avatar-xss avatar-circle me-2" src="${base}/resources/unify-layout/vendor/flag-icon-css/flags/1x1/us.svg" alt="Image description" width="16"/>
+                    <span>英语</span>
+                  </span>
+                </a>
+
+                <div class="dropdown-menu">
+                  <a class="dropdown-item d-flex align-items-center active" href="#">
+                    <img class="avatar avatar-xss avatar-circle me-2" src="${base}/resources/unify-layout/vendor/flag-icon-css/flags/1x1/us.svg" alt="Image description" width="16"/>
+                    <span>英语</span>
+                  </a>
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <img class="avatar avatar-xss avatar-circle me-2" src="${base}/resources/unify-layout/vendor/flag-icon-css/flags/1x1/de.svg" alt="Image description" width="16"/>
+                    <span>德语</span>
+                  </a>
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <img class="avatar avatar-xss avatar-circle me-2" src="${base}/resources/unify-layout/vendor/flag-icon-css/flags/1x1/es.svg" alt="Image description" width="16"/>
+                    <span>西班牙语</span>
+                  </a>
+                </div>
+              </div>
+              <!-- End Button Group -->
+            </li>
+          </ul>
+          <!-- End List -->
+        </div>
+        <!-- End Col -->
+
+        <div class="col-md-auto">
+          <p class="fs-5 text-white-70 mb-0">© 版权所有 大风起兮(北京)科技有限公司 2013~2022  京ICP备17009214号-1   京B2-20171268   <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11011302005216"><img src="https://dafengqi.oss-cn-beijing.aliyuncs.com/web/icpbeian.png"/>京公网安备 11011302005216号</a></p>
+        </div>
+        <!-- End Col -->
+      </div>
+      <!-- End Row -->
+    </div>
+  </footer>
+  <!-- ========== END FOOTER ========== -->
+  
+   <!-- ========== SECONDARY CONTENTS ========== -->
+  <!-- Go To -->
+  <a class="js-go-to go-to position-fixed" href="javascript:;" style="visibility: hidden;"
+     data-hs-go-to-options='{
+       "offsetTop": 700, 
+       "position": {
+         "init": {
+           "right": "2rem"
+         },
+         "show": {
+           "bottom": "2rem"
+         },
+         "hide": {
+           "bottom": "-2rem"
+         }
+       }
+     }'>
+    <i class="bi-chevron-up"></i>
+  </a>
+  <!-- ========== END SECONDARY CONTENTS ========== -->
+
+  <!-- JS Global Compulsory  -->
+  <script src="${base}/resources/unify-layout/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- JS Implementing Plugins -->
+  <script src="${base}/resources/unify-layout/vendor/hs-header/dist/hs-header.min.js"></script>
+  <script src="${base}/resources/unify-layout/vendor/hs-mega-menu/dist/hs-mega-menu.min.js"></script>
+  <script src="${base}/resources/unify-layout/vendor/hs-go-to/dist/hs-go-to.min.js"></script>
+  <script src="${base}/resources/unify-layout/vendor/hs-video-bg/dist/hs-video-bg.min.js"></script>
+  <script src="${base}/resources/unify-layout/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- JS Unify -->
+  <script src="${base}/resources/unify-layout/js/theme.min.js"></script>
+  
+  
+
+  <!-- JS Plugins Init. -->
+  <script>
+    (function() {
+      // INITIALIZATION OF NAVBAR
+      // =======================================================
+      new HSHeader('#header').init()
+
+
+      // INITIALIZATION OF MEGA MENU
+      // =======================================================
+      const megaMenu = new HSMegaMenu('.js-mega-menu', {
+        desktop: {
+          position: 'left'
+        }
+      })
+
+
+      // INITIALIZATION OF GO TO
+      // =======================================================
+      new HSGoTo('.js-go-to')
+
+      // INITIALIZATION OF TOGGLE PASSWORD
+      // =======================================================
+      new HSTogglePassword('.js-toggle-password')
+
+
+      // INITIALIZATION OF VIDEO BG
+      // =======================================================
+      document.querySelectorAll('.js-video-bg').forEach(item=> {
+        new HSVideoBg(item).init()
+      })
+
+
+      // INITIALIZATION OF SWIPER
+      // =======================================================
+      var swiper = new Swiper('.js-swiper-card-grid',{
+        navigation: {
+          nextEl: '.js-swiper-card-grid-button-next',
+          prevEl: '.js-swiper-card-grid-button-prev',
+        },
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: 1,
+        breakpoints: {
+          480: {
+            slidesPerView: 2
+          },
+          768: {
+            slidesPerView: 2
+          },
+          1024: {
+            slidesPerView: 3
+          },
+        },
+        on: {
+          'imagesReady': function (swiper) {
+            const preloader = swiper.el.querySelector('.js-swiper-preloader')
+            preloader.parentNode.removeChild(preloader)
+          }
+        }
+      });
+
+      // INITIALIZATION OF SWIPER
+      // =======================================================
+      var swiper = new Swiper('.js-swiper-clients',{
+        slidesPerView: 2,
+        breakpoints: {
+          380: {
+            slidesPerView: 3,
+            spaceBetween: 15,
+          },
+          768: {
+            slidesPerView: 4,
+            spaceBetween: 15,
+          },
+          1024: {
+            slidesPerView: 5,
+            spaceBetween: 15,
+          },
+        },
+      });
+    })()
+  </script>
+  
+  
+    </h:body>
+
+</html>

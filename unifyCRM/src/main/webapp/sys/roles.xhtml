@@ -1,0 +1,180 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+		    button.ui-button {
+		        margin-right: .5rem;
+		    }
+		</style>
+	</ui:define>
+	<ui:define name="title">
+        角色管理
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="角色" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				<div class="card"> 
+					<h:form id="RoleListForm">
+						<p:toolbar>
+							<p:toolbarGroup>
+								<c:forEach items="#{roleController.modules}" var="model">
+									<p:commandButton id="createButton" value="新增"
+										actionListener="#{roleController.prepareCreate}"
+										style="width:auto;" update=":RoleCreateForm"
+										rendered="#{model.name eq '新增'}"
+										icon="pi pi-file" 
+										oncomplete="PF('RoleCreateDialog').show()" 
+										scrollable="true" scrollHeight="100"
+                                   	 	styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines"/>
+								</c:forEach>
+							</p:toolbarGroup>
+
+							<p:toolbarGroup align="right">
+
+								<c:forEach items="#{roleController.modules}" var="model">
+									<p:menuButton value="导出" rendered="#{model.name eq '导出'}">
+										<p:menuitem value="XLS" icon="pi pi-cloud-download">
+											<p:dataExporter type="xls" target="datalist"
+												fileName="角色管理" pageOnly="true" />
+										</p:menuitem>
+										<p:menuitem value="XLSX" icon="pi pi-cloud-download">
+											<p:dataExporter type="xlsxstream" target="datalist"
+												fileName="角色管理" pageOnly="true" />
+										</p:menuitem>
+										<p:menuitem value="PDF" icon="pi pi-cloud-download">
+											<p:dataExporter type="pdf" target="datalist"
+												fileName="角色管理" pageOnly="true" />
+										</p:menuitem>
+										<p:menuitem value="CSV" icon="pi pi-cloud-download">
+											<p:dataExporter type="csv" target="datalist"
+												fileName="角色管理" pageOnly="true" />
+										</p:menuitem>
+										<p:menuitem value="XML" icon="pi pi-cloud-download">
+											<p:dataExporter type="xml" target="datalist"
+												fileName="角色管理" pageOnly="true" />
+										</p:menuitem>
+										<p:menuitem value="TXT" icon="pi pi-cloud-download">
+											<p:dataExporter type="txt" target="datalist"
+												fileName="角色管理" pageOnly="true" />
+										</p:menuitem>
+									</p:menuButton>
+								</c:forEach>
+								<p:commandButton id="toggler" type="button" value="显示列"
+									styleClass="light-btn" style="width:auto;margin-left:5px;"
+									icon="pi pi-cog" />
+								<p:columnToggler datasource="datalist" trigger="toggler" />
+								
+							</p:toolbarGroup>
+						</p:toolbar>
+						<p:dataTable id="datalist" var="item" widgetVar="dataTable"
+							selectionMode="single" value="#{roleController.items}"
+							resizableColumns="true" resizeMode="expand" scrollHeight="100%"
+							selection="#{roleController.selected}" rowKey="#{item.id}"
+							paginator="true" rows="100" emptyMessage="无记录" tableStyle="width:auto"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="100,500,1000,5000" reflow="true"
+							rowIndexVar="rowIndex">
+							<p:column>
+								<f:facet name="header">操作</f:facet>
+					                <p:commandButton icon="pi pi-align-justify" action="#{roleController.module}" alt="功能权限"
+					                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
+										<f:param name="description" value="#{item.description}" />
+										<f:param name="id" value="#{item.id}" />
+					                </p:commandButton>
+					                <p:commandButton icon="pi pi-align-center" action="#{roleController.roleMechanism}" alt="数据权限"
+					                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
+										<f:param name="description" value="#{item.description}" />
+										<f:param name="id" value="#{item.id}" />
+					                </p:commandButton>
+							</p:column> 
+							<p:column headerText="序号" style="width:4%">
+							                #{rowIndex+1}
+							            </p:column>
+							<p:column sortBy="#{item.description}" filterBy="#{item.description}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="角色名称" />
+								</f:facet>
+								<h:outputText value="#{item.description}" />
+							</p:column>
+							<p:column sortBy="#{item.name}" filterBy="#{item.name}"
+								filterMatchMode="contains" >
+								<f:facet name="header">
+									<h:outputText value="角色键值" />
+								</f:facet>
+								<h:outputText value="#{item.name}" />
+							</p:column>
+						</p:dataTable>
+						<p:confirmDialog global="true" showEffect="fade"
+							hideEffect="explode">
+							<p:commandButton value="是" type="button"
+								styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+							<p:commandButton value="否" type="button"
+								styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+						</p:confirmDialog>
+					</h:form>
+				<p:dialog id="RoleCreateDlg" widgetVar="RoleCreateDialog"
+					modal="true" resizable="false" appendTo="@(body)" header="新增"
+						style="height:auto;width:450px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;"
+					>
+						<h:form id="RoleCreateForm">
+							<h:panelGroup id="display">
+								<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+									<p:outputLabel value="角色名称" for="description" />
+									<p:inputText id="description" value="#{roleController.selected.description}"
+										required="true" maxlength="200" title="description"  />
+									<p:outputLabel value="角色键值" for="name" />
+									<p:inputText id="name" value="#{roleController.selected.name}"
+										required="true" maxlength="200" title="name"  />
+								</p:panelGrid>
+
+								<br />
+								<p:commandButton value="保存" styleClass="ui-confirmdialog-yes"
+									icon="pi pi-save" action="#{roleController.create}"
+									style="width:auto;"
+									update=":growl,display,:RoleListForm:datalist" ajax="true"
+ 									oncomplete="handleSubmit(args, 'RoleCreateDialog');"/>
+							</h:panelGroup>
+						</h:form>
+					</p:dialog>
+					<p:dialog id="RoleEditDlg" widgetVar="RoleEditDialog" modal="true"
+						style="height:auto;width:450px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;"
+						resizable="false" appendTo="@(body)" header="编辑">
+						<h:form id="RoleEditForm">
+							<h:panelGroup id="display">
+								<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+									<p:outputLabel value="角色名称" for="description" />
+									<p:inputText id="description" value="#{roleController.selected.description}"
+										required="true" maxlength="200" title="description"  />
+									<p:outputLabel value="角色键值" for="name" />
+									<p:inputText id="name" value="#{roleController.selected.name}"
+										required="true" maxlength="200" title="name"  disabled="true"/>
+								</p:panelGrid>
+								<br />
+								<div class="EmptyBox10"></div>
+								<p:commandButton value="保存" styleClass="ui-confirmdialog-yes"
+									icon="fa fa-save" action="#{roleController.update}"
+									style="width:auto;"
+									update=":growl,display,:RoleListForm:datalist" ajax="true"
+ 									oncomplete="handleSubmit(args, 'RoleEditDialog');"/>
+							</h:panelGroup>
+						</h:form>
+					</p:dialog>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

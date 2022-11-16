@@ -1,0 +1,131 @@
+  
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+		    button.ui-button {
+		        margin-right: .5rem;
+		    }
+		</style>
+	</ui:define>
+	<ui:define name="title">
+        报价单
+    </ui:define>
+	<ui:define name="content">
+		
+		<div class="p-grid list-demo">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="报价单" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				<div class="card"> 
+					<h:form id="QuoteListForm">
+							<p:toolbar>
+								<p:toolbarGroup>
+									<c:forEach items="#{quoteController.modules}" var="model">
+										<p:commandButton id="createButton" value="新增"
+											action="#{quoteController.prepareCreate}"
+											style="width:auto;"
+											rendered="#{model.name eq '新增'}"
+											icon="pi pi-file" /> 
+									</c:forEach>
+								</p:toolbarGroup>
+	
+								<p:toolbarGroup align="right">
+	
+									<p:commandButton id="toggler" type="button" value="显示列"
+										styleClass="light-btn" style="width:auto;"
+										icon="pi pi-cog" />
+									<p:columnToggler datasource="datalist" trigger="toggler" />
+									
+								</p:toolbarGroup>
+							</p:toolbar>
+							
+							<p:dataTable id="datalist" var="item"
+								value="#{quoteController.items}"
+								selection="#{quoteController.selected}" editable="true"
+					            selectionMode="single" widgetVar="dataTable" resizableColumns="true" showGridlines="true"
+								style="margin-bottom:20px" rowKey="#{item.id}" reflow="true"
+								scrollHeight="100%" tableStyle="width:auto" paginator="true" rows="100" emptyMessage="无记录"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="100,500,1000,5000">
+									<p:column >
+										<f:facet name="header">操作</f:facet>
+										
+						                <p:linkButton icon="pi pi-file-pdf" style="margin-right:5px;" styleClass="edit-button rounded-button ui-button-success" href="https://www.smk.mobi/ppt/#{item.ppt}.pptx">
+									    </p:linkButton>
+						                <p:linkButton icon="pi pi-file-excel" style="margin-right:5px;" styleClass="edit-button rounded-button ui-button-success" href="https://www.smk.mobi/ppt/#{item.excel}.xls">
+									    </p:linkButton>
+										<c:forEach items="#{quoteController.modules}" var="model">
+							                <p:commandButton icon="pi pi-search" action="#{quoteController.view}"
+														   	 rendered="#{model.name eq '查看'}" 
+							                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
+												<f:param name="id" value="#{item.id}" />
+							                </p:commandButton>
+							                <p:commandButton class="ui-button-warning rounded-button"  icon="pi pi-pencil" process="@this"
+														     rendered="#{model.name eq '编辑' and item.type eq '否'}"   action="#{quoteController.edit}">
+												<f:param name="id" value="#{item.id}" />
+							                </p:commandButton>
+							                <p:commandButton icon="pi pi-trash" action="#{quoteController.remove}"
+														   	 rendered="#{model.name eq '删除' and item.type eq '否'}" 
+							                                 oncomplete="PF('confirmDialogRemove').show()"
+							                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
+												<f:param name="id" value="#{item.id}" />
+							                </p:commandButton>
+											<p:confirmDialog message="确定删除吗?" header="提示" severity="alert"
+												widgetVar="confirmDialogRemove">
+												<p:commandButton value="是" styleClass="ui-confirmdialog-yes"
+													action="#{quoteController.destroy}" icon="pi pi-check"
+													style="width:auto;" update=":growl,datalist" ajax="true"
+													oncomplete="PF('confirmDialogRemove').hide()" />
+												<p:commandButton value="否" styleClass="ui-confirmdialog-no"
+													style="width:auto;" icon="pi pi-times"
+													onclick="PF('confirmDialogRemove').hide();" type="button" />
+											</p:confirmDialog>
+										</c:forEach>
+									</p:column> 
+									
+									<p:column headerText="客户" footerText="客户" sortBy="#{item.customerName}" filterBy="#{item.supplierName}" filterMatchMode="contains">
+		                                <h:outputText value="#{item.customerName}" />
+		                            </p:column>
+									<p:column headerText="Ppt" footerText="Ppt" sortBy="#{item.ppt}" filterBy="#{item.ppt}" filterMatchMode="contains">
+		                                <h:outputText value="#{item.ppt}" />
+		                            </p:column>
+									<p:column headerText="Excel" footerText="Excel" sortBy="#{item.excel}" filterBy="#{item.excel}" filterMatchMode="contains">
+		                                <h:outputText value="#{item.excel}" />
+		                            </p:column>
+									<p:column headerText="创建人名称" footerText="创建人名称" sortBy="#{item.createName}" filterBy="#{item.createName}" filterMatchMode="contains">
+		                                <h:outputText value="#{item.createName}" />
+		                            </p:column>
+									
+									<p:column headerText="创建日期" footerText="创建日期" sortBy="#{item.createDate}" filterBy="#{item.createDate}" filterMatchMode="contains">
+		                                <h:outputText value="#{item.createDate}" />
+		                            </p:column>
+									
+									<p:column headerText="机构名称" footerText="机构名称" sortBy="#{item.mechanismName}" filterBy="#{item.mechanismName}" filterMatchMode="contains">
+		                                <h:outputText value="#{item.mechanismName}" />
+		                            </p:column>
+		                            
+					            </p:dataTable>
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode">
+									<p:commandButton value="是" type="button"
+										styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+									<p:commandButton value="否" type="button"
+										styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+								</p:confirmDialog>
+							</h:form>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,258 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+	</ui:define>
+	<ui:define name="title">
+        跟进记录
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="跟进记录" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				<h:form id="FollowupCxForm">
+					<div class="card">
+						<div class="col-12">
+							<div class="ui-fluid formgrid grid">
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="所属模块" for="froms" />
+									<p:selectCheckboxMenu id="froms"
+										value="#{followupController.selected.froms}" multiple="true"
+										required="false" filter="true" filterMatchMode="startsWith">
+										<f:selectItem itemLabel="线索" itemValue="线索" />
+										<f:selectItem itemLabel="客户" itemValue="客户" />
+										<f:selectItem itemLabel="商机" itemValue="商机" />
+										<f:selectItem itemLabel="合同" itemValue="合同" />
+									</p:selectCheckboxMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="跟进类型" for="followUps" />
+									<p:selectCheckboxMenu id="followUps"
+										value="#{followupController.selected.followUps}"
+										multiple="true" required="false" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItem itemLabel="电话" itemValue="电话" />
+										<f:selectItem itemLabel="QQ" itemValue="QQ" />
+										<f:selectItem itemLabel="微信" itemValue="微信" />
+										<f:selectItem itemLabel="拜访" itemValue="拜访" />
+										<f:selectItem itemLabel="邮件" itemValue="邮件" />
+										<f:selectItem itemLabel="短信" itemValue="短信" />
+										<f:selectItem itemLabel="其他" itemValue="其他" />
+									</p:selectCheckboxMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="部门" for="departmentName" />
+									<div class="ui-inputgroup">
+										<p:inputText id="departmentName"
+											value="#{followupController.selected.departmentName}"
+											title="departmentName" disabled="true" />
+										<p:commandButton icon="pi pi-search"
+											styleClass="ui-button-warning"
+											oncomplete="PF('DepartmentSelectedDialog').show()" />
+									</div>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="写跟进时间" for="time" />
+									<p:selectOneMenu id="time"
+										value="#{followupController.selected.time}" required="false">
+										<f:selectItem itemLabel="请选择"></f:selectItem>
+										<f:selectItem itemLabel="今日" itemValue="今日"></f:selectItem>
+										<f:selectItem itemLabel="本周" itemValue="本周"></f:selectItem>
+										<f:selectItem itemLabel="本月" itemValue="本月"></f:selectItem>
+										<f:selectItem itemLabel="本季度" itemValue="本季度"></f:selectItem>
+										<f:selectItem itemLabel="本年" itemValue="本年"></f:selectItem>
+										<p:ajax update="dateRange"
+											listener="#{followupController.time}" />
+									</p:selectOneMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="自定义" for="dateRange" />
+									<p:datePicker id="dateRange"
+										value="#{followupController.selected.timeDateRange}"
+										selectionMode="range" readonlyInput="true"
+										pattern="yyyy-MM-dd HH:mm:ss" showTime="true">
+										<p:ajax event="dateSelect"
+											listener="#{followupController.dateRange}" update="time" />
+									</p:datePicker>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="实际跟进时间" for="nextFollowTimes" />
+									<p:selectOneMenu id="nextFollowTimes"
+										value="#{followupController.selected.nextFollowTime}"
+										required="false">
+										<f:selectItem itemLabel="请选择"></f:selectItem>
+										<f:selectItem itemLabel="今日" itemValue="今日"></f:selectItem>
+										<f:selectItem itemLabel="本周" itemValue="本周"></f:selectItem>
+										<f:selectItem itemLabel="本月" itemValue="本月"></f:selectItem>
+										<f:selectItem itemLabel="本季度" itemValue="本季度"></f:selectItem>
+										<f:selectItem itemLabel="本年" itemValue="本年"></f:selectItem>
+										<p:ajax update="dateRanges"
+											listener="#{followupController.nextFollowTimes}" />
+									</p:selectOneMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="自定义" for="dateRanges" />
+									<p:datePicker id="dateRanges"
+										value="#{followupController.selected.nextFollowTimeDateRange}"
+										selectionMode="range" readonlyInput="true"
+										pattern="yyyy-MM-dd HH:mm:ss" showTime="true">
+										<p:ajax event="dateSelect"
+											listener="#{followupController.dateRanges}"
+											update="nextFollowTimes" />
+									</p:datePicker>
+								</div>
+								<div class="field col-12 md:col-3">
+									<div class="ui-inputgroup">
+										<p:commandButton value="查询"
+											style="width:auto;margin-left:5px;"
+											action="#{followupController.search}"
+											update="FollowupListForm" icon="pi pi-search" />
+										<p:commandButton value="重置" icon="pi pi-replay"
+											action="#{followupController.reset}" update="FollowupCxForm"
+											process="@this" style="width:auto;margin-left:5px;"
+											styleClass="p-mr-2 ui-button-outlined">
+										</p:commandButton>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</h:form>
+				<h:form id="FollowupListForm">
+					<div class="card">
+
+						<p:dataTable id="datalist" var="item"
+							value="#{followupController.items}"
+							selection="#{followupController.selected}" editable="true"
+							style="margin-bottom:20px" rowKey="#{item.id}" reflow="true"
+							resizableColumns="true" showGridlines="true" scrollHeight="100%"
+							tableStyle="width:auto" emptyMessage="无记录">
+							<p:column>
+								<f:facet name="header">操作</f:facet>
+								<p:commandButton icon="pi pi-trash"
+									action="#{followupController.remove}"
+									oncomplete="PF('confirmDialogRemove').show()"
+									styleClass="edit-button rounded-button ui-button-success"
+									process="@this">
+									<f:param name="id" value="#{item.id}" />
+								</p:commandButton>
+								<p:confirmDialog message="确定删除吗?" header="提示" severity="alert"
+									widgetVar="confirmDialogRemove">
+									<p:commandButton value="是" styleClass="ui-confirmdialog-yes"
+										action="#{followupController.destroy}" icon="pi pi-check"
+										style="width:auto;" update=":growl,datalist" ajax="true"
+										oncomplete="PF('confirmDialogRemove').hide()" />
+									<p:commandButton value="否" styleClass="ui-confirmdialog-no"
+										style="width:auto;" icon="pi pi-times"
+										onclick="PF('confirmDialogRemove').hide();" type="button" />
+								</p:confirmDialog>
+							</p:column>
+							<p:column sortBy="#{item.from}" filterBy="#{item.from}"
+								styleClass="singleLine" filterMatchMode="contains">
+
+								<f:facet name="header">
+									<h:outputText value="跟进模块" />
+								</f:facet>
+								<h:outputText value="#{item.from}" />
+							</p:column>
+							<p:column sortBy="#{item.followUp}" filterBy="#{item.followUp}"
+								styleClass="singleLine" filterMatchMode="contains">
+
+								<f:facet name="header">
+									<h:outputText value="跟进类型" />
+								</f:facet>
+								<h:outputText value="#{item.followUp}" />
+							</p:column>
+							<p:column sortBy="#{item.followName}"
+								filterBy="#{item.followName}" styleClass="singleLine"
+								filterMatchMode="contains">
+
+								<f:facet name="header">
+									<h:outputText value="跟进项目" />
+								</f:facet>
+								<h:outputText value="#{item.followName}" />
+							</p:column>
+							<p:column sortBy="#{item.content}" filterBy="#{item.content}"
+								styleClass="singleLine" filterMatchMode="contains">
+
+								<f:facet name="header">
+									<h:outputText value="内容" />
+								</f:facet>
+								<h:outputText value="#{item.content}" />
+							</p:column>
+							<p:column sortBy="#{item.followStatus}"
+								filterBy="#{item.followStatus}" styleClass="singleLine"
+								filterMatchMode="contains">
+
+								<f:facet name="header">
+									<h:outputText value="跟进状态" />
+								</f:facet>
+								<h:outputText value="#{item.followStatus}" />
+							</p:column>
+							<p:column sortBy="#{item.time}" filterBy="#{item.time}"
+								styleClass="singleLine" filterMatchMode="contains">
+
+								<f:facet name="header">
+									<h:outputText value="写跟进时间" />
+								</f:facet>
+								<h:outputText value="#{item.time}" />
+							</p:column>
+							<p:column sortBy="#{item.nextFollowTime}"
+								filterBy="#{item.nextFollowTime}" styleClass="singleLine"
+								filterMatchMode="contains">
+
+								<f:facet name="header">
+									<h:outputText value="下次跟进时间" />
+								</f:facet>
+								<h:outputText value="#{item.nextFollowTime}" />
+							</p:column>
+
+						</p:dataTable>
+					</div>
+				</h:form>
+
+				<p:dialog id="DepartmentSelectedDlg"
+					widgetVar="DepartmentSelectedDialog" modal="true" resizable="false"
+					appendTo="@(body)" header="选择部门"
+					style="max-height:550px;max-width:850px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+					<h:panelGroup id="selectDepartmentPG">
+						<h:form id="departmentItemsSelectedForm">
+							<p:panelGrid columns="1">
+								<p:tree value="#{departmentController.root}" var="doc"
+									selectionMode="single"
+									selection="#{departmentController.selectedNode}"
+									filterBy="#{doc}">
+									<p:treeNode collapsedIcon="ui-icon ui-icon-folder-collapsed">
+										<h:outputText value="#{doc}" />
+									</p:treeNode>
+								</p:tree>
+								<p:commandButton value="确定"
+									update=",:FollowupCxForm:departmentName"
+									oncomplete="handleSubmit(args, 'DepartmentSelectedDialog');"
+									style="width:auto;margin-top:10px;"
+									actionListener="#{followupController.displaySelectedMultipledepartment(departmentController.selectedNode)}" />
+							</p:panelGrid>
+						</h:form>
+						<div class="EmptyBox10"></div>
+					</h:panelGroup>
+				</p:dialog>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

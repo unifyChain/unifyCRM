@@ -1,0 +1,55 @@
+body {
+  .ui-toggleswitch {
+    position: relative;
+    display: inline-block;
+    width: 3rem;
+    height: 1.75rem;
+
+    .ui-toggleswitch-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: $inputSwitchOffBg;
+      transition: $transition;
+      border-radius: $inputSwitchBorderRadius;
+    }
+
+    .ui-toggleswitch-slider:before {
+      position: absolute;
+      content: "";
+      top: 50%;
+      background: $inputSwitchHandleOffBg;
+      width: 1.250rem;
+      height: 1.250rem;
+      left: .25rem;
+      margin-top: math.div(-1 * 1.250rem, 2);
+      border-radius: $inputSwitchHandleBorderRadius;
+      transition: transform $transitionDuration;
+    }
+
+    &.ui-toggleswitch-checked {
+      .ui-toggleswitch-slider:before {
+        transform: translateX(1.250rem);
+      }
+    }
+
+    &.ui-toggleswitch-focus {
+      .ui-toggleswitch-slider {
+        @include focused();
+      }
+    }
+
+    &.ui-toggleswitch-checked {
+      .ui-toggleswitch-slider {
+        background: $inputSwitchOnBg;
+
+        &:before {
+          background: $inputSwitchHandleOnBg;
+        }
+      }
+    }
+  }
+}

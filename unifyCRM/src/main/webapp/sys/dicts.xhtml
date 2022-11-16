@@ -1,0 +1,292 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+    button.ui-button {
+        margin-right: .5rem;
+    }
+</style>
+	</ui:define>
+	<ui:define name="title">
+        字典管理
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="字典管理"  url="dicts"/>
+							<p:menuitem value="新增字典(#{dictController.dictName}-#{dictController.dictType})" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				<div class="card">
+					<h:form id="DictListForm">
+						<p:toolbar> 
+									<p:toolbarGroup>
+										<c:forEach items="#{dictController.modules}" var="model">
+											<p:commandButton id="createButton" value="新增"
+												actionListener="#{dictController.prepareCreate}"
+												style="width:auto;" update=":DictCreateForm"
+												rendered="#{model.name eq '新增'}"
+												icon="pi pi-file" 
+												oncomplete="PF('DictCreateDialog').show()" 
+												scrollable="true" scrollHeight="100"
+		                                   	 	styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines"/>
+										</c:forEach>
+									</p:toolbarGroup>
+
+									<p:toolbarGroup align="right">
+
+										<c:forEach items="#{dictController.modules}" var="model">
+											<p:menuButton value="导出" rendered="#{model.name eq '导出'}">
+												<p:menuitem value="XLS" icon="pi pi-cloud-download">
+													<p:dataExporter type="xls" target="datalist"
+														fileName="字典数据" pageOnly="true" />
+												</p:menuitem>
+												<p:menuitem value="XLSX" icon="pi pi-cloud-download">
+													<p:dataExporter type="xlsxstream" target="datalist"
+														fileName="字典数据" pageOnly="true" />
+												</p:menuitem>
+												<p:menuitem value="PDF" icon="pi pi-cloud-download">
+													<p:dataExporter type="pdf" target="datalist"
+														fileName="字典数据" pageOnly="true" />
+												</p:menuitem>
+												<p:menuitem value="CSV" icon="pi pi-cloud-download">
+													<p:dataExporter type="csv" target="datalist"
+														fileName="字典数据" pageOnly="true" />
+												</p:menuitem>
+												<p:menuitem value="XML" icon="pi pi-cloud-download">
+													<p:dataExporter type="xml" target="datalist"
+														fileName="字典数据" pageOnly="true" />
+												</p:menuitem>
+												<p:menuitem value="TXT" icon="pi pi-cloud-download">
+													<p:dataExporter type="txt" target="datalist"
+														fileName="字典数据" pageOnly="true" />
+												</p:menuitem>
+											</p:menuButton>
+										</c:forEach>
+										<p:commandButton id="toggler" type="button" value="显示列"
+											styleClass="light-btn" style="width:auto;margin-left:5px;"
+											icon="pi pi-cog" />
+										<p:columnToggler datasource="datalist" trigger="toggler" />
+										
+									</p:toolbarGroup>
+								</p:toolbar>
+						<p:dataTable id="datalist" var="item" widgetVar="dataTable"
+							selectionMode="single" value="#{dictController.items}"
+							resizableColumns="true" resizeMode="expand" scrollHeight="100%"
+							selection="#{dictController.selected}" rowKey="#{item.dictCode}"
+							paginator="true" rows="100" emptyMessage="无记录" tableStyle="width:auto"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="100,500,1000,5000" reflow="true"
+							rowIndexVar="rowIndex">
+							<p:column style="width:7%" headerText="操作">
+								<c:forEach items="#{dictController.modules}" var="model">
+					                <p:commandButton icon="pi pi-search" update=":DictViewForm" action="#{dictController.edit}"
+												   	 rendered="#{model.name eq '查看'}" 
+					                                 oncomplete="PF('DictViewDialog').show()"
+					                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
+										<f:param name="id" value="#{item.dictCode}" />
+					                </p:commandButton>
+					                <p:commandButton class="ui-button-warning rounded-button" update=":DictEditForm" icon="pi pi-pencil" process="@this"
+												     rendered="#{model.name eq '编辑'}" 
+					                                 oncomplete="PF('DictEditDialog').show()" action="#{dictController.edit}">
+										<f:param name="id" value="#{item.dictCode}" />
+					                </p:commandButton>
+								</c:forEach>
+							</p:column> 
+							<p:column headerText="序号" style="width:4%">
+							                #{rowIndex+1}
+							            </p:column>
+							<p:column sortBy="#{item.dictLabel}" filterBy="#{item.dictLabel}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="字典标签" />
+								</f:facet>
+								<h:outputText value="#{item.dictLabel}" />
+							</p:column>
+							<p:column sortBy="#{item.dictValue}" filterBy="#{item.dictValue}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="字典键值" />
+								</f:facet>
+								<h:outputText value="#{item.dictValue}" />
+							</p:column>
+							<p:column sortBy="#{item.treeSort}" filterBy="#{item.treeSort}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="排序号" />
+								</f:facet>
+								<h:outputText value="#{item.treeSort}" />
+							</p:column>
+							<p:column sortBy="#{item.isSys}" filterBy="#{item.isSys}"
+								filterMatchMode="contains" style="width:6%">
+								<f:facet name="header">
+									<h:outputText value="系统内置" />
+								</f:facet>
+								<h:outputText value="#{item.isSys}" />
+							</p:column>
+							<p:column sortBy="#{item.updateDate}" filterBy="#{item.updateDate}"
+								filterMatchMode="contains" style="width:13%">
+								<f:facet name="header">
+									<h:outputText value="更新时间" />
+								</f:facet>
+								<h:outputText value="#{item.updateDate}" />
+							</p:column>
+							<p:column sortBy="#{item.remarks}" filterBy="#{item.remarks}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="备注信息" />
+								</f:facet>
+								<h:outputText value="#{item.remarks}" />
+							</p:column>
+							<p:column sortBy="#{item.status}" filterBy="#{item.status}"
+								filterMatchMode="contains" style="width:4%">
+								<f:facet name="header">
+									<h:outputText value="状态" />
+								</f:facet>
+								<h:outputText value="#{item.status}" />
+							</p:column>
+						</p:dataTable>
+						<p:confirmDialog global="true" showEffect="fade"
+							hideEffect="explode">
+							<p:commandButton value="是" type="button"
+								styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+							<p:commandButton value="否" type="button"
+								styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+						</p:confirmDialog>
+					</h:form>
+					<p:dialog id="DictCreateDlg" widgetVar="DictCreateDialog"
+						style="height:auto;width:450px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;"
+						modal="true" resizable="false" appendTo="@(body)" header="新增">
+						<h:form id="DictCreateForm">
+							<h:panelGroup id="display">
+								<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+									<p:outputLabel value="字典标签" for="dictLabel" />
+									<p:inputText id="dictLabel" value="#{dictController.selected.dictLabel}"
+										required="true" maxlength="200" title="dictLabel"  />
+									<p:outputLabel value="字典键值" for="dictValue" />
+									<p:inputText id="dictValue" value="#{dictController.selected.dictValue}"
+										required="true" maxlength="200" title="dictValue"  />
+									<p:outputLabel value="排序号" for="treeSort" />
+									<p:inputText id="treeSort" value="#{dictController.selected.treeSort}"
+										onkeyup="this.value=this.value.replace(/\D/g,'')"
+										required="true" maxlength="200" title="treeSort"  />
+									<p:outputLabel value="系统内置" for="isSys" />
+									<p:selectOneMenu  id="isSys"
+										value="#{dictController.selected.isSys}">
+										<f:selectItem itemLabel="是" itemValue="是" />
+										<f:selectItem itemLabel="否" itemValue="否" />
+									</p:selectOneMenu>
+									<p:outputLabel value="字典描述" for="dictType" />
+									<p:inputText id="dictType" value="#{dictController.selected.dictType}"
+										required="false" maxlength="200" title="dictType"  />
+									<p:outputLabel value="备注信息" for="remarks" />
+                    				<p:inputTextarea rows="3"   id="remarks" value="#{dictController.selected.remarks}"  autoResize="false"/>
+								</p:panelGrid>
+
+								<br />
+								<p:commandButton value="保存" styleClass="ui-confirmdialog-yes"
+									icon="pi pi-save" action="#{dictController.create}"
+									style="width:auto;"
+									update=":growl,display,:DictListForm:datalist" ajax="true"
+ 									oncomplete="handleSubmit(args, 'DictCreateDialog');"/>
+							</h:panelGroup>
+						</h:form>
+					</p:dialog>
+					<p:dialog id="DictEditDlg" widgetVar="DictEditDialog" modal="true"
+						style="height:auto;width:450px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;"
+						resizable="false" appendTo="@(body)" header="编辑">
+						<h:form id="DictEditForm">
+							<h:panelGroup id="display">
+								<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+									<p:outputLabel value="字典标签" for="dictLabel" />
+									<p:inputText id="dictLabel" value="#{dictController.selected.dictLabel}"
+										required="true" maxlength="200" title="dictLabel"  />
+									<p:outputLabel value="字典键值" for="dictValue" />
+									<p:inputText id="dictValue" value="#{dictController.selected.dictValue}"
+										required="true" maxlength="200" title="dictType"  />
+									<p:outputLabel value="排序号" for="treeSort" />
+									<p:inputText id="treeSort" value="#{dictController.selected.treeSort}"
+										onkeyup="this.value=this.value.replace(/\D/g,'')"
+										required="true" maxlength="200" title="dictType"  />
+									<p:outputLabel value="系统内置" for="isSys" />
+									<p:selectOneMenu  id="isSys"
+										value="#{dictController.selected.isSys}">
+										<f:selectItem itemLabel="是" itemValue="是" />
+										<f:selectItem itemLabel="否" itemValue="否" />
+									</p:selectOneMenu>
+									<p:outputLabel value="字典描述" for="dictType" />
+									<p:inputText id="dictType" value="#{dictController.selected.dictType}"
+										required="false" maxlength="200" title="dictType"  />
+									<p:outputLabel value="备注信息" for="remarks" />
+                    				<p:inputTextarea rows="3"   id="remarks" value="#{dictController.selected.remarks}"  autoResize="false"/>
+								</p:panelGrid>
+								<br />
+								<div class="EmptyBox10"></div>
+								<p:commandButton value="保存" styleClass="ui-confirmdialog-yes"
+									icon="pi pi-save" action="#{dictController.update}"
+									style="width:auto;"
+									update=":growl,display,:DictListForm:datalist" ajax="true"
+ 									oncomplete="handleSubmit(args, 'DictEditDialog');"/>
+							</h:panelGroup>
+						</h:form>
+					</p:dialog>
+					<p:dialog id="DictViewDlg" widgetVar="DictViewDialog" modal="true"
+						resizable="false" appendTo="@(body)" header="查看">
+						<h:form id="DictViewForm">
+							<h:panelGroup id="display">
+								<p:panelGrid columns="2"
+									rendered="#{dictController.selected != null}">
+									<h:outputText value="编码" />
+									<h:outputText value="#{dictController.selected.dictCode}" title="id" />
+									<h:outputText value="字典标签" />
+									<h:outputText value="#{dictController.selected.dictLabel}" title="dictLabel" />
+									<h:outputText value="字典键值" />
+									<h:outputText value="#{dictController.selected.dictValue}"
+										title="dictValue" />
+									<h:outputText value="排序号" />
+									<h:outputText value="#{dictController.selected.treeSort}"
+										title="treeSort" />
+									<h:outputText value="系统内置" />
+									<h:outputText value="#{dictController.selected.isSys}"
+										title="isSys" />
+									<h:outputText value="备注信息" />
+									<h:outputText value="#{dictController.selected.remarks}"
+										title="remarks" />
+									<h:outputText value="状态" />
+									<h:outputText value="#{dictController.selected.status}"
+										title="status" />
+								</p:panelGrid>
+								<div class="EmptyBox10"></div>
+								<br />
+						        <p:commandButton value="删除"  styleClass="p-mr-2" action="#{dictController.destroy}" update=":growl,:DictListForm" icon="pi pi-check" style="width:auto;margin-left:5px;">
+						            <p:confirm type="popup" header="Confirmation" message="确定删除吗?" icon="pi pi-exclamation-triangle"/>
+						        </p:commandButton>
+						        <p:commandButton value="启用"  styleClass="p-mr-2" icon="pi pi-check" action="#{dictController.enable}" update=":growl,:DictListForm"  style="width:auto;margin-left:5px;" rendered="#{dictController.selected.status eq '禁用'}">
+						            <p:confirm type="popup" header="Confirmation" message="确定启用吗?" icon="pi pi-exclamation-triangle"/>
+						        </p:commandButton>
+						        <p:commandButton value="禁用"  styleClass="p-mr-2" icon="pi pi-times"  action="#{dictController.disable}" update=":growl,:DictListForm" style="width:auto;margin-left:5px;" rendered="#{dictController.selected.status eq '启用'}">
+						            <p:confirm type="popup" header="Confirmation" message="确定禁用吗?" icon="pi pi-exclamation-triangle"/>
+						        </p:commandButton>
+						        <p:confirmPopup global="true">
+						            <p:commandButton value="否"  styleClass="ui-confirm-popup-no ui-button-flat"/>
+						            <p:commandButton value="是"  styleClass="ui-confirm-popup-yes"  onclick="PF('DictViewDialog').hide();"  />
+						        </p:confirmPopup>
+							</h:panelGroup>
+						</h:form>
+					</p:dialog>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

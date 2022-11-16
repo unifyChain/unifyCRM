@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <f:facet name="first">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+    </f:facet>
+    <title>PrimeFaces Avalon Wizard</title>
+    <script type="text/javascript">
+        //<![CDATA[
+            var Wizard = {
+                init: function() {
+                    this.wizardContainer = $('.wizard-container');
+                    if (this.wizardContainer.length) {
+                        this.wizardContent = this.wizardContainer.find('.wizard-content');
+                        this.tabs = this.wizardContainer.find('.wizard-header .wizard-tabs-container > .wizard-tab');
+                        this.selectedTab = this.tabs.eq(0);
+
+                        var continueButton = $('.continue-button'),
+                            $this = this;
+
+                        this.tabs.off('click.wizard-tab', '.tab-header').on('click.wizard-tab', '.tab-header', null, function() {
+                            var tab = $(this).closest('.wizard-tab');
+
+                            if (!tab.is($this.selectedTab)) {
+                                if ($this.selectedTab.index() < tab.index()) {
+                                    var firstActiveTab = tab.prevAll('.active-tab:first');
+                                    $this.activateItems(firstActiveTab);
+                                }
+                                else {
+                                    var latestActiveTab = tab.nextAll('.active-tab:last');
+                                    $this.deactivateItems(latestActiveTab);
+                                }
+
+                                $this.selectedTab = tab;
+                            }
+                        });
+                    
+                        continueButton.off('click.cbutton').on('click.cbutton', function() {
+                            var content = $(this).closest('.wizard-content'),
+                                index = content.index(),
+                                nextTab = $this.tabs.eq(index);
+
+                            nextTab.children('.tab-header').trigger('click.wizard-tab');
+                        });
+                    }
+                },
+
+                activateItems: function(tab) {
+                    var nextItem = tab.next();
+                        $this = this;
+
+                    nextItem.addClass('active-tab');
+                    clearTimeout(this.deactivateItems);
+
+                    this.activateTimeout = setTimeout(function() {
+                        if (!nextItem.is($this.selectedTab)) {
+                            $this.activateItems(nextItem);
+                        }
+                        else {
+                            $this.wizardContent.filter('.active-content').removeClass('active-content').end().eq($this.selectedTab.index()).addClass('active-content');
+                        }
+                    }, 600);
+                },
+
+                deactivateItems: function(tab) {
+                    tab.removeClass('active-tab');
+
+                    var prevItem = tab.prev();
+                        $this = this;
+
+                    clearTimeout(this.deactivateItems);
+
+                    clearTimeout(this.activateItems);
+                    this.deactivateTimeout = setTimeout(function() {
+                        if (!prevItem.is($this.selectedTab)) {
+                            $this.deactivateItems(prevItem);
+                        }
+                        else {
+                            $this.wizardContent.filter('.active-content').removeClass('active-content').end().eq($this.selectedTab.index()).addClass('active-content');
+                        }
+                    }, 600);
+                },
+
+                selectOrderInfo: function(itemSelector, orderSelector) {
+                    var selectedItem = $(itemSelector),
+                        selectedOrder = $(orderSelector);
+                    
+                    $('.tier-card').removeClass('active-tier-card');
+                    selectedItem.addClass('active-tier-card');
+                    selectedOrder.siblings().removeClass('selected-order').end().addClass('selected-order');
+
+                    this.selectedTab.next().children('.tab-header').trigger('click.wizard-tab');
+                }
+            }
+
+            $(function() {
+                Wizard.init();
+            });            
+        //]]>
+        </script>
+</h:head>
+
+<h:body styleClass="wizard-body">
+    <div class="wizard-wrapper">
+        <div class="wizard-container">
+            <div class="wizard-header">
+                <div class="wizard-tabs-container">
+                    <div class="wizard-tab register-tab active-tab">
+                        <div class="tab-progressbar"></div>
+                        <div class="tab-header"></div>
+                    </div>
+                    <div class="wizard-tab tier-tab">
+                        <div class="tab-progressbar"></div>
+                        <div class="tab-header"></div>
+                    </div>
+                    <div class="wizard-tab payment-tab">
+                        <div class="tab-progressbar"></div>
+                        <div class="tab-header"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-content register active-content">
+                <div class="content-header">
+                    <div class="grid">
+                        <div class="col-6 title">
+                            <h1>REGISTER</h1>
+                            <span>Please complete steps to register</span>
+                        </div>
+                        <div class="col-6 icon">
+                            <p:graphicImage name="images/extensions/icon-register.svg" styleClass="layout-image"
+                                library="avalon-layout" />
+                        </div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="grid forms">
+                        <div class="col-12 md:col-6">
+                            <p:outputLabel for="name" value="Username" />
+                            <p:inputText id="name" placeholder="Name" styleClass="form-element" />
+
+                            <p:outputLabel for="email" value="Email" />
+                            <p:inputText id="email" placeholder="Email" styleClass="form-element" />
+
+                            <p:outputLabel for="password" value="Password" />
+                            <p:password id="password" placeholder="Password" styleClass="form-element" />
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <p:outputLabel for="timezone" value="Timezone" />
+                            <p:selectOneMenu id="timezone" styleClass="form-element">
+                                <f:selectItem itemLabel="Select Time Zone" itemValue="" />
+                                <f:selectItem itemLabel="UTC-12.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC-11.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC-10.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC-09.30" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC-09.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC-08.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC-07.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC-06.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC-05.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC-04.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC-03.30" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC-03.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC-02.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC-+00.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+01.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+02.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+03.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+03.30" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+04.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+04.30" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+05.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+05.30" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+05.45" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+06.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+06.30" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+07.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+08.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+08.45" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+09.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+09.30" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+10.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+10.30" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+11.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+12.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+12.45" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+13.00" itemValue="UTC-+Value" />
+                                <f:selectItem itemLabel="UTC+14.00" itemValue="UTC-+Value" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="popup" value="Birthdate" />
+                            <p:calendar id="popup" styleClass="form-element" placeholder="Birthdate" />
+
+                            <p:outputLabel for="avalon" value="Where did you hear Avalon" />
+                            <p:selectOneMenu id="avalon" styleClass="form-element">
+                                <f:selectItem itemLabel="Where did you hear Avalon" itemValue="" />
+                                <f:selectItem itemLabel="Blogs" itemValue="Blogs" />
+                                <f:selectItem itemLabel="Google Ads" itemValue="google" />
+                                <f:selectItem itemLabel="Your Forum" itemValue="prime-forum" />
+                                <f:selectItem itemLabel="Youtube" itemValue="Youtube" />
+                                <f:selectItem itemLabel="Reddit" itemValue="reddit" />
+                                <f:selectItem itemLabel="Events" itemValue="event" />
+                                <f:selectItem itemLabel="Other" itemValue="other" />
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="grid button">
+                        <p:commandButton styleClass="continue-button" type="button" value="CONTINUE" style="width: 100%" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="wizard-content tier">
+                <div class="content-header">
+                    <div class="grid">
+                        <div class="col-6 title">
+                            <h1>CHOOSE TIER</h1>
+                            <span>Now choose your account type</span>
+                        </div>
+                        <div class="col-6 icon">
+                            <p:graphicImage name="images/extensions/icon-tier@2x.png" styleClass="layout-image"
+                                library="avalon-layout" />
+                        </div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="grid cards">
+                        <div class="col-12 md:col-4">
+                            <div class="tier-card basic" onclick="Wizard.selectOrderInfo('.basic', '.order-basic')">
+                                <div class="tier-card-header">
+                                    <div class="grid">
+                                        <div class="col-8">
+                                            <h1>BEGINNER</h1>
+                                            <span>For starters and side projects</span>
+                                        </div>
+                                        <div class="col-4 icon">
+                                            <i class="pi pi-check" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tier-card-content">
+                                    <div class="row even">
+                                        Responsive
+                                    </div>
+                                    <div class="row">
+                                        Push Mesaages
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-4">
+                            <div class="tier-card active-tier-card pro" onclick="Wizard.selectOrderInfo('.pro', '.order-basic')">
+                                <div class="tier-card-header">
+                                    <div class="grid">
+                                        <div class="col-8">
+                                            <h1>PROFFESIONAL</h1>
+                                            <span>For companies</span>
+                                        </div>
+                                        <div class="col-4 icon">
+                                            <i class="pi pi-check" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tier-card-content">
+                                    <div class="row even">
+                                        Responsive
+                                    </div>
+                                    <div class="row">
+                                        Push Mesaages
+                                    </div>
+                                    <div class="row even">
+                                        7/24 Support
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-4">
+                            <div class="tier-card pro-plus" onclick="Wizard.selectOrderInfo('.pro-plus', '.order-pro-plus')">
+                                <div class="tier-card-header">
+                                    <div class="grid">
+                                        <div class="col-8">
+                                            <h1>ENTERPRISE</h1>
+                                            <span>For custom needs</span>
+                                        </div>
+                                        <div class="col-4 icon">
+                                            <i class="pi pi-check" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tier-card-content">
+                                    <div class="row even">
+                                        Responsive
+                                    </div>
+                                    <div class="row">
+                                        Push Mesaages
+                                    </div>
+                                    <div class="row even">
+                                        7/24 High Priority Support
+                                    </div>
+                                    <div class="row">
+                                        Free Shipping
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid button">
+                        <p:commandButton styleClass="continue-button" type="button" value="CONTINUE" style="width: 100%" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="wizard-content payment">
+                <div class="grid">
+                    <div class="col-12 md:col-8 payment-info">
+                        <div class="content-header">
+                            <div class="grid">
+                                <div class="col-12 title">
+                                    <h1>PAYMENT</h1>
+                                    <span>Give me the money</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="grid forms">
+                                <div class="col-12">
+                                    <p:outputLabel for="cardName" value="Cardholder Name" />
+                                    <p:inputText id="cardName" placeholder="Cardholder Name"
+                                        styleClass="form-element" />
+                                </div>
+
+                                <div class="col-12 md:col-6">
+                                    <p:outputLabel for="cardNumber" value="Card Number" />
+                                    <p:inputMask id="cardNumber" mask="9999-9999-9999-9999" styleClass="form-element"/>
+                                </div>
+
+                                <div class="col-6 md:col-3">
+                                    <p:outputLabel for="cardDate" value="Date" />
+                                    <p:inputMask id="cardDate" mask="99/99" placeholder="MO/YE" styleClass="form-element" />
+                                </div>
+
+                                <div class="col-6 md:col-3">
+                                    <p:outputLabel for="ccv" value="CCV" />
+                                    <p:inputMask id="ccv" mask="999" placeholder="XYZ" styleClass="form-element" />
+                                </div>
+                            </div>
+                            <div class="grid checkbox">
+                                <p:selectManyCheckbox layout="responsive" columns="1">
+                                    <f:selectItem itemLabel=" Save credit card information for future usage"
+                                        itemValue="SaveInfo" />
+                                </p:selectManyCheckbox>
+                            </div>
+                            <div class="grid button">
+                                <p:commandButton type="button" value="CONTINUE" style="width: 100%" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 md:col-4 order-info">
+                        <div class="order order-default">
+                            <div class="summary">
+                                <div class="grid">
+                                    <div class="col-12">
+                                        <h1>ORDER SUMMARY</h1>
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <div class="col-8">Tier - </div>
+                                    <div class="col-4 price">$0.00</div>
+                                </div>
+                                <div class="grid">
+                                    <div class="col-8">VAT (%18)</div>
+                                    <div class="col-4 price">$0.00</div>
+                                </div>
+                            </div>
+                            <div class="grid total">
+                                <div class="col-8">Total</div>
+                                <div class="col-4 price">$0.00</div>
+                                <div class="col-12">
+                                    Please select one tier.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="order order-basic">
+                            <div class="summary">
+                                <div class="grid">
+                                    <div class="col-12">
+                                        <h1>ORDER SUMMARY</h1>
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <div class="col-8">Tier - Basic</div>
+                                    <div class="col-4 price">$5.00</div>
+                                </div>
+                                <div class="grid">
+                                    <div class="col-8">VAT (%18)</div>
+                                    <div class="col-4 price">$0.90</div>
+                                </div>
+
+                            </div>
+                            <div class="grid total">
+                                <div class="col-8">Total</div>
+                                <div class="col-4 price">$5.90</div>
+                            </div>
+                        </div>
+                        <div class="order order-pro selected-order">
+                            <div class="summary">
+                                <div class="grid">
+                                    <div class="col-12">
+                                        <h1>ORDER SUMMARY</h1>
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <div class="col-8">Tier - Pro</div>
+                                    <div class="col-4 price">$25.00</div>
+                                </div>
+                                <div class="grid">
+                                    <div class="col-8">VAT (%18)</div>
+                                    <div class="col-4 price">$4.50</div>
+                                </div>
+                            </div>
+                            <div class="grid total">
+                                <div class="col-8">Total</div>
+                                <div class="col-4 price">$29.50</div>
+                            </div>
+                        </div>
+                        <div class="order order-pro-plus">
+                            <div class="summary">
+                                <div class="grid">
+                                    <div class="col-12">
+                                        <h1>ORDER SUMMARY</h1>
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <div class="col-8">Tier - Pro+</div>
+                                    <div class="col-4 price">$50.00</div>
+                                </div>
+                                <div class="grid">
+                                    <div class="col-8">VAT (%18)</div>
+                                    <div class="col-4 price">$9.00</div>
+                                </div>
+                            </div>
+                            <div class="grid total">
+                                <div class="col-8">Total</div>
+                                <div class="col-4 price">$59.00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h:outputStylesheet name="css/primeflex.min.css" library="avalon-layout" />
+    <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="avalon-layout" />
+</h:body>
+
+</html>

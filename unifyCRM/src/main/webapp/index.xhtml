@@ -1,0 +1,411 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template-unify.xhtml">
+	<ui:define name="content">
+	<!-- ========== MAIN CONTENT ========== -->
+  <main id="content" role="main">
+    <!-- Hero -->
+    <div class="container content-space-t-3">
+      <div class="row justify-content-lg-between align-items-lg-center">
+        <div class="col-lg-5 mb-5 mb-lg-0">
+          <div class="mb-5">
+            <h3 class="display-4 text-dark mb-5">使用<span class="text-primary">大风起</span>开始您的旅程</h3>
+            <p class="fs-3">功能丰富的组件和设计的演示页面帮助您创建尽可能最好的产品。</p>
+          </div>
+
+          <div class="d-grid d-sm-flex gap-3 mb-5">
+            <a class="btn btn-primary" href="${base}/login.xhtml">演示申请</a>
+          </div>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-lg-6">
+          <div class="position-relative">
+            <div class="position-relative">
+              <img class="img-fluid" src="${base}/resources/unify-layout/img/950x950/img1.jpg"  alt="大风起·云向兮"/>
+
+              <div class="position-absolute bottom-0 end-0">
+                <img class="w-100" src="${base}/resources/unify-layout/svg/illustrations/cubics.svg" alt="SVG" style="max-width: 30rem;"/>
+              </div>
+            </div> 
+
+            <!-- Media -->
+            <div class="d-inline-block position-absolute top-0 start-0 bg-white w-100 rounded-pill shadow-sm p-2 mt-5 ms-n5" style="max-width: 12rem;">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                  <span class="avatar avatar-sm avatar-circle">
+                    <img class="avatar-img" src="${base}/resources/unify-layout/img/160x160/img10.jpg"  alt="大风起·云向兮"/>
+                  </span>
+                </div>
+                <div class="flex-grow-1 ms-2">
+                  <div class="fs-5 fw-bold mb-0">朱莉娅</div>
+                  <span class="d-block fs-6">开源软件！</span>
+                </div>
+              </div>
+            </div>
+            <!-- End Media -->
+
+            <!-- Media -->
+            <div class="d-inline-block position-absolute bottom-0 start-0 bg-warning w-100 rounded-pill shadow-sm p-2 mb-10 ms-n10" style="max-width: 16rem;">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                  <span class="avatar avatar-sm avatar-circle">
+                    <img class="avatar-img" src="${base}/resources/unify-layout/img/160x160/img3.jpg"  alt="大风起·云向兮"/>
+                  </span>
+                </div>
+                <div class="flex-grow-1 ms-2">
+                  <div class="fs-5 fw-bold text-dark mb-0">迈克</div>
+                  <span class="d-block fs-6 text-dark">优秀文档 🔥👋</span>
+                </div>
+              </div>
+            </div>
+            <!-- End Media -->
+          </div>
+        </div>
+        <!-- End Col -->
+      </div>
+      <!-- End Row -->
+    </div>
+    <!-- End Hero -->
+
+    <!-- Icon Blocks -->
+    <div class="container content-space-t-2 content-space-t-lg-3">
+      <div class="row">
+        <div class="col-sm-6 col-lg mb-5 mb-lg-0">
+          <!-- Icon Block -->
+          <div class="text-center">
+            <div class="mb-3">
+              <i class="bi-phone fs-1 text-dark"></i>
+            </div>
+            
+            <h5>快速反应</h5>
+            <span class="d-block">响应快、移动优先的web项目</span>
+          </div>
+          <!-- End Icon Block -->
+        </div>
+        <!-- End Col -->
+
+        <div class="col-sm-6 col-lg mb-5 mb-lg-0">
+          <!-- Icon Block -->
+          <div class="text-center">
+            <div class="mb-3">
+              <i class="bi-toggles2 fs-1 text-dark"></i>
+            </div>
+            
+            <h5>可定制的</h5>
+            <span class="d-block">组件易于定制</span>
+          </div>
+          <!-- End Icon Block -->
+        </div>
+        <!-- End Col -->
+
+        <div class="col-sm-6 col-lg mb-5 mb-sm-0">
+          <!-- Icon Block -->
+          <div class="text-center">
+            <div class="mb-3">
+              <i class="bi-file-earmark-text fs-1 text-dark"></i>
+            </div>
+            
+            <h5>文档</h5>
+            <span class="d-block">每个组件和插件都有很好的文档记录</span>
+          </div>
+          <!-- End Icon Block -->
+        </div>
+        <!-- End Col -->
+
+        <div class="col-sm-6 col-lg">
+          <!-- Icon Block -->
+          <div class="text-center">
+            <div class="mb-3">
+              <i class="bi-chat-right-dots fs-1 text-dark"></i>
+            </div>
+            
+            <h5>24/7支持</h5>
+            <span class="d-block">每周7天，每天24小时与我们联系。</span>
+          </div>
+          <!-- End Icon Block -->
+        </div>
+        <!-- End Col -->
+      </div>
+      <!-- End Row -->
+    </div>
+    <!-- End Icon Blocks -->
+
+    <!-- Features -->
+    <div class="overflow-hidden">
+      <div class="container content-space-2 content-space-lg-3">
+        <div class="row align-items-lg-center">
+          <div class="col-lg-7 me-auto ms-lg-n10 mb-5 mb-lg-0">
+            <div class="row align-items-center">
+              <div class="col-4">
+                <img class="img-fluid rounded-3" src="${base}/resources/unify-layout/img/580x480/img1.jpg"  alt="大风起·云向兮"/>
+              </div>
+              <!-- End Col -->
+              
+              <div class="col-3">
+                <img class="img-fluid rounded-3" src="${base}/resources/unify-layout/img/350x700/img1.jpg"  alt="大风起·云向兮"/>
+              </div>
+              <!-- End Col -->
+
+              <div class="col-5">
+                <img class="img-fluid rounded-3" src="${base}/resources/unify-layout/img/400x700/img1.jpg"  alt="大风起·云向兮"/>
+              </div>
+              <!-- End Col -->
+            </div>
+            <!-- End Row -->
+          </div>
+          <!-- End Col -->
+
+          <div class="col-lg-5">
+            <div class="mb-5">
+              <h3>设计最优用户体验的协作工具</h3>
+              <p>使用我们的工具探索您的想法，实现您的愿景。然后轻松分享你的工作。</p>
+            </div>
+
+            <!-- List Checked -->
+            <ul class="list-checked list-checked-soft-bg-primary list-checked-lg">
+              <li class="list-checked-item"><span class="fw-bold">少一些例行公事</span> – 多一些创造力</li>
+              <li class="list-checked-item">数万费用的节省</li>
+              <li class="list-checked-item">有效的使用<span class="fw-bold">预算</span></li>
+            </ul>
+            <!-- End List Checked -->
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+      </div>
+    </div>
+    <!-- End Features -->
+
+    <!-- Icon Blocks -->
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6 col-lg-4 mb-5">
+          <div class="text-center px-md-5">
+            <div class="mb-3">
+              <i class="bi-tablet-landscape fs-1 text-dark"></i>
+            </div>
+            <p>大风起 <span class="fw-bold">是一个非常漂亮的移动网络第一个项目。</span> </p>
+          </div>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-sm-6 col-lg-4 mb-5">
+          <div class="text-center px-md-5">
+            <div class="mb-3">
+              <i class="bi-shield-check fs-1 text-dark"></i>
+            </div>
+            <p>大风起不仅适用于开发人员，也适用于设计师，它包含一个 <span class="fw-bold">Figma</span>文件。</p>
+          </div>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-sm-6 col-lg-4 mb-5">
+          <div class="text-center px-md-5">
+            <div class="mb-3">
+              <i class="bi-hdd-network fs-1 text-dark"></i>
+            </div>
+            <p><span class="fw-bold">无论您是初创企业</span>还是全球企业，学习如何与大风起集成。</p>
+          </div>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-sm-6 col-lg-4 mb-5 mb-lg-0">
+          <div class="text-center px-md-5">
+            <div class="mb-3">
+              <i class="bi-gear fs-1 text-dark"></i>
+            </div>
+            <p>使用大风起系统和自动化库 <span class="fw-bold">管理您的业务</span>。</p>
+          </div>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-sm-6 col-lg-4 mb-5 mb-sm-0">
+          <div class="text-center px-md-5">
+            <div class="mb-3">
+              <i class="bi-sliders fs-1 text-dark"></i>
+            </div>
+            <p>模板可以使用大风起组件 <span class="fw-bold">轻松定制</span>。 </p>
+          </div>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-sm-6 col-lg-4">
+          <div class="text-center px-md-5">
+            <div class="mb-3">
+              <i class="bi-journal-text fs-1 text-dark"></i>
+            </div>
+            <p>每个组件和插件都有很好的 <span class="fw-bold">文档记录和实例</span>。</p>
+          </div>
+        </div>
+        <!-- End Col -->
+      </div>
+      <!-- End Row -->
+    </div>
+    <!-- End Icon Blocks -->
+
+    <!-- Features -->
+    <div class="container content-space-t-2 content-space-t-lg-3">
+      <div class="row justify-content-lg-between align-items-lg-center">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <img class="img-fluid rounded-3" src="${base}/resources/unify-layout/img/950x950/img2.jpg"  alt="大风起·云向兮"/>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-lg-5">
+          <div class="mb-5">
+            <h2>我们应对初创企业面临的挑战</h2>
+            <p>除了作为数字化合作伙伴与初创企业合作外，我们还针对我们在各种产品和项目中遇到的常见痛点构建了企业产品。</p>
+          </div>
+
+          <!-- List Checked -->
+          <ul class="list-checked list-checked-soft-bg-primary list-checked-lg mb-5">
+            <li class="list-checked-item"><span class="fw-bold">简易快速</span>设计</li>
+            <li class="list-checked-item">强大的<span class="fw-bold">功能</span></li>
+            <li class="list-checked-item">用户体验设计</li>
+          </ul>
+          <!-- End List Checked -->
+
+          <a class="btn btn-primary" href="#">Our services</a>
+        </div>
+        <!-- End Col -->
+      </div>
+      <!-- End Row -->
+    </div>
+    <!-- End Features -->
+
+    <!-- Stats -->
+    <div class="container content-space-2 content-space-lg-3">
+      <div class="row justify-content-lg-between align-items-lg-center">
+        <div class="col-lg-5 mb-9 mb-lg-0">
+          <div class="mb-6">
+            <h2>这就是效率</h2>
+            <p>我们为您提供一个测试帐户，可以在几秒钟内设置。我们的重点是尽快得到您的回复。</p>
+          </div>
+
+          <!-- Blockquote -->
+          <figure>
+            <blockquote class="blockquote"><em>令人惊叹的合作伙伴。非常快速和专业的合作伙伴。</em></blockquote>
+
+            <figcaption class="blockquote-footer">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                  <img class="avatar avatar-circle" src="${base}/resources/unify-layout/img/160x160/img3.jpg" alt="大风起·云向兮"/>
+                </div>
+
+                <div class="flex-grow-1 ms-3">
+                  地区宝
+                  <span class="blockquote-footer-source">营销总 | China</span>
+                </div>
+              </div>
+            </figcaption>
+          </figure>
+          <!-- End Blockquote -->
+        </div>
+        <!-- End Col -->
+
+        <div class="col-lg-6">
+          <!-- List -->
+          <ul class="list-equal-height list-equal-height-2-cols">
+            <li class="list-equal-height-item">
+              <h4 class="display-5">1k+</h4>
+              <p class="mb-0">用户 - 从初创企业到行业新秀</p>
+            </li>
+
+            <li class="list-equal-height-item">
+              <h4 class="display-5"><sub><i class="bi-arrow-up-short text-primary ms-n2"></i></sub>50%</h4>
+              <p class="mb-0">使用地区宝增加网页流量</p>
+            </li>
+
+            <li class="list-equal-height-item">
+              <h4 class="display-5"><sub><i class="bi-arrow-up-short text-primary ms-n2"></i></sub>8.9%</h4>
+              <p class="mb-0">提高整个销售范围内的回购率</p>
+            </li>
+
+            <li class="list-equal-height-item">
+              <h4 class="display-5">2x</h4>
+              <p class="mb-0">比以前的大风起版本更快</p>
+            </li>
+          </ul>
+          <!-- End List -->
+        </div>
+        <!-- End Col -->
+      </div>
+      <!-- End Row -->
+    </div>
+    <!-- End Stats -->
+
+    <!-- Clients -->
+    <div class="container content-space-2 content-space-lg-3">
+      <!-- Heading -->
+      <div class="w-lg-75 text-center mx-lg-auto mb-10">
+        <h2>受到开源、企业和3000多人的信任</h2>
+      </div>
+      <!-- End Heading -->
+
+      <div class="row justify-content-center text-center">
+        <div class="col-4 col-sm-3 col-md-2 py-3">
+          <img class="avatar avatar-lg avatar-4x3 avatar-centered" src="${base}/resources/unify-layout/svg/brands/amazon-dark.svg" alt="大风起·云向兮"/>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-4 col-sm-3 col-md-2 py-3">
+          <img class="avatar avatar-lg avatar-4x3 avatar-centered" src="${base}/resources/unify-layout/svg/brands/kaplan-dark.svg" alt="大风起·云向兮"/>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-4 col-sm-3 col-md-2 py-3">
+          <img class="avatar avatar-lg avatar-4x3 avatar-centered" src="${base}/resources/unify-layout/svg/brands/google-dark.svg" alt="大风起·云向兮"/>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-4 col-sm-3 col-md-2 py-3">
+          <img class="avatar avatar-lg avatar-4x3 avatar-centered" src="${base}/resources/unify-layout/svg/brands/airbnb-dark.svg" alt="大风起·云向兮"/>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-4 col-sm-3 col-md-2 py-3">
+          <img class="avatar avatar-lg avatar-4x3 avatar-centered" src="${base}/resources/unify-layout/svg/brands/shopify-dark.svg" alt="大风起·云向兮"/>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-4 col-sm-3 col-md-2 py-3">
+          <img class="avatar avatar-lg avatar-4x3 avatar-centered" src="${base}/resources/unify-layout/svg/brands/vidados-dark.svg" alt="大风起·云向兮"/>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-4 col-sm-3 col-md-2 py-3">
+          <img class="avatar avatar-lg avatar-4x3 avatar-centered" src="${base}/resources/unify-layout/svg/brands/capsule-dark.svg" alt="大风起·云向兮"/>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-4 col-sm-3 col-md-2 py-3">
+          <img class="avatar avatar-lg avatar-4x3 avatar-centered" src="${base}/resources/unify-layout/svg/brands/forbes-dark.svg" alt="大风起·云向兮"/>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-4 col-sm-3 col-md-2 py-3">
+          <img class="avatar avatar-lg avatar-4x3 avatar-centered" src="${base}/resources/unify-layout/svg/brands/business-insider-dark.svg" alt="大风起·云向兮"/>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-4 col-sm-3 col-md-2 py-3">
+          <img class="avatar avatar-lg avatar-4x3 avatar-centered" src="${base}/resources/unify-layout/svg/brands/hubspot-dark.svg" alt="大风起·云向兮"/>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-4 col-sm-3 col-md-2 py-3">
+          <img class="avatar avatar-lg avatar-4x3 avatar-centered" src="${base}/resources/unify-layout/svg/brands/sass-dark.svg" alt="大风起·云向兮"/>
+        </div>
+        <!-- End Col -->
+      </div>
+      <!-- End Row -->
+    </div>
+    <!-- End Clients -->
+  </main>
+  <!-- ========== END MAIN CONTENT ========== -->
+	</ui:define>
+</ui:composition>

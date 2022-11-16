@@ -1,0 +1,250 @@
+// Icon Override Mixin
+@mixin icon-override($icon) {
+    background: none;
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-indent: 0px !important;
+    text-align: center;
+
+    &:before {
+        content: $icon;
+    }
+}
+
+@mixin border-radius($val) {
+    -moz-border-radius: $val;
+    -webkit-border-radius: $val;
+    border-radius: $val;
+}
+
+@mixin border-radius-right($val) {
+    -moz-border-radius-topright: $val;
+    -webkit-border-top-right-radius: $val;
+    border-top-right-radius: $val;
+    -moz-border-radius-bottomright: $val;
+    -webkit-border-bottom-right-radius: $val;
+    border-bottom-right-radius: $val;
+}
+
+@mixin border-radius-left($val) {
+    -moz-border-radius-topleft: $val;
+    -webkit-border-top-left-radius: $val;
+    border-top-left-radius: $val;
+    -moz-border-radius-bottomleft: $val;
+    -webkit-border-bottom-left-radius: $val;
+    border-bottom-left-radius: $val;
+}
+
+@mixin border-radius-top($val) {
+    -moz-border-radius-topleft: $val;
+    -webkit-border-top-left-radius: $val;
+    border-top-left-radius: $val;
+    -moz-border-radius-topright: $val;
+    -webkit-border-top-right-radius: $val;
+    border-top-right-radius: $val;
+}
+
+@mixin border-radius-bottom($val) {
+    -moz-border-radius-bottomleft: $val;
+    -webkit-border-bottom-left-radius: $val;
+    border-bottom-left-radius: $val;
+    -moz-border-radius-bottomright: $val;
+    -webkit-border-bottom-right-radius: $val;
+    border-bottom-right-radius: $val;
+}
+
+@mixin transition($transition...) {
+    -moz-transition:    $transition;
+    -o-transition:      $transition;
+    -webkit-transition: $transition;
+    transition:         $transition;
+}
+
+@mixin rotate($deg) {
+    -webkit-transform: rotate($deg);
+    -moz-transform: rotate($deg);
+    -o-transform: rotate($deg);
+    -ms-transform: rotate($deg);
+    transform: rotate($deg);
+}
+
+@mixin scale($deg) {
+    -webkit-transform: scale($deg);
+    -moz-transform: scale($deg);
+    -o-transform: scale($deg);
+    -ms-transform: scale($deg);
+    transform: scale($deg);
+}
+
+@mixin opacity($opacity) {
+    opacity: $opacity;
+    $opacity-ie: $opacity * 100;
+    filter: alpha(opacity=$opacity-ie);
+}
+
+@mixin no-shadow() {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+}
+
+@mixin list-item-hover {
+    background-color: $listItemHoverBgColor;
+    color: $listItemHoverTextColor;
+}
+
+@mixin highlight {
+    background-color: $highlightBgColor;
+    color: $highlightTextColor;
+}
+
+@mixin menu-item-hover {
+    background-color: $listItemHoverBgColor;
+    color: $listItemHoverTextColor;
+}
+
+@mixin background-gradient-top2bottom($start-color, $end-color) {
+    background-color: $start-color;
+    background-image: -webkit-gradient(linear, left top, left bottom, from($start-color), to($end-color));
+    background-image: -webkit-linear-gradient(top, $start-color, $end-color);
+    background-image:    -moz-linear-gradient(top, $start-color, $end-color);
+    background-image:     -ms-linear-gradient(top, $start-color, $end-color);
+    background-image:      -o-linear-gradient(top, $start-color, $end-color);
+    background-image:         linear-gradient(to bottom, $start-color, $end-color);
+    filter:            progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$start-color}', endColorstr='#{$end-color}');
+}
+
+@mixin background-gradient-left2right($start-color, $end-color) {
+    background-color: $start-color;
+    background-image: -webkit-gradient(linear, left top, right top, from($start-color), to($end-color));
+    background-image: -webkit-linear-gradient(left, $start-color, $end-color);
+    background-image:    -moz-linear-gradient(left, $start-color, $end-color);
+    background-image:     -ms-linear-gradient(left, $start-color, $end-color);
+    background-image:      -o-linear-gradient(left, $start-color, $end-color);
+    background-image:         linear-gradient(left, $start-color, $end-color);
+    filter:            progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$start-color}', endColorstr='#{$end-color}', gradientType='1');
+}
+
+@mixin shadow($value) {
+    -webkit-box-shadow: $value;
+    -moz-box-shadow: $value;
+    box-shadow: $value;
+}
+
+@mixin multi-shadow($value1, $value2) {
+    -webkit-box-shadow: $value1, $value2;
+    -moz-box-shadow: $value1, $value2;
+    box-shadow: $value1, $value2;
+}
+
+@mixin disabled-input() {
+    @include opacity(1);
+    background-color: $disabledBgColor;
+}
+
+@mixin clearfix() {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+@mixin translateX($val) {
+    -webkit-transform: translateX($val);
+    -moz-transform: translateX($val);
+    -o-transform: translateX($val);
+    -ms-transform: translateX($val);
+    transform: translateX($val);
+}
+
+@mixin translateXForIE($val1, $val2) {
+    -ms-transform: translateX($val1) translateX($val2);
+}
+
+@mixin box-sizing($box-model) {
+    -webkit-box-sizing: $box-model;
+    -moz-box-sizing: $box-model;
+    box-sizing: $box-model;
+}
+
+@mixin placeholder($content) {
+    &::-webkit-input-placeholder {@content}
+    &:-moz-placeholder           {@content}
+    &::-moz-placeholder          {@content}
+    &:-ms-input-placeholder      {@content}
+}
+
+@mixin pull-to($side){
+    float: $side;
+}
+
+@mixin overlay-shadow {
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    -moz-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+@mixin overlay() {
+    @include overlay-shadow();
+    border: 1px solid $overlayBorderColor;
+}
+
+@mixin flex() {
+    display: -ms-flexbox;
+    display: flex;
+}
+
+@mixin flex-wrap($value) {
+    -ms-flex-wrap: $value;
+    flex-wrap: $value;
+}
+
+@mixin flex-direction-row() {
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+
+@mixin flex-direction-column() {
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+@mixin flex-justify-center() {
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+@mixin flex-justify-between() {
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+
+@mixin flex-align-center() {
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+@mixin flex-align-start() {
+    -ms-flex-align: start;
+    align-items: flex-start;
+}
+
+@mixin flex-align-end() {
+    -ms-flex-align: end;
+    align-items: flex-end;
+}
+
+@mixin flex-justify-start() {
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+}
+
+@mixin flex-justify-end() {
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+}

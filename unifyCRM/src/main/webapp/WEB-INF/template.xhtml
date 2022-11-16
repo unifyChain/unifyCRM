@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+		  <link rel="icon" href="#{request.contextPath}/images/favicon.ico"/>
+            <meta name="theme-color" content="#{guestPreferences.themeColors[guestPreferences.theme]}" />
+        </f:facet>
+        <title><ui:insert name="title">大风起·云向兮</ui:insert></title>
+        <h:outputScript name="js/prism.js" library="avalon-layout"/>
+        <h:outputScript name="js/layout.js" library="avalon-layout" />
+	    <h:outputScript name="js/jsfcrud.js" library="avalon-layout" />
+        <ui:insert name="head"/>
+    </h:head>
+
+    <h:body styleClass="#{guestPreferences.inputStyleClass}">
+        <div class="layout-wrapper #{guestPreferences.getMenu()}">
+            <ui:include src="./topbar.xhtml" />
+            <ui:include src="./menu.xhtml" />
+            
+            <div class="layout-main">
+				<p:growl id="growl" showDetail="true"  life="5000"/>
+                <ui:insert name="content"/>
+            </div>
+            
+            <ui:include src="./config.xhtml" />
+            <ui:include src="./footer.xhtml" />
+           
+        </div>
+
+        <p:ajaxStatus styleClass="layout-ajax-loader">
+            <f:facet name="start">
+                <i class="pi pi-spin pi-spinner layout-ajax-loader-icon" aria-hidden="true"/>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:outputStylesheet name="css/primeflex.min.css" library="avalon-layout" />
+        <h:outputStylesheet name="css/primeicons.css" library="avalon-layout" />
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="avalon-layout" />
+        <h:outputStylesheet name="css/demo.css" library="demo" />
+    </h:body>
+
+</html>

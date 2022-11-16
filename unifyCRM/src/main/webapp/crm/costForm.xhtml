@@ -1,0 +1,410 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">
+        费用
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<c:if test="#{costController.selected.type=='编辑'}">
+							<p:breadCrumb>
+								<p:menuitem value="Dashboard" url="../dashboard" />
+								<p:menuitem value="费用" url="costs" />
+								<p:menuitem value="编辑" url="#" />
+							</p:breadCrumb>
+						</c:if>
+						<c:if test="#{costController.selected.type=='新增'}">
+							<p:breadCrumb>
+								<p:menuitem value="Dashboard" url="../dashboard" />
+								<p:menuitem value="费用" url="costs" />
+								<p:menuitem value="新增" url="#" />
+							</p:breadCrumb>
+						</c:if>
+						<c:if test="#{costController.selected.type=='查看'}">
+							<p:breadCrumb>
+								<p:menuitem value="Dashboard" url="../dashboard" />
+								<p:menuitem value="费用" url="costs" />
+								<p:menuitem value="查看" url="#" />
+							</p:breadCrumb>
+						</c:if>
+					</div>
+				</h:form>
+				<div class="card">
+					<h:form id="CostCreateForm">
+						<c:if test="#{costController.selected.type=='编辑'}">
+							<p:toolbar>
+								<p:toolbarGroup>
+									<p:commandButton action="#{costController.update}"
+										style="width:auto;" value="保存" id="add" update=":growl"
+										widgetVar="saveButton1" onclick="PF('saveButton1').disable()"
+										oncomplete="PF('saveButton1').enable();PF('dlg2').hide();handleSubmit(args,'CostCreateDialog');"
+										icon="pi pi-save" styleClass="btn btn-primary">
+										<f:param name="from" value="list" />
+									</p:commandButton>
+								</p:toolbarGroup>
+
+							</p:toolbar>
+						</c:if>
+						<c:if test="#{costController.selected.type=='新增'}">
+							<p:toolbar>
+								<p:toolbarGroup>
+									<p:commandButton action="#{costController.create}"
+										style="width:auto;" value="保存" id="add" update=":growl"
+										widgetVar="saveButton1" onclick="PF('saveButton1').disable()"
+										oncomplete="PF('saveButton1').enable();PF('dlg2').hide();handleSubmit(args,'CostCreateDialog');"
+										icon="pi pi-save" styleClass="btn btn-primary">
+										<f:param name="from" value="list" />
+									</p:commandButton>
+								</p:toolbarGroup>
+
+							</p:toolbar>
+						</c:if>
+
+						<p:fieldset legend="基本信息" style="margin-top:5px;">
+
+							<c:if test="#{costController.selected.type=='查看'}">
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="费用编号" for="id" />
+												<p:inputText id="id" value="#{costController.selected.id}"
+													title="id" required="true" disabled="true" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="费用类型" for="expenseType" />
+												<p:selectOneMenu id="expenseType" disabled="true"
+													value="#{costController.selected.expenseType}"
+													required="false">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{dictController.expenseTypes}"
+														var="expenseType" itemLabel="#{expenseType.dictLabel}"
+														itemValue="#{expenseType.dictCode}!_#{expenseType.dictLabel}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="费用金额" for="expenseAmount" />
+												<p:inputText id="expenseAmount"
+													value="#{costController.selected.expenseAmount}"
+													title="expenseAmount" required="false" disabled="true" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="发生时间" for="timeOfOccurrence" />
+												<p:datePicker id="timeOfOccurrence"
+													value="#{costController.selected.timeOfOccurrence}"
+													showTime="true" required="true" disabled="true" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="对应客户" for="customerId" />
+												<p:selectOneMenu id="customerId"
+													value="#{costController.selected.customerId}"
+													required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{customerController.parentCustomer}"
+														var="sjkh" itemLabel="#{sjkh.name}"
+														itemValue="#{sjkh.id}!_#{sjkh.name}" />
+												</p:selectOneMenu>
+											</div>
+										</div>
+									</div>
+								</div>
+							</c:if>
+							<c:if test="#{costController.selected.type=='编辑'}">
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="费用编号" for="id" />
+												<p:inputText id="id" value="#{costController.selected.id}"
+													title="id" required="true" disabled="true" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="费用类型" for="expenseType" />
+												<p:selectOneMenu id="expenseType"
+													value="#{costController.selected.expenseType}"
+													required="false">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{dictController.expenseTypes}"
+														var="expenseType" itemLabel="#{expenseType.dictLabel}"
+														itemValue="#{expenseType.dictCode}!_#{expenseType.dictLabel}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="费用金额" for="expenseAmount" />
+												<p:inputText id="expenseAmount"
+													value="#{costController.selected.expenseAmount}"
+													title="expenseAmount" required="false" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="发生时间" for="timeOfOccurrence" />
+												<p:datePicker id="timeOfOccurrence"
+													value="#{costController.selected.timeOfOccurrence}"
+													showTime="true" required="true" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="对应客户" for="customerId" />
+												<p:selectOneMenu id="customerId"
+													value="#{costController.selected.customerId}"
+													required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{customerController.parentCustomer}"
+														var="sjkh" itemLabel="#{sjkh.name}"
+														itemValue="#{sjkh.id}!_#{sjkh.name}" />
+												</p:selectOneMenu>
+											</div>
+										</div>
+									</div>
+								</div>
+							</c:if>
+							<c:if test="#{costController.selected.type=='新增'}">
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="费用编号" for="id" />
+												<p:inputText id="id" value="#{costController.selected.id}"
+													title="id" required="true" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="费用类型" for="expenseType" />
+												<p:selectOneMenu id="expenseType"
+													value="#{costController.selected.expenseType}"
+													required="false">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{dictController.expenseTypes}"
+														var="expenseType" itemLabel="#{expenseType.dictLabel}"
+														itemValue="#{expenseType.dictCode}!_#{expenseType.dictLabel}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="费用金额" for="expenseAmount" />
+												<p:inputText id="expenseAmount"
+													value="#{costController.selected.expenseAmount}"
+													title="expenseAmount" required="false" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="发生时间" for="timeOfOccurrence" />
+												<p:datePicker id="timeOfOccurrence"
+													value="#{costController.selected.timeOfOccurrence}"
+													showTime="true" required="true" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="对应客户" for="customerId" />
+												<p:selectOneMenu id="customerId"
+													value="#{costController.selected.customerId}"
+													required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{customerController.parentCustomer}"
+														var="sjkh" itemLabel="#{sjkh.name}"
+														itemValue="#{sjkh.id}!_#{sjkh.name}" />
+												</p:selectOneMenu>
+											</div>
+										</div>
+									</div>
+								</div>
+							</c:if>
+						</p:fieldset>
+
+						<p:fieldset legend="详细信息" style="margin-top:5px;">
+							<c:if test="#{costController.selected.type=='查看'}">
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="联系人" for="contactsId" />
+												<p:selectOneMenu id="contactsId"
+													value="#{costController.selected.contactsId}"
+													required="true" disabled="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{contactsController.items}"
+														var="sjkh" itemLabel="#{sjkh.name}"
+														itemValue="#{sjkh.id}!_#{sjkh.name}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="商机" for="businessId" />
+												<p:selectOneMenu id="businessId"
+													value="#{costController.selected.businessId}"
+													required="false" disabled="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems
+														value="#{businessOpportunityController.items}"
+														var="follow_status"
+														itemLabel="#{follow_status.businessOpportunityTitle}"
+														itemValue="#{follow_status.id}!_#{follow_status.businessOpportunityTitle}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="合同" for="contractId" />
+												<p:selectOneMenu id="contractId"
+													value="#{costController.selected.contractId}"
+													required="true" disabled="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{contractController.items}"
+														var="sjkh" itemLabel="#{sjkh.contractTitle}"
+														itemValue="#{sjkh.id}!_#{sjkh.contractTitle}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="负责人" for="personId" />
+												<p:selectOneMenu id="personId"
+													value="#{costController.selected.personId}"
+													required="false" disabled="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{userController.items}" var="status"
+														itemLabel="#{status.firstName}"
+														itemValue="#{status.id}!_#{status.firstName}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="p-field col-12 p-md-12">
+												<p:outputLabel value="费用描述" for="costDescription" />
+												<p:inputTextarea rows="3" id="costDescription"
+													value="#{costController.selected.costDescription}"
+													autoResize="false" disabled="true" />
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</c:if>
+							<c:if test="#{costController.selected.type=='编辑'}">
+
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="联系人" for="contactsId" />
+												<p:selectOneMenu id="contactsId"
+													value="#{costController.selected.contactsId}"
+													required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{contactsController.items}"
+														var="sjkh" itemLabel="#{sjkh.name}"
+														itemValue="#{sjkh.id}!_#{sjkh.name}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="商机" for="businessId" />
+												<p:selectOneMenu id="businessId"
+													value="#{costController.selected.businessId}"
+													required="false">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems
+														value="#{businessOpportunityController.items}"
+														var="follow_status"
+														itemLabel="#{follow_status.businessOpportunityTitle}"
+														itemValue="#{follow_status.id}!_#{follow_status.businessOpportunityTitle}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="合同" for="contractId" />
+												<p:selectOneMenu id="contractId"
+													value="#{costController.selected.contractId}"
+													required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{contractController.items}"
+														var="sjkh" itemLabel="#{sjkh.contractTitle}"
+														itemValue="#{sjkh.id}!_#{sjkh.contractTitle}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="负责人" for="personId" />
+												<p:selectOneMenu id="personId"
+													value="#{costController.selected.personId}"
+													required="false">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{userController.items}" var="status"
+														itemLabel="#{status.firstName}"
+														itemValue="#{status.id}!_#{status.firstName}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="p-field col-12 p-md-12">
+												<p:outputLabel value="费用描述" for="costDescription" />
+												<p:inputTextarea rows="3" id="costDescription"
+													value="#{costController.selected.costDescription}"
+													autoResize="false" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</c:if>
+							<c:if test="#{costController.selected.type=='新增'}">
+
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="联系人" for="contactsId" />
+												<p:selectOneMenu id="contactsId"
+													value="#{costController.selected.contactsId}"
+													required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{contactsController.items}"
+														var="sjkh" itemLabel="#{sjkh.name}"
+														itemValue="#{sjkh.id}!_#{sjkh.name}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="商机" for="businessId" />
+												<p:selectOneMenu id="businessId"
+													value="#{costController.selected.businessId}"
+													required="false">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems
+														value="#{businessOpportunityController.items}"
+														var="follow_status"
+														itemLabel="#{follow_status.businessOpportunityTitle}"
+														itemValue="#{follow_status.id}!_#{follow_status.businessOpportunityTitle}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="合同" for="contractId" />
+												<p:selectOneMenu id="contractId"
+													value="#{costController.selected.contractId}"
+													required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{contractController.items}"
+														var="sjkh" itemLabel="#{sjkh.contractTitle}"
+														itemValue="#{sjkh.id}!_#{sjkh.contractTitle}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="负责人" for="personId" />
+												<p:selectOneMenu id="personId"
+													value="#{costController.selected.personId}"
+													required="false">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{userController.items}" var="status"
+														itemLabel="#{status.firstName}"
+														itemValue="#{status.id}!_#{status.firstName}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="p-field col-12 p-md-12">
+												<p:outputLabel value="费用描述" for="costDescription" />
+												<p:inputTextarea rows="3" id="costDescription"
+													value="#{costController.selected.costDescription}"
+													autoResize="false" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</c:if>
+						</p:fieldset>
+					</h:form>
+
+				</div>
+			</div>
+
+		</div>
+		<p:dialog id="dlg2" widgetVar="dlg2" modal="true" resizable="false"
+			appendTo="@(body)" header="新增">
+		</p:dialog>
+	</ui:define>
+</ui:composition>

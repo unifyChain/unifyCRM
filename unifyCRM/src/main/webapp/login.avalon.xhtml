@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+	</f:facet>
+	<title>MiniCode</title>
+	<h:outputScript name="js/layout.js" library="avalon-layout" />
+</h:head>
+
+<h:body>
+	<br/><br/><br/><br/>
+	<form method="post" id="loginForm"
+		action="#{request.contextPath}/j_security_check"
+		onsubmit="saveUsername(this);return validateForm(this)"
+		class="form-signin" autocomplete="off">
+		<div class="flex align-items-center justify-content-center">
+			<div class="surface-card p-4 shadow-2 border-round w-full lg:w-4">
+				<div class="text-center mb-5">
+					<p:graphicImage name="images/blocks/logos/hyper.svg" library="demo"
+						alt="Image" height="50" styleClass="mb-3" />
+					<div class="text-900 text-3xl font-medium mb-3">大风起CRM</div>
+					<span class="text-600 font-medium line-height-3">还没注册?</span> <a
+						class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">现在创建!</a>
+				</div>
+				<c:if test="${param.error != null}">
+					<div class="alert alert-danger alert-dismissable">
+						#{text['errors.password.mismatch']}</div>
+				</c:if>
+				<div>
+					<label for="email1" class="block text-900 font-medium mb-2">账号</label>
+					<p:inputText id="j_username" styleClass="w-full mb-3" />
+
+					<label for="password1" class="block text-900 font-medium mb-2">密码</label>
+					<p:inputText id="j_password" type="password"
+						styleClass="w-full mb-3" />
+
+					<div class="flex align-items-center justify-content-between mb-6">
+						<div class="flex align-items-center">
+							<p:selectBooleanCheckbox id="rememberme" styleClass="mr-2" />
+							<label for="rememberme">记住我</label>
+						</div>
+						<a
+							class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">忘记密码?</a>
+					</div>
+					<button type="submit" class="btn btn-primary btn-lg">登录</button>
+
+				</div>
+			</div>
+		</div>
+
+	</form>
+	<h:outputStylesheet name="css/primeflex.min.css"
+		library="avalon-layout" />
+	<h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css"
+		library="avalon-layout" />
+</h:body>
+
+</html>

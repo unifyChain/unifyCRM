@@ -1,0 +1,246 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+	</ui:define>
+	<ui:define name="title">
+        公告
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="公告" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				<div class="card">
+					<h:form id="AnnouncementListForm">
+						<p:toolbar>
+							<p:toolbarGroup>
+									<p:commandButton id="createButton" value="新增"
+										actionListener="#{announcementController.prepareCreate}"
+										style="width:auto;" update=":AnnouncementCreateForm" icon="pi pi-file"
+										oncomplete="PF('AnnouncementCreateDialog').show()" scrollable="true"
+										scrollHeight="100"
+										styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines" />
+							</p:toolbarGroup>
+
+							<p:toolbarGroup align="right">
+
+								<p:commandButton id="toggler" type="button" value="显示列"
+									styleClass="light-btn" style="width:auto;margin-left:5px;"
+									icon="pi pi-cog" />
+								<p:columnToggler datasource="datalist" trigger="toggler" />
+
+							</p:toolbarGroup>
+						</p:toolbar>
+						<p:dataTable id="datalist" var="item" widgetVar="dataTable"
+							selectionMode="single" value="#{announcementController.items}"
+							resizableColumns="true" resizeMode="expand"
+							selection="#{announcementController.selected}" rowKey="#{item.id}"
+							paginator="true" emptyMessage="无记录" tableStyle="width:auto"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="100,500,1000,5000" reflow="true"
+							rowIndexVar="rowIndex" scrollable="true" scrollHeight="200">
+							<p:column headerText="操作">
+									<p:commandButton icon="pi pi-search" update=":AnnouncementViewForm"
+										action="#{announcementController.edit}"
+										oncomplete="PF('AnnouncementViewDialog').show()"
+										styleClass="edit-button rounded-button ui-button-success"
+										process="@this">
+										<f:param name="id" value="#{item.id}" />
+									</p:commandButton>
+									<p:commandButton class="ui-button-warning rounded-button"
+										update=":AnnouncementEditForm" icon="pi pi-pencil" process="@this"
+										oncomplete="PF('AnnouncementEditDialog').show()"
+										action="#{announcementController.edit}">
+										<f:param name="id" value="#{item.id}" />
+									</p:commandButton>
+									<p:commandButton icon="pi pi-trash"
+										action="#{announcementController.remove}"
+										oncomplete="PF('confirmDialogRemove').show()"
+										styleClass="edit-button rounded-button ui-button-success"
+										process="@this">
+										<f:param name="id" value="#{item.id}" />
+									</p:commandButton>
+									<p:confirmDialog message="确定删除吗?" header="提示"
+										severity="alert" widgetVar="confirmDialogRemove">
+										<p:commandButton value="是" styleClass="ui-confirmdialog-yes"
+											action="#{announcementController.destroy}" icon="pi pi-check"
+											style="width:auto;" update=":growl,datalist" ajax="true"
+											oncomplete="PF('confirmDialogRemove').hide()" />
+										<p:commandButton value="否" styleClass="ui-confirmdialog-no"
+											style="width:auto;" icon="pi pi-times"
+											onclick="PF('confirmDialogRemove').hide();" type="button" />
+									</p:confirmDialog>
+							</p:column>
+							<p:column headerText="序号">
+							                #{rowIndex+1}
+							            </p:column>
+							<p:column sortBy="#{item.name}" filterBy="#{item.name}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="标题" />
+								</f:facet>
+								<h:outputText value="#{item.name}" />
+							</p:column>
+							<p:column sortBy="#{item.status}" filterBy="#{item.status}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="是否生效" />
+								</f:facet>
+								<h:outputText value="#{item.status}" />
+							</p:column>
+							<p:column sortBy="#{item.content}" filterBy="#{item.content}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="内容" />
+								</f:facet>
+								<h:outputText value="#{item.content}" />
+							</p:column>
+						</p:dataTable>
+						<p:confirmDialog global="true" showEffect="fade"
+							hideEffect="explode">
+							<p:commandButton value="是" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="否" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+					</h:form>
+					<p:dialog id="AnnouncementCreateDlg" widgetVar="AnnouncementCreateDialog"
+						style="height:auto;width:450px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;"
+						modal="true" resizable="false" appendTo="@(body)" header="新增">
+						<h:form id="AnnouncementCreateForm">
+							<h:panelGroup id="display">
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="p-field col-12 p-md-12">
+												<p:outputLabel value="标题" for="name" />
+												<p:inputText id="name"
+													value="#{announcementController.selected.name}" required="true"
+													maxlength="200" title="name" />
+											</div>
+											<div class="field col-12 md:col-12">
+												<p:outputLabel value="是否生效" for="status" />
+												<p:selectOneMenu id="status"
+													value="#{announcementController.selected.status}" required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItem itemLabel="是" itemValue="是" />
+													<f:selectItem itemLabel="否" itemValue="否" />
+												</p:selectOneMenu>
+											</div>
+											<div class="p-field col-12 p-md-12">
+												<p:outputLabel value="内容" for="content" />
+												<p:inputTextarea rows="3" id="content"
+													value="#{announcementController.selected.content}"
+													autoResize="false" />
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<br />
+								<p:commandButton value="保存" styleClass="ui-confirmdialog-yes"
+									icon="pi pi-save" action="#{announcementController.create}"
+									style="width:auto;"
+									update=":growl,display,:AnnouncementListForm:datalist" ajax="true"
+									oncomplete="handleSubmit(args, 'AnnouncementCreateDialog');" />
+							</h:panelGroup>
+						</h:form>
+					</p:dialog>
+					<p:dialog id="AnnouncementEditDlg" widgetVar="AnnouncementEditDialog"
+						modal="true"
+						style="height:auto;width:450px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;"
+						resizable="false" appendTo="@(body)" header="编辑">
+						<h:form id="AnnouncementEditForm">
+							<h:panelGroup id="display">
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="p-field col-12 p-md-12">
+												<p:outputLabel value="标题" for="name" />
+												<p:inputText id="name"
+													value="#{announcementController.selected.name}" required="true"
+													maxlength="200" title="name" />
+											</div>
+											<div class="field col-12 md:col-12">
+												<p:outputLabel value="是否生效" for="status" />
+												<p:selectOneMenu id="status"
+													value="#{announcementController.selected.status}" required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItem itemLabel="是" itemValue="是" />
+													<f:selectItem itemLabel="否" itemValue="否" />
+												</p:selectOneMenu>
+											</div>
+											<div class="p-field col-12 p-md-12">
+												<p:outputLabel value="内容" for="content" />
+												<p:inputTextarea rows="3" id="content"
+													value="#{announcementController.selected.content}"
+													autoResize="false" />
+											</div>
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="EmptyBox10"></div>
+								<p:commandButton value="保存" styleClass="ui-confirmdialog-yes"
+									icon="pi pi-save" action="#{announcementController.update}"
+									style="width:auto;"
+									update=":growl,display,:AnnouncementListForm:datalist" ajax="true"
+									oncomplete="handleSubmit(args, 'AnnouncementEditDialog');" />
+							</h:panelGroup>
+						</h:form>
+					</p:dialog>
+					<p:sidebar widgetVar="AnnouncementViewDialog" position="right"
+						style="width: 30%;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+						<h:form id="AnnouncementViewForm">
+							<h:panelGroup id="display">
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="p-field col-12 p-md-12">
+												<p:outputLabel value="标题" for="name" />
+												<p:inputText id="name"
+													value="#{announcementController.selected.name}" required="true"
+													maxlength="200" title="name"  disabled="true"/>
+											</div>
+											<div class="field col-12 md:col-12">
+												<p:outputLabel value="是否生效" for="status" />
+												<p:selectOneMenu id="status" disabled="true"
+													value="#{announcementController.selected.status}" required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItem itemLabel="是" itemValue="是" />
+													<f:selectItem itemLabel="否" itemValue="否" />
+												</p:selectOneMenu>
+											</div>
+											<div class="p-field col-12 p-md-12">
+												<p:outputLabel value="内容" for="content" />
+												<p:inputTextarea rows="3" id="content" disabled="true"
+													value="#{announcementController.selected.content}"
+													autoResize="false" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</h:panelGroup>
+						</h:form>
+					</p:sidebar>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

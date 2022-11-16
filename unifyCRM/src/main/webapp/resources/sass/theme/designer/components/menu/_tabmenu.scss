@@ -1,0 +1,100 @@
+body {
+  .ui-tabmenu {
+    padding: 0;
+    position: static;
+
+    .ui-tabmenu-nav {
+      margin: 0;
+      padding: 0;
+      background: $tabsNavBg;
+      @include flex();
+      @include flex-wrap(wrap);
+      position: relative;
+
+      &:before {
+        position: absolute;
+        border-bottom: $tabsNavBorder;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+      }
+
+      .ui-tabmenuitem {
+        list-style: none;
+        padding: 0;
+        white-space: nowrap;
+        display: inline-block;
+        vertical-align: top;
+        float: none;
+        background: $tabsHeaderBg;
+        color: $tabsHeaderTextColor;
+        top: 0;
+        margin: 0;
+        border-bottom: $tabsNavBorder;
+        cursor: pointer;
+        @include flex();
+        @include flex-align-center();
+        transition: $transition;
+
+        a {
+          color: $tabsHeaderTextColor;
+          padding: $tabsHeaderPadding;
+          font-weight: $tabsHeaderFontWeight;
+          display: block;
+          line-height: 1;
+          outline: 0 none;
+
+          .ui-icon {
+            margin-right: $inlineSpacing;
+          }
+        }
+
+        &.ui-state-hover {
+          background: $tabsHeaderHoverBg;
+          border-color: $tabsHeaderHoverBorderColor;
+
+          a {
+            color: $tabsHeaderTextHoverColor;
+
+            .ui-icon {
+              color: $tabsHeaderTextHoverColor;
+            }
+          }
+        }
+
+        &.ui-state-active {
+          background: $tabsHeaderActiveBg;
+          border-color: $tabsHeaderActiveBorderColor;
+
+          a {
+            color: $tabsHeaderTextActiveColor;
+
+            .ui-icon {
+              color: $tabsHeaderTextActiveColor;
+            }
+          }
+        }
+
+        &.ui-menuitem-outline {
+          @include focused();
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $phoneBreakpoint) {
+    .ui-tabmenu {
+      .ui-tabmenu-nav {
+        .ui-tabmenuitem a {
+          .ui-menuitem-icon {
+            margin-right: 0;
+          }
+
+          .ui-menuitem-text {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

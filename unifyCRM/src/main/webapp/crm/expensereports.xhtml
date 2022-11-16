@@ -1,0 +1,531 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+	</ui:define>
+	<ui:define name="title">
+        报销单
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="报销单" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				<h:form id="CostSearchForm">
+
+					<div class="card">
+						<div class="col-12">
+							<div class="ui-fluid formgrid grid">
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="创建时间" for="createDate" />
+									<p:selectOneMenu id="createDate"
+										value="#{expensereportController.selected.createDate}"
+										required="false">
+										<f:selectItem itemLabel="请选择"></f:selectItem>
+										<f:selectItem itemLabel="今日" itemValue="今日"></f:selectItem>
+										<f:selectItem itemLabel="本周" itemValue="本周"></f:selectItem>
+										<f:selectItem itemLabel="本月" itemValue="本月"></f:selectItem>
+										<f:selectItem itemLabel="本季度" itemValue="本季度"></f:selectItem>
+										<f:selectItem itemLabel="本年" itemValue="本年"></f:selectItem>
+										<p:ajax update="dateRange"
+											listener="#{expensereportController.createDate}" />
+									</p:selectOneMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="自定义" for="dateRange" />
+									<p:datePicker id="dateRange"
+										value="#{expensereportController.selected.createDateRange}"
+										selectionMode="range" readonlyInput="true"
+										pattern="yyyy-MM-dd HH:mm:ss" showTime="true">
+										<p:ajax event="dateSelect"
+											listener="#{expensereportController.dateRange}"
+											update="createDate" />
+									</p:datePicker>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="报销人" for="personId" />
+									<p:selectCheckboxMenu id="personId"
+										value="#{expensereportController.selected.personIds}"
+										multiple="true" required="false" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItems value="#{userController.items}" var="status"
+											itemLabel="#{status.firstName}" itemValue="#{status.ids}" />
+									</p:selectCheckboxMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="报销部门" for="departmentName" />
+									<div class="ui-inputgroup">
+										<p:inputText id="departmentName"
+											value="#{expensereportController.selected.departmentName}"
+											title="departmentName" disabled="true" />
+										<p:commandButton icon="pi pi-search"
+											styleClass="ui-button-warning"
+											oncomplete="PF('DepartmentSelectedDialog').show()" />
+									</div>
+								</div>
+								<div class="field col-12 md:col-3">
+									<div class="ui-inputgroup">
+										<p:commandButton value="查询"
+											style="width:auto;margin-left:5px;"
+											action="#{expensereportController.search}"
+											update="CostListForm" icon="pi pi-search" />
+										<p:commandButton value="重置" icon="pi pi-replay"
+											action="#{expensereportController.reset}"
+											update="CostSearchForm" process="@this"
+											style="width:auto;margin-left:5px;"
+											styleClass="p-mr-2 ui-button-outlined">
+										</p:commandButton>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</h:form>
+				<h:form id="CostListForm">
+					<div class="card">
+						<p:tabView style="margin-top:5px;">
+							<p:tab title="全部报销单">
+								<p:toolbar>
+									<p:toolbarGroup>
+										<c:forEach items="#{expensereportController.modules}"
+											var="model">
+											<p:commandButton
+												action="#{expensereportController.prepareCreate}"
+												value="新增报销单" ajax="false" icon="pi pi-file"
+												style="width:auto;" styleClass="btn btn-primary"
+												rendered="#{model.name eq '新增'}">
+												<f:param name="from" value="list" />
+											</p:commandButton>
+										</c:forEach>
+									</p:toolbarGroup>
+
+									<p:toolbarGroup align="right">
+
+										<c:forEach items="#{expensereportController.modules}"
+											var="model">
+											<p:menuButton value="导出" rendered="#{model.name eq '导出'}"
+												icon="pi pi-upload">
+												<p:menuitem value="XLS">
+													<p:dataExporter type="xls" target="datalist"
+														fileName="全部报销单" />
+												</p:menuitem>
+												<p:menuitem value="XLSX">
+													<p:dataExporter type="xlsxstream" target="datalist"
+														fileName="全部报销单" />
+												</p:menuitem>
+												<p:menuitem value="PDF">
+													<p:dataExporter type="pdf" target="datalist"
+														fileName="全部报销单" />
+												</p:menuitem>
+												<p:menuitem value="CSV">
+													<p:dataExporter type="csv" target="datalist"
+														fileName="全部报销单" />
+												</p:menuitem>
+												<p:menuitem value="XML">
+													<p:dataExporter type="xml" target="datalist"
+														fileName="全部报销单" />
+												</p:menuitem>
+												<p:menuitem value="TXT">
+													<p:dataExporter type="txt" target="datalist"
+														fileName="全部报销单" />
+												</p:menuitem>
+											</p:menuButton>
+											<p:fileUpload mode="simple" skinSimple="true" label="导入"
+												chooseIcon="pi pi-download" style="margin-left:5px;"
+												rendered="#{model.name eq '导入'}" />
+											<p:commandButton value="下载"
+												style="width:auto;margin-left:5px;"
+												rendered="#{model.name eq '下载'}" icon="pi pi-cloud-download" />
+										</c:forEach>
+										<p:commandButton id="toggler" type="button" value="显示列"
+											styleClass="light-btn" style="width:auto;" icon="pi pi-cog" />
+										<p:columnToggler datasource="datalist" trigger="toggler" />
+
+									</p:toolbarGroup>
+								</p:toolbar>
+								<p:dataTable id="datalist" var="item"
+									value="#{expensereportController.items}"
+									selection="#{expensereportController.selected}" editable="true"
+									style="margin-bottom:20px" rowKey="#{item.id}" reflow="true"
+									resizableColumns="true" showGridlines="true"
+									scrollHeight="100%" tableStyle="width:auto" emptyMessage="无记录">
+									<p:column>
+										<f:facet name="header">操作</f:facet>
+										<c:forEach items="#{expensereportController.modules}"
+											var="model">
+											<p:commandButton icon="pi pi-search"
+												update=":ExpensereportViewForm"
+												action="#{expensereportController.view}"
+												rendered="#{model.name eq '查看'}"
+												onclick="PF('ExpensereportViewDialog').show()"
+												styleClass="edit-button rounded-button ui-button-success"
+												process="@this">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:commandButton class="ui-button-warning rounded-button"
+												icon="pi pi-pencil" process="@this"
+												rendered="#{model.name eq '编辑'}"
+												action="#{expensereportController.edit}">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:commandButton icon="pi pi-trash"
+												action="#{expensereportController.remove}"
+												rendered="#{model.name eq '删除'}"
+												oncomplete="PF('confirmDialogRemove').show()"
+												styleClass="edit-button rounded-button ui-button-success"
+												process="@this">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:confirmDialog message="确定删除吗?" header="提示"
+												severity="alert" widgetVar="confirmDialogRemove">
+												<p:commandButton value="是" styleClass="ui-confirmdialog-yes"
+													action="#{expensereportController.destroy}"
+													icon="pi pi-check" style="width:auto;"
+													update=":growl,datalist" ajax="true"
+													oncomplete="PF('confirmDialogRemove').hide()" />
+												<p:commandButton value="否" styleClass="ui-confirmdialog-no"
+													style="width:auto;" icon="pi pi-times"
+													onclick="PF('confirmDialogRemove').hide();" type="button" />
+											</p:confirmDialog>
+										</c:forEach>
+									</p:column>
+									<p:column sortBy="#{item.id}" filterBy="#{item.id}"
+										styleClass="singleLine" filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="报销单号" />
+										</f:facet>
+										<h:outputText value="#{item.id}" />
+									</p:column>
+									<p:column sortBy="#{item.personName}"
+										filterBy="#{item.personName}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="报销人" />
+										</f:facet>
+										<h:outputText value="#{item.personName}" />
+									</p:column>
+									<p:column sortBy="#{item.departmentName}"
+										filterBy="#{item.departmentName}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="报销部门" />
+										</f:facet>
+										<h:outputText value="#{item.departmentName}" />
+									</p:column>
+									<p:column sortBy="#{item.remarks}" filterBy="#{item.remarks}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="备注" />
+										</f:facet>
+										<h:outputText value="#{item.remarks}" />
+									</p:column>
+								</p:dataTable>
+
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode">
+									<p:commandButton value="是" type="button"
+										styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+									<p:commandButton value="否" type="button"
+										styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+								</p:confirmDialog>
+							</p:tab>
+
+							<p:tab title="我的报销单">
+								<p:toolbar>
+									<p:toolbarGroup>
+										<c:forEach items="#{expensereportController.modules}"
+											var="model">
+											<p:commandButton
+												action="#{expensereportController.prepareCreate}"
+												value="新增报销单" ajax="false" icon="pi pi-file"
+												style="width:auto;" styleClass="btn btn-primary"
+												rendered="#{model.name eq '新增'}">
+												<f:param name="from" value="list" />
+											</p:commandButton>
+										</c:forEach>
+									</p:toolbarGroup>
+
+									<p:toolbarGroup align="right">
+
+										<c:forEach items="#{expensereportController.modules}"
+											var="model">
+											<p:menuButton value="导出" rendered="#{model.name eq '导出'}"
+												icon="pi pi-upload">
+												<p:menuitem value="XLS">
+													<p:dataExporter type="xls" target="datalist1"
+														fileName="我的报销单" />
+												</p:menuitem>
+												<p:menuitem value="XLSX">
+													<p:dataExporter type="xlsxstream" target="datalist1"
+														fileName="我的报销单" />
+												</p:menuitem>
+												<p:menuitem value="PDF">
+													<p:dataExporter type="pdf" target="datalist1"
+														fileName="我的报销单" />
+												</p:menuitem>
+												<p:menuitem value="CSV">
+													<p:dataExporter type="csv" target="datalist1"
+														fileName="我的报销单" />
+												</p:menuitem>
+												<p:menuitem value="XML">
+													<p:dataExporter type="xml" target="datalist1"
+														fileName="我的报销单" />
+												</p:menuitem>
+												<p:menuitem value="TXT">
+													<p:dataExporter type="txt" target="datalist1"
+														fileName="我的报销单" />
+												</p:menuitem>
+											</p:menuButton>
+											<p:fileUpload mode="simple" skinSimple="true" label="导入"
+												chooseIcon="pi pi-download" style="margin-left:5px;"
+												rendered="#{model.name eq '导入'}" />
+											<p:commandButton value="下载"
+												style="width:auto;margin-left:5px;"
+												rendered="#{model.name eq '下载'}" icon="pi pi-cloud-download" />
+										</c:forEach>
+										<p:commandButton id="toggler1" type="button" value="显示列"
+											styleClass="light-btn" style="width:auto;" icon="pi pi-cog" />
+										<p:columnToggler datasource="datalist1" trigger="toggler1" />
+
+									</p:toolbarGroup>
+								</p:toolbar>
+								<p:dataTable id="datalist1" var="item"
+									value="#{expensereportController.itemsOfMy}"
+									selection="#{expensereportController.selected}" editable="true"
+									style="margin-bottom:20px" rowKey="#{item.id}" reflow="true"
+									resizableColumns="true" showGridlines="true"
+									scrollHeight="100%" tableStyle="width:auto" emptyMessage="无记录">
+									<p:column>
+										<f:facet name="header">操作</f:facet>
+										<c:forEach items="#{expensereportController.modules}"
+											var="model">
+											<p:commandButton icon="pi pi-search"
+												update=":ExpensereportViewForm"
+												action="#{expensereportController.view}"
+												rendered="#{model.name eq '查看'}"
+												onclick="PF('ExpensereportViewDialog').show()"
+												styleClass="edit-button rounded-button ui-button-success"
+												process="@this">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:commandButton class="ui-button-warning rounded-button"
+												icon="pi pi-pencil" process="@this"
+												rendered="#{model.name eq '编辑'}"
+												action="#{expensereportController.edit}">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:commandButton icon="pi pi-trash"
+												action="#{expensereportController.remove}"
+												rendered="#{model.name eq '删除'}"
+												oncomplete="PF('confirmDialogRemove1').show()"
+												styleClass="edit-button rounded-button ui-button-success"
+												process="@this">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:confirmDialog message="确定删除吗?" header="提示"
+												severity="alert" widgetVar="confirmDialogRemove1">
+												<p:commandButton value="是" styleClass="ui-confirmdialog-yes"
+													action="#{expensereportController.destroy}"
+													icon="pi pi-check" style="width:auto;"
+													update=":growl,datalist1" ajax="true"
+													oncomplete="PF('confirmDialogRemove1').hide()" />
+												<p:commandButton value="否" styleClass="ui-confirmdialog-no"
+													style="width:auto;" icon="pi pi-times"
+													onclick="PF('confirmDialogRemove1').hide();" type="button" />
+											</p:confirmDialog>
+										</c:forEach>
+									</p:column>
+									<p:column sortBy="#{item.id}" filterBy="#{item.id}"
+										styleClass="singleLine" filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="报销单号" />
+										</f:facet>
+										<h:outputText value="#{item.id}" />
+									</p:column>
+									<p:column sortBy="#{item.personName}"
+										filterBy="#{item.personName}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="报销人" />
+										</f:facet>
+										<h:outputText value="#{item.personName}" />
+									</p:column>
+									<p:column sortBy="#{item.departmentName}"
+										filterBy="#{item.departmentName}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="报销部门" />
+										</f:facet>
+										<h:outputText value="#{item.departmentName}" />
+									</p:column>
+									<p:column sortBy="#{item.remarks}" filterBy="#{item.remarks}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="备注" />
+										</f:facet>
+										<h:outputText value="#{item.remarks}" />
+									</p:column>
+								</p:dataTable>
+
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode">
+									<p:commandButton value="是" type="button"
+										styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+									<p:commandButton value="否" type="button"
+										styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+								</p:confirmDialog>
+							</p:tab>
+
+
+						</p:tabView>
+					</div>
+				</h:form>
+				<p:sidebar widgetVar="ExpensereportViewDialog" position="right"
+					style="width: 80%;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+					<h:form id="ExpensereportViewForm">
+						<h:panelGroup id="display">
+							<div class="card">
+								<div class="col-12">
+									<h5>#{expensereportController.selected.id}</h5>
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-3,ui-grid-col-4,ui-grid-col-3,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank"
+										style="border:0px none; background-color:transparent;">
+										<h:outputText value="报销人：" for="personName" />
+										<h:outputText id="personName"
+											value="#{expensereportController.selected.personName}"
+											title="personName" required="false" disabled="true" />
+										<h:outputText value="报销部门：" for="departmentName" />
+										<h:outputText id="departmentName"
+											value="#{expensereportController.selected.departmentName}"
+											title="expenseType" required="false" disabled="true" />
+									</p:panelGrid>
+								</div>
+							</div>
+							<div class="card" style="margin-top: 5px;">
+								<p:tabView>
+									<p:tab title="详细信息">
+										<div class="card">
+											<h:form id="CostmxListForm">
+												<p:dataTable id="datalist" var="item" widgetVar="dataTable"
+													value="#{expensereportController.costList}"
+													resizableColumns="true" resizeMode="expand"
+													emptyMessage="无记录" selectionMode="single"
+													selection="#{expensereportController.selectedmx}"
+													rowKey="#{costmx.id}" paginator="true" rows="100"
+													tableStyle="width:auto"
+													paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+													rowsPerPageTemplate="500,1000,5000,20000" reflow="true"
+													rowIndexVar="rowIndex">
+
+													<p:column sortBy="#{item.id}" filterBy="#{item.id}"
+														styleClass="singleLine" filterMatchMode="contains">
+
+														<f:facet name="header">
+															<h:outputText value="费用编号" />
+														</f:facet>
+														<h:outputText value="#{item.id}" />
+													</p:column>
+													<p:column sortBy="#{item.expenseTypeName}"
+														filterBy="#{item.expenseTypeName}" styleClass="singleLine"
+														filterMatchMode="contains">
+														<f:facet name="header">
+															<h:outputText value="费用类型" />
+														</f:facet>
+														<h:outputText value="#{item.expenseTypeName}" />
+													</p:column>
+													<p:column sortBy="#{item.timeOfOccurrence}"
+														filterBy="#{item.timeOfOccurrence}"
+														styleClass="singleLine" filterMatchMode="contains">
+														<f:facet name="header">
+															<h:outputText value="发生时间" />
+														</f:facet>
+														<h:outputText value="#{item.timeOfOccurrence}" />
+													</p:column>
+													<p:column sortBy="#{item.expenseAmount}"
+														filterBy="#{item.expenseAmount}" styleClass="singleLine"
+														filterMatchMode="contains">
+														<f:facet name="header">
+															<h:outputText value="费用金额" />
+														</f:facet>
+														<h:outputText value="#{item.expenseAmount}" />
+													</p:column>
+													<p:column sortBy="#{item.costDescription}"
+														filterBy="#{item.costDescription}" styleClass="singleLine"
+														filterMatchMode="contains">
+														<f:facet name="header">
+															<h:outputText value="费用描述" />
+														</f:facet>
+														<h:outputText value="#{item.costDescription}" />
+													</p:column>
+													<p:column sortBy="#{item.personName}"
+														filterBy="#{item.personName}" styleClass="singleLine"
+														filterMatchMode="contains">
+														<f:facet name="header">
+															<h:outputText value="负责人" />
+														</f:facet>
+														<h:outputText value="#{item.personName}" />
+													</p:column>
+												</p:dataTable>
+												<p:confirmDialog global="true" showEffect="fade"
+													hideEffect="explode">
+													<p:commandButton value="是" type="button"
+														styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+													<p:commandButton value="否" type="button"
+														styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+												</p:confirmDialog>
+											</h:form>
+										</div>
+									</p:tab>
+								</p:tabView>
+							</div>
+
+						</h:panelGroup>
+					</h:form>
+				</p:sidebar>
+				<p:dialog id="DepartmentSelectedDlg"
+					widgetVar="DepartmentSelectedDialog" modal="true" resizable="false"
+					appendTo="@(body)" header="选择部门"
+					style="max-height:550px;max-width:850px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+					<h:panelGroup id="selectDepartmentPG">
+						<h:form id="departmentItemsSelectedForm">
+							<p:panelGrid columns="1">
+								<p:tree value="#{departmentController.root}" var="doc"
+									selectionMode="single"
+									selection="#{departmentController.selectedNode}"
+									filterBy="#{doc}">
+									<p:treeNode collapsedIcon="ui-icon ui-icon-folder-collapsed">
+										<h:outputText value="#{doc}" />
+									</p:treeNode>
+								</p:tree>
+								<p:commandButton value="确定"
+									update=",:CostSearchForm:departmentName"
+									oncomplete="handleSubmit(args, 'DepartmentSelectedDialog');"
+									style="width:auto;margin-top:10px;"
+									actionListener="#{expensereportController.displaySelectedMultipledepartment(departmentController.selectedNode)}" />
+							</p:panelGrid>
+						</h:form>
+						<div class="EmptyBox10"></div>
+					</h:panelGroup>
+				</p:dialog>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

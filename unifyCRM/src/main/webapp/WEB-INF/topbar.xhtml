@@ -1,0 +1,100 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:pu="http://primefaces.org/avalon">
+
+    <div class="topbar clearfix">
+        <div class="topbar-left">            
+            <p:graphicImage name="images/logo.png" library="avalon-layout" styleClass="topbar-logo"/>
+        </div>
+        
+        <div class="topbar-right">
+            <a id="menu-button" href="#">
+                <i class="pi pi-angle-left"/>
+            </a>
+            
+            <a id="topbar-menu-button" href="#">
+                <i class="pi pi-bars"/>
+            </a>
+            
+            <h:form id="topbar-items-form">
+                <ul class="topbar-items fadeInDown animated">
+                    <ui:fragment rendered="#{guestPreferences.profileMode == 'overlay'||guestPreferences.menuLayout == 'menu-layout-static menu-layout-horizontal'}">
+                        <li class="profile-item">
+                            <a href="#">                            
+                                <p:graphicImage name="images/avatar.png" library="avalon-layout" styleClass="profile-image" style="border: 0 none"/>
+                                <span class="topbar-item-name">${sessionScope.NAME}</span>
+	                            <c:if test="${sessionScope.ROLENAME=='ROLE_COMPANY'}">
+	                             <span class="topbar-item-role">机构</span>
+	                   			</c:if>
+                            </a>
+
+                            <ul class="layout-menu animated">
+                                
+                                <li role="menuitem">
+                                    <a href="#">
+                                        <i class="pi pi-fw pi-cog"/>
+                                        <span>设置</span>
+                                    </a>
+                                </li>
+		                        <li role="menuitem">
+		                            <a href="logout.jsp">
+		                                <i class="pi pi-fw pi-sign-out"/>
+		                                <span>退出</span>
+		                            </a>
+		                        </li>
+                            </ul>
+                        </li>
+                    </ui:fragment>
+                    
+                    <li>
+                        <a href="#">
+                            <i class="topbar-icon animated swing pi pi-fw pi-envelope"/>
+                            <span class="topbar-badge animated rubberBand">#{noticeController.number}</span>
+                            <span class="topbar-item-name">通知</span>
+                        </a>
+                        <ul class="layout-menu animated">
+						    <c:forEach items="#{noticeController.itemsAll}" var="module">
+	                            <li role="menuitem">
+	                                <a href="#">
+	                                    <span>#{module.expireDate}</span>
+	                                    <span>#{module.name}</span>
+	                                </a>
+	                            </li>
+						    </c:forEach>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" >
+                            <i class="topbar-icon pi pi-fw pi-bell"/>
+                            <span class="topbar-badge animated rubberBand">#{announcementController.number}</span>
+                            <span class="topbar-item-name">公告</span>
+                        </a>
+                        <ul class="layout-menu animated">
+						    <c:forEach items="#{announcementController.itemsAll}" var="module">
+	                            <li role="menuitem">
+	                                <a href="#">
+	                                    <span>#{module.name}</span>
+	                                    <BR />
+	                                    <p>#{module.content}</p>
+	                                </a>
+	                            </li>
+						    </c:forEach>
+                        </ul>
+                    </li>
+                    <li class="search-item">
+                        <div class="topbar-search">
+                            <input type="text" placeholder="搜索" onkeypress="if (event.keyCode == 13) {return false;}"/>
+                            <i class="pi pi-search"/>
+                        </div>
+                    </li>
+                </ul>
+            </h:form>
+        </div>
+    </div>
+
+</ui:composition>

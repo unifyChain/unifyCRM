@@ -1,0 +1,80 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+	    xmlns:c="http://java.sun.com/jsp/jstl/core"
+        xmlns:pu="http://primefaces.org/avalon">
+
+    <h:form id="menuform">
+        <div class="layout-menu-container #{guestPreferences.menuClass}">
+            <div class="menu-scroll-content">
+                <ui:fragment
+                        rendered="#{guestPreferences.profileMode == 'inline' and guestPreferences.menuLayout != 'menu-layout-static menu-layout-horizontal'}">
+                    <div class="profile">
+                        <a id="profile-options" href="#">
+                            <p:graphicImage name="images/yunxiang.png" library="avalon-layout" styleClass="profile-image"
+                                            style="border: 0 none"/>
+                            <span class="profile-name">${sessionScope.NAME}</span>
+                            <i class="pi pi-fw pi-chevron-down"/>
+                            <c:if test="${sessionScope.ROLENAME=='ROLE_COMPANY'}">
+                             <span class="profile-role">机构</span>
+                   			</c:if>
+                        </a>
+                    </div>
+                    <ul id="profile-menu" class="layout-menu">
+                        
+                        <li role="menuitem">
+                            <a href="#">
+                                <i class="pi pi-fw pi-cog"/>
+                                <span>设置</span>
+                            </a>
+                            <div class="layout-menu-tooltip">
+                                <div class="layout-menu-tooltip-arrow"></div>
+                                <div class="layout-menu-tooltip-text">设置</div>
+                            </div>
+                        </li>
+                        <li role="menuitem">
+                            <a href="/unifyCRM/logout.jsp">
+                                <i class="pi pi-fw pi-sign-out"/>
+                                <span>退出</span>
+                            </a>
+                            <div class="layout-menu-tooltip">
+                                <div class="layout-menu-tooltip-arrow"></div>
+                                <div class="layout-menu-tooltip-text">退出</div>
+                            </div>
+                        </li>
+                    </ul>
+                </ui:fragment>
+
+                <pu:menu widgetVar="me" styleClass="layout-main-menu">
+                    <p:submenu id="m_homepage" label="KanBan" icon="pi pi-fw pi-home">
+                        <p:menuitem id="m_dashboards" value="仪表盘" icon="pi pi-fw pi-home" outcome="/dashboard" />
+                    </p:submenu>
+				    <c:forEach items="#{applicationController.itemsMenu}" var="module">
+                     	<p:submenu id="om_#{module.id}"  label="#{module.name}" icon="#{module.picture}">
+						    <c:forEach items="#{module.detailList}" var="modules"> 
+						    		
+									<c:if test="#{modules.status=='否'}">
+										<p:menuitem id="om_#{modules.id}" value="#{modules.name}" icon="#{modules.picture}"
+										 	 outcome="#{modules.url}"  onclick="PF('blockUIWidget').block()" />
+									</c:if>
+									<c:if test="#{modules.status=='是'}">
+				                            <p:submenu id="m_#{modules.id}" label="#{modules.name}" icon="#{modules.picture}">
+											    <c:forEach items="#{modules.detailList1}" var="sub"> 
+														<p:menuitem id="om_#{sub.id}" value="#{sub.name}" icon="#{sub.picture}"
+														 	 outcome="#{sub.url}"  onclick="PF('blockUIWidget').block()" />
+											    </c:forEach>
+				                           	</p:submenu>
+									</c:if>
+						    </c:forEach>  
+	                     </p:submenu>
+	                     
+				    </c:forEach>
+                   
+                </pu:menu>
+            </div>
+        </div>
+    </h:form>
+</ui:composition>

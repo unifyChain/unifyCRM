@@ -1,0 +1,633 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+	<style type="text/css">
+	button.ui-button {
+		margin-right: .5rem;
+	}
+	</style>
+	</ui:define>
+	<ui:define name="title">
+        线索池
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="线索池" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				<h:form id="ClueSearchForm">
+					<div class="card">
+						<div class="col-12">
+							<div class="ui-fluid formgrid grid">
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="跟进状态" for="followStatus" />
+									<p:selectCheckboxMenu id="followStatus"
+										value="#{clueController.selected.followStatuss}"
+										multiple="true" required="false" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItems value="#{dictController.clueFollowStatuss}"
+											var="followStatus" itemLabel="#{followStatus.dictLabel}"
+											itemValue="#{followStatus.dictCode}" />
+									</p:selectCheckboxMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="线索来源" for="clueSource" />
+									<p:selectCheckboxMenu id="clueSource"
+										value="#{clueController.selected.clueSources}" multiple="true"
+										required="false" filter="true" filterMatchMode="startsWith">
+										<f:selectItems value="#{dictController.clueSources}"
+											var="clue_source" itemLabel="#{clue_source.dictLabel}"
+											itemValue="#{clue_source.dictCode}" />
+									</p:selectCheckboxMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="创建时间" for="createDate" />
+									<p:selectOneMenu id="createDate"
+										value="#{clueController.selected.createDate}" required="false">
+										<f:selectItem itemLabel="请选择"></f:selectItem>
+										<f:selectItem itemLabel="今日" itemValue="今日"></f:selectItem>
+										<f:selectItem itemLabel="本周" itemValue="本周"></f:selectItem>
+										<f:selectItem itemLabel="本月" itemValue="本月"></f:selectItem>
+										<f:selectItem itemLabel="本季度" itemValue="本季度"></f:selectItem>
+										<f:selectItem itemLabel="本年" itemValue="本年"></f:selectItem>
+										<p:ajax update="dateRange"
+											listener="#{clueController.createDate}" />
+									</p:selectOneMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="自定义" for="dateRange" />
+									<p:datePicker id="dateRange"
+										value="#{clueController.selected.createDateRange}"
+										selectionMode="range" readonlyInput="true"
+										pattern="yyyy-MM-dd HH:mm:ss" showTime="true">
+										<p:ajax event="dateSelect"
+											listener="#{clueController.dateRange}" update="createDate" />
+									</p:datePicker>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="下次跟进时间" for="nextFollowTimes" />
+									<p:selectOneMenu id="nextFollowTimes"
+										value="#{clueController.selected.nextFollowTimes}"
+										required="false">
+										<f:selectItem itemLabel="请选择"></f:selectItem>
+										<f:selectItem itemLabel="今日" itemValue="今日"></f:selectItem>
+										<f:selectItem itemLabel="本周" itemValue="本周"></f:selectItem>
+										<f:selectItem itemLabel="本月" itemValue="本月"></f:selectItem>
+										<f:selectItem itemLabel="本季度" itemValue="本季度"></f:selectItem>
+										<f:selectItem itemLabel="本年" itemValue="本年"></f:selectItem>
+										<p:ajax update="dateRanges"
+											listener="#{clueController.nextFollowTimes}" />
+									</p:selectOneMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="自定义" for="dateRanges" />
+									<p:datePicker id="dateRanges"
+										value="#{clueController.selected.nextFollowTimeDateRange}"
+										selectionMode="range" readonlyInput="true"
+										pattern="yyyy-MM-dd HH:mm:ss" showTime="true">
+										<p:ajax event="dateSelect"
+											listener="#{clueController.dateRanges}"
+											update="nextFollowTimes" />
+									</p:datePicker>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="更新于" for="updateDate" />
+									<p:selectOneMenu id="updateDate"
+										value="#{clueController.selected.updateDate}" required="false">
+										<f:selectItem itemLabel="请选择"></f:selectItem>
+										<f:selectItem itemLabel="今日" itemValue="今日"></f:selectItem>
+										<f:selectItem itemLabel="本周" itemValue="本周"></f:selectItem>
+										<f:selectItem itemLabel="本月" itemValue="本月"></f:selectItem>
+										<f:selectItem itemLabel="本季度" itemValue="本季度"></f:selectItem>
+										<f:selectItem itemLabel="本年" itemValue="本年"></f:selectItem>
+										<p:ajax update="updateDateRange"
+											listener="#{clueController.updateDate}" />
+									</p:selectOneMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="自定义" for="updateDateRange" />
+									<p:datePicker id="updateDateRange"
+										value="#{clueController.selected.updateDateRange}"
+										selectionMode="range" readonlyInput="true"
+										pattern="yyyy-MM-dd HH:mm:ss" showTime="true">
+										<p:ajax event="dateSelect"
+											listener="#{clueController.updateDateRange}"
+											update="updateDate" />
+									</p:datePicker>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="创建人" for="createId" />
+									<p:selectCheckboxMenu id="createId"
+										value="#{clueController.selected.createIds}" multiple="true"
+										required="false" filter="true" filterMatchMode="startsWith">
+										<f:selectItems value="#{userController.items}" var="status"
+											itemLabel="#{status.firstName}"
+											itemValue="#{status.username}" />
+									</p:selectCheckboxMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<div class="ui-inputgroup">
+										<p:commandButton value="查询"
+											style="width:auto;margin-left:5px;"
+											action="#{clueController.search}" update="ClueListForm"
+											icon="pi pi-search" />
+										<p:commandButton value="重置" icon="pi pi-replay"
+											action="#{clueController.reset}" update="ClueSearchForm"
+											process="@this" style="width:auto;margin-left:5px;"
+											styleClass="p-mr-2 ui-button-outlined">
+										</p:commandButton>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</h:form>
+				<h:form id="ClueListForm">
+					<div class="card">
+						<p:toolbar>
+
+							<p:toolbarGroup align="right">
+
+								<c:forEach items="#{clueController.modelsPool}" var="model">
+									<p:menuButton value="导出" rendered="#{model.name eq '导出'}"
+										icon="pi pi-upload">
+										<p:menuitem value="XLS">
+											<p:dataExporter type="xls" target="datalist" fileName="线索池" />
+										</p:menuitem>
+										<p:menuitem value="XLSX">
+											<p:dataExporter type="xlsxstream" target="datalist"
+												fileName="线索池" />
+										</p:menuitem>
+										<p:menuitem value="PDF">
+											<p:dataExporter type="pdf" target="datalist" fileName="线索池" />
+										</p:menuitem>
+										<p:menuitem value="CSV">
+											<p:dataExporter type="csv" target="datalist" fileName="线索池" />
+										</p:menuitem>
+										<p:menuitem value="XML">
+											<p:dataExporter type="xml" target="datalist" fileName="线索池" />
+										</p:menuitem>
+										<p:menuitem value="TXT">
+											<p:dataExporter type="txt" target="datalist" fileName="线索池" />
+										</p:menuitem>
+									</p:menuButton>
+									<p:fileUpload mode="simple" skinSimple="true" label="导入"
+										chooseIcon="pi pi-download" style="margin-left:5px;"
+										rendered="#{model.name eq '导入'}" />
+									<p:commandButton value="下载" style="width:auto;margin-left:5px;"
+										rendered="#{model.name eq '下载'}" icon="pi pi-cloud-download" />
+								</c:forEach>
+								<p:commandButton id="toggler" type="button" value="显示列"
+									styleClass="light-btn" style="width:auto;" icon="pi pi-cog" />
+								<p:columnToggler datasource="datalist" trigger="toggler" />
+
+							</p:toolbarGroup>
+						</p:toolbar>
+						<p:dataTable id="datalist" var="item"
+							value="#{clueController.cluePool}"
+							selection="#{clueController.selected}" editable="true"
+							selectionMode="single" widgetVar="dataTable"
+							resizableColumns="true" showGridlines="true"
+							style="margin-bottom:20px" rowKey="#{item.id}" reflow="true"
+							scrollHeight="100%" tableStyle="width:auto" paginator="true"
+							rows="100" emptyMessage="无记录"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="100,500,1000,5000">
+							<p:column>
+								<f:facet name="header">操作</f:facet>
+								<c:forEach items="#{clueController.modelsPool}" var="model">
+									<p:commandButton icon="pi pi-search" update=":ClueViewForm"
+										action="#{clueController.viewCluePool}"
+										rendered="#{model.name eq '查看'}"
+										oncomplete="PF('ClueViewDialog').show()"
+										styleClass="edit-button rounded-button ui-button-success"
+										process="@this">
+										<f:param name="id" value="#{item.id}" />
+									</p:commandButton>
+								</c:forEach>
+									<p:commandButton icon="pi pi-sort-alt"
+										action="#{clueController.removes}"
+										oncomplete="PF('confirmDialogPool').show()"
+										styleClass="edit-button rounded-button ui-button-success"
+										process="@this">
+										<f:param name="id" value="#{item.id}" />
+									</p:commandButton>
+									<p:confirmDialog message="确定转移吗?" header="提示"
+										severity="alert" widgetVar="confirmDialogPool">
+										<p:commandButton value="是" styleClass="ui-confirmdialog-yes"
+											action="#{clueController.coolToClue}" icon="pi pi-check"
+											style="width:auto;" update=":growl,datalist" ajax="true"
+											oncomplete="PF('confirmDialogPool').hide()" />
+										<p:commandButton value="否" styleClass="ui-confirmdialog-no"
+											style="width:auto;" icon="pi pi-times"
+											onclick="PF('confirmDialogPool').hide();" type="button" />
+									</p:confirmDialog>
+							</p:column>
+							<p:column sortBy="#{item.name}" filterBy="#{item.name}"
+								styleClass="singleLine" filterMatchMode="contains">
+
+								<f:facet name="header">
+									<h:outputText value="姓名" />
+								</f:facet>
+								<h:outputText value="#{item.name}" />
+							</p:column>
+							<p:column sortBy="#{item.corporateName}"
+								filterBy="#{item.corporateName}" styleClass="singleLine"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="公司名称" />
+								</f:facet>
+								<h:outputText value="#{item.corporateName}" />
+							</p:column>
+							<p:column sortBy="#{item.telephone}" filterBy="#{item.telephone}"
+								styleClass="singleLine" filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="电话" />
+								</f:facet>
+								<h:outputText value="#{item.telephone}" />
+							</p:column>
+							<p:column sortBy="#{item.phone}" filterBy="#{item.phone}"
+								styleClass="singleLine" filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="手机" />
+								</f:facet>
+								<h:outputText value="#{item.phone}" />
+							</p:column>
+							<p:column field="followStatusName" headerText="跟进状态"
+								filterMatchMode="exact" sortBy="#{item.followStatusName}"
+								styleClass="singleLine">
+								<f:facet name="filter">
+									<p:selectOneMenu onchange="PF('dataTable').filter()"
+										styleClass="custom-filter">
+										<f:selectItem itemLabel="全部" itemValue="#{null}"
+											noSelectionOption="true" />
+										<f:selectItems value="#{dictController.clueFollowStatuss}"
+											var="clue_type" itemLabel="#{clue_type.dictLabel}"
+											itemValue="#{clue_type.dictLabel}" />
+									</p:selectOneMenu>
+								</f:facet>
+								<h:outputText value="#{item.followStatusName}" />
+							</p:column>
+							<p:column field="clueSourceName" headerText="线索来源"
+								filterMatchMode="exact" sortBy="#{item.clueSourceName}"
+								styleClass="singleLine">
+								<f:facet name="filter">
+									<p:selectOneMenu onchange="PF('dataTable').filter()"
+										styleClass="custom-filter">
+										<f:selectItem itemLabel="全部" itemValue="#{null}"
+											noSelectionOption="true" />
+										<f:selectItems value="#{dictController.clueSources}"
+											var="clue_source" itemLabel="#{clue_source.dictLabel}"
+											itemValue="#{clue_source.dictCode}" />
+									</p:selectOneMenu>
+								</f:facet>
+								<h:outputText value="#{item.clueSourceName}" />
+							</p:column>
+							<p:column sortBy="#{item.wxid}" filterBy="#{item.wxid}"
+								styleClass="singleLine" filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="微信" />
+								</f:facet>
+								<h:outputText value="#{item.wxid}" />
+							</p:column>
+							<p:column sortBy="#{item.qq}" filterBy="#{item.qq}"
+								styleClass="singleLine" filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="QQ" />
+								</f:facet>
+								<h:outputText value="#{item.qq}" />
+							</p:column>
+							<p:column sortBy="#{item.wangwang}" filterBy="#{item.wangwang}"
+								styleClass="singleLine" filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="旺旺" />
+								</f:facet>
+								<h:outputText value="#{item.wangwang}" />
+							</p:column>
+							<p:column sortBy="#{item.email}" filterBy="#{item.email}"
+								styleClass="singleLine" filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="邮箱" />
+								</f:facet>
+								<h:outputText value="#{item.email}" />
+							</p:column>
+							<p:column sortBy="#{item.website}" filterBy="#{item.website}"
+								styleClass="singleLine" filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="网址" />
+								</f:facet>
+								<h:outputText value="#{item.website}" />
+							</p:column>
+							<p:column sortBy="#{item.zipCode}" filterBy="#{item.zipCode}"
+								styleClass="singleLine" filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="邮编" />
+								</f:facet>
+								<h:outputText value="#{item.zipCode}" />
+							</p:column>
+							<p:column sortBy="#{item.departmentName}"
+								filterBy="#{item.departmentName}" styleClass="singleLine"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="所属部门" />
+								</f:facet>
+								<h:outputText value="#{item.departmentName}" />
+							</p:column>
+							<p:column sortBy="#{item.updateDate}"
+								filterBy="#{item.updateDate}" styleClass="singleLine"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="修改时间" />
+								</f:facet>
+								<h:outputText value="#{item.updateDate}" />
+							</p:column>
+							<p:column sortBy="#{item.remarks}" filterBy="#{item.remarks}"
+								styleClass="singleLine" filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="备注" />
+								</f:facet>
+								<h:outputText value="#{item.remarks}" />
+							</p:column>
+							<p:column sortBy="#{item.personName}"
+								filterBy="#{item.personName}" styleClass="singleLine"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="负责人" />
+								</f:facet>
+								<h:outputText value="#{item.personName}" />
+							</p:column>
+							<p:column sortBy="#{item.nextFollowTime}"
+								filterBy="#{item.nextFollowTime}" styleClass="singleLine"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="下次跟进时间" />
+								</f:facet>
+								<h:outputText value="#{item.nextFollowTime}" />
+							</p:column>
+							<p:column sortBy="#{item.createName}"
+								filterBy="#{item.createName}" styleClass="singleLine"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="创建人" />
+								</f:facet>
+								<h:outputText value="#{item.createName}" />
+							</p:column>
+							<p:column sortBy="#{item.createDate}"
+								filterBy="#{item.createDate}" styleClass="singleLine"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="创建时间" />
+								</f:facet>
+								<h:outputText value="#{item.createDate}" />
+							</p:column>
+						</p:dataTable>
+
+						<p:confirmDialog global="true" showEffect="fade"
+							hideEffect="explode">
+							<p:commandButton value="是" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="否" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+					</div>
+				</h:form>
+				<p:sidebar widgetVar="ClueViewDialog" position="right"
+					style="width: 80%;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+					<h:form id="ClueViewForm">
+						<h:panelGroup id="display">
+							<div class="card">
+								<div class="col-12">
+									<h5>#{clueController.selected.name}</h5>
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-3,ui-grid-col-4,ui-grid-col-3,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank"
+										style="border:0px none; background-color:transparent;">
+										<h:outputText value="公司名称：" for="corporateName" />
+										<h:outputText id="corporateName"
+											value="#{clueController.selected.corporateName}"
+											title="corporateName" required="false" disabled="true" />
+										<h:outputText value="电话：" for="telephone" />
+										<h:outputText id="telephone"
+											value="#{clueController.selected.telephone}"
+											title="telephone" required="false" disabled="true" />
+										<h:outputText value="下次跟进时间：" for="nextFollowTime" />
+										<h:outputText id="nextFollowTime"
+											value="#{clueController.selected.nextFollowTime}"
+											showTime="true" required="false" disabled="true" />
+										<h:outputText value="负责人：" for="personName" />
+										<h:outputText id="personName"
+											value="#{clueController.selected.personName}"
+											title="personName" disabled="true" />
+										<h:outputText value="所属部门：" for="departmentName" />
+										<h:outputText id="departmentName"
+											value="#{clueController.selected.departmentName}"
+											title="departmentName" disabled="true" />
+										<p:outputLabel value="职务" for="position" />
+										<h:outputText id="position"
+											value="#{clueController.selected.position}" title="position"
+											disabled="true" />
+									</p:panelGrid>
+								</div>
+							</div>
+							<div class="card" style="margin-top: 5px;">
+								<p:tabView>
+									<p:tab title="详细信息">
+										<div class="col-12">
+											<div class="ui-fluid formgrid grid">
+												<div class="field col-12 md:col-3">
+													<p:outputLabel value="部门" for="department" />
+													<p:inputText id="department" disabled="true"
+														value="#{clueController.selected.department}"
+														title="department" required="false" maxlength="45" />
+												</div>
+												<div class="field col-12 md:col-3">
+													<p:outputLabel value="职务" for="position" />
+													<p:inputText id="position" disabled="true"
+														value="#{clueController.selected.position}"
+														title="position" required="false" maxlength="45" />
+												</div>
+												<div class="field col-12 md:col-3">
+													<p:outputLabel value="手机号" for="phone" />
+													<p:inputText id="phone" disabled="true"
+														value="#{clueController.selected.phone}" title="phone"
+														required="false" maxlength="45" />
+												</div>
+												<div class="field col-12 md:col-3">
+													<p:outputLabel value="微信号" for="wxid" />
+													<p:inputText id="wxid" disabled="true"
+														value="#{clueController.selected.wxid}" title="telephone"
+														maxlength="45" />
+												</div>
+												<div class="field col-12 md:col-3">
+													<p:outputLabel value="QQ号" for="qq" />
+													<p:inputText id="qq" value="#{clueController.selected.qq}"
+														title="address" maxlength="45" disabled="true" />
+												</div>
+												<div class="field col-12 md:col-3">
+													<p:outputLabel value="旺旺号" for="wangwang" />
+													<p:inputText id="wangwang" disabled="true"
+														value="#{clueController.selected.wangwang}"
+														title="wangwang" maxlength="45" />
+												</div>
+												<div class="field col-12 md:col-3">
+													<p:outputLabel value="邮箱" for="email" />
+													<p:inputText id="email" disabled="true"
+														value="#{clueController.selected.email}" title="email"
+														maxlength="45" />
+												</div>
+												<div class="field col-12 md:col-3">
+													<p:outputLabel value="网址" for="website" />
+													<p:inputText id="website" disabled="true"
+														value="#{clueController.selected.website}" title="website"
+														maxlength="45" />
+												</div>
+												<div class="field col-12 md:col-3">
+													<p:outputLabel value="地址" for="address" />
+													<p:inputText id="address" disabled="true"
+														value="#{clueController.selected.address}" title="address"
+														maxlength="45" />
+												</div>
+												<div class="field col-12 md:col-3">
+													<p:outputLabel value="邮编" for="zipCode" />
+													<p:inputText id="zipCode" disabled="true"
+														value="#{clueController.selected.zipCode}" title="zipCode"
+														maxlength="45" />
+												</div>
+												<div class="field col-12 md:col-3">
+													<p:outputLabel value="跟进状态" for="followStatus" />
+													<p:selectOneMenu id="followStatus" disabled="true"
+														value="#{clueController.selected.followStatus}"
+														required="false">
+														<f:selectItem itemLabel="请选择"></f:selectItem>
+														<f:selectItems value="#{dictController.clueFollowStatuss}"
+															var="followStatus" itemLabel="#{followStatus.dictLabel}"
+															itemValue="#{followStatus.dictCode}!_#{followStatus.dictLabel}" />
+													</p:selectOneMenu>
+												</div>
+												<div class="field col-12 md:col-3">
+													<p:outputLabel value="线索来源" for="clueSource" />
+													<p:selectOneMenu id="clueSource" disabled="true"
+														value="#{clueController.selected.clueSource}"
+														required="false">
+														<f:selectItem itemLabel="请选择"></f:selectItem>
+														<f:selectItems value="#{dictController.clueSources}"
+															var="clue_source" itemLabel="#{clue_source.dictLabel}"
+															itemValue="#{clue_source.dictCode}!_#{clue_source.dictLabel}" />
+													</p:selectOneMenu>
+												</div>
+
+												<div class="p-field col-12 p-md-12">
+													<p:outputLabel value="备注信息" for="remarks" />
+													<p:inputTextarea rows="3" id="remarks" disabled="true"
+														value="#{clueController.selected.remarks}"
+														autoResize="false" />
+												</div>
+											</div>
+										</div>
+									</p:tab>
+									<p:tab title="销售动态">
+										<p:dataTable id="datalist" var="item"
+											value="#{clueController.itemsFollowUp}" editable="true"
+											style="margin-bottom:20px" rowKey="#{item.id}" reflow="true"
+											resizableColumns="true" showGridlines="true"
+											scrollHeight="100%" tableStyle="width:auto"
+											emptyMessage="无记录">
+											<p:column sortBy="#{item.from}" filterBy="#{item.from}"
+												styleClass="singleLine" filterMatchMode="contains">
+
+												<f:facet name="header">
+													<h:outputText value="跟进模块" />
+												</f:facet>
+												<h:outputText value="#{item.from}" />
+											</p:column>
+											<p:column sortBy="#{item.follo_type}"
+												filterBy="#{item.follo_type}" styleClass="singleLine"
+												filterMatchMode="contains">
+
+												<f:facet name="header">
+													<h:outputText value="跟进类型" />
+												</f:facet>
+												<h:outputText value="#{item.follo_type}" />
+											</p:column>
+											<p:column sortBy="#{item.follow_mc}"
+												filterBy="#{item.follow_mc}" styleClass="singleLine"
+												filterMatchMode="contains">
+
+												<f:facet name="header">
+													<h:outputText value="跟进项目" />
+												</f:facet>
+												<h:outputText value="#{item.follow_mc}" />
+											</p:column>
+											<p:column sortBy="#{item.content}" filterBy="#{item.content}"
+												styleClass="singleLine" filterMatchMode="contains">
+
+												<f:facet name="header">
+													<h:outputText value="内容" />
+												</f:facet>
+												<h:outputText value="#{item.content}" />
+											</p:column>
+											<p:column sortBy="#{item.follow_status}"
+												filterBy="#{item.follow_status}" styleClass="singleLine"
+												filterMatchMode="contains">
+
+												<f:facet name="header">
+													<h:outputText value="跟进状态" />
+												</f:facet>
+												<h:outputText value="#{item.follow_status}" />
+											</p:column>
+											<p:column sortBy="#{item.time}" filterBy="#{item.time}"
+												styleClass="singleLine" filterMatchMode="contains">
+
+												<f:facet name="header">
+													<h:outputText value="写跟进时间" />
+												</f:facet>
+												<h:outputText value="#{item.time}" />
+											</p:column>
+											<p:column sortBy="#{item.next_follow_time}"
+												filterBy="#{item.next_follow_time}" styleClass="singleLine"
+												filterMatchMode="contains">
+
+												<f:facet name="header">
+													<h:outputText value="下次跟进时间" />
+												</f:facet>
+												<h:outputText value="#{item.next_follow_time}" />
+											</p:column>
+											<p:column sortBy="#{item.create_name}"
+												filterBy="#{item.create_name}" styleClass="singleLine"
+												filterMatchMode="contains">
+												<f:facet name="header">
+													<h:outputText value="创建人" />
+												</f:facet>
+												<h:outputText value="#{item.create_name}" />
+											</p:column>
+											<p:column sortBy="#{item.create_date}"
+												filterBy="#{item.create_date}" styleClass="singleLine"
+												filterMatchMode="contains">
+												<f:facet name="header">
+													<h:outputText value="创建时间" />
+												</f:facet>
+												<h:outputText value="#{item.create_date}" />
+											</p:column>
+										</p:dataTable>
+									</p:tab>
+								</p:tabView>
+							</div>
+
+						</h:panelGroup>
+					</h:form>
+				</p:sidebar>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

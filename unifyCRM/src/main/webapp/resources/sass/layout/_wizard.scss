@@ -1,0 +1,329 @@
+.wizard-body {
+    background:  url("\#{resource['avalon-layout:images/extensions/background@2x.jpg']}") top;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position-y: center;
+
+    .wizard-wrapper {
+        height: 65%;
+        width: 100%;
+        position: absolute;
+        left: 0;
+        top: 35%;
+
+        .wizard-container {
+            background-color: #292b2c;
+            width: 100%;
+            min-height: 100%;
+
+            .wizard-header {
+                height: 100px;
+                box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+
+                .wizard-tabs-container {
+                    width: 55%;
+                    height: 35px;
+                    display: flex;
+                    flex-direction: row;
+
+                    .wizard-tab {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: center;
+                        align-items: center;
+
+                        .tab-header {
+                            background: #3e4243;
+                            height: 35px;
+                            width: 35px;
+                            @include border-radius(50%);
+                            border: none;
+                            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+                            cursor: pointer;
+                            flex: 0 0 35px;
+                            z-index: 1;
+                        }
+
+                        .tab-progressbar {
+                            width: 100%;
+                            height: 8px;
+                            background-color: #3e4243;
+                            position: relative;
+
+                            &:before {
+                                content: ' ';
+                                width: 0;
+                                height: 100%;
+                                position: absolute;
+                                background-color: #8dc8ff;
+                                @include transition(width .6s cubic-bezier(.35,0,.25,1));
+                            }
+                        }
+
+                        &:first-child {
+                            width: auto;
+
+                            .tab-progressbar {
+                                display: none;
+                            }
+                        }
+
+                        &.active-tab {
+                            .tab-header {
+                                background: linear-gradient(to right, #457fca, #5691c8);
+                            }
+
+                            .tab-progressbar {
+                                &:before {
+                                    width: 100%;
+                                }
+                            }
+                        }
+                    }
+                }               
+            }
+
+            .wizard-content {
+                width: 55%;
+                margin: auto;
+
+                .content-header {
+                    margin-bottom: 20px;
+                    margin-top: 15px;
+
+                    .title{
+                        h1{
+                            color: #ffffff;
+                            font-size: 24px;
+                            font-weight: 500;
+                        }
+                        span{
+                            font-size: 14px;
+                            color: #999999;
+                        }
+                    }
+                    .icon{
+                        display: flex;
+                        justify-content: flex-end;
+                    }
+                }
+
+                .content {
+                    button{
+                        background-color: #2e6da4;
+                        margin-bottom: 10px;
+                    }
+
+                    .forms{
+                        label{
+                            color: #cccccc;
+                        }
+                        .form-element{
+                            width: 100%;
+                            margin-bottom:30px;
+                            margin-top: 10px;
+
+                            label{
+                             color: #292b2c;
+                            }
+
+                           > input{
+                                 width: 100%;
+                            }
+
+                            &.ui-calendar{
+                                >input{
+                                     margin-bottom: 30px;
+                                     margin-top: 10px;
+                                }
+                            }
+                        }
+                       
+                    }
+                }
+
+                &.register{
+                    display: none;
+                   .content{
+                      
+
+                   }
+                }
+
+                &.tier{
+                    display: none;
+
+                    .content-header{
+                        img{
+                            height: 75px;
+                        }
+                    }
+
+                    .tier-card{
+                        padding: 0;
+                        height:260px;
+                        width: 100%;
+                        border-radius: 4px;
+                        border: solid 1px #5a6062;
+                        background-color: #ffffff;
+                        margin-bottom: 30px;
+                        cursor: pointer;
+
+                        .tier-card-header{
+                            background-color: #3e4243;
+                            width: 100%;
+                            padding: 15px;
+                            min-height: 110px;
+
+                            h1{
+                                color: #ffffff;
+                                font-size: 18px;
+                                margin: 5px;
+                                font-weight: 500;
+                            }
+                            
+                            span{
+                                color: #999999;
+                                margin: 5px;
+                            }
+
+                            .icon{
+                                justify-content: flex-end;
+                                align-items: center;
+                                height: 65px;
+                                font-size: 24px;
+                                color: #292b2c;
+                                display: none;
+                            }
+                        }
+
+                        .tier-card-content{
+                         
+                            color: #999999;
+
+                            .row{
+                                width: 100%;
+                                padding: 5px 15px;
+
+                                &.even{
+                                    background-color: rgba(216, 216, 216, 0.4);
+                                }
+                            }
+                        }
+                        &.active-tier-card{
+                            border: solid 1px #5a9fe0;
+
+                            .tier-card-header{
+                                background-color: #8dc8ff;
+
+                                h1{
+                                    color: #292b2c;
+                                }
+
+                                span{
+                                    color: #292b2c;
+                                }
+                            }
+
+                            .icon{
+                                display: flex;
+                            }
+                        }
+                    }
+                }
+
+                &.payment {
+                    display: none;
+
+                    .payment-info{
+                        padding-right: 30px;
+                        .content-header{
+                            width: 100%;
+                        }
+    
+                        .content{
+                            width: 100%;
+                        }
+                        
+                        .checkbox{
+                            margin-bottom: 10px;
+
+                            label{
+                                color: #999999; 
+                            }
+                        }
+                    }
+
+                    .order-info{
+                        background-color: rgba(255, 255, 255, 0.04);
+                        padding: 0;
+                        font-size: 14px;
+                        color: #757575;
+                        color: rgba(255, 255, 255, 0.67);
+
+                        .order-basic,.order-pro,.order-pro-plus,.order-default{
+                            display: none;
+                        }
+                        .selected-order{
+                            display: block;
+                        }
+
+                        .summary{
+                            background-color: rgba(255, 255, 255, 0.03);
+                            padding: 15px;
+                            
+                            h1{
+                                font-size: 12px;
+                                letter-spacing: 2px;
+                                color: rgba(255, 255, 255, 0.6);
+                            }
+                        }
+
+                        .price{
+                            font-weight: 700;
+                            text-align: right;
+                        }
+
+                        .total{
+                            padding:15px;
+                            margin-top: 30px;
+                        }
+
+                    }
+                }
+
+                &.active-content{
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 640px) {
+    .wizard-body {
+        .wizard-wrapper {
+            height: 100%;
+            top: 0;
+            opacity: .8;
+
+            .wizard-container {
+                .wizard-header {
+                    .wizard-tabs-container {
+                        width: 95%;
+                    }
+                }
+
+                .wizard-content {
+                    width: 95%;
+                }
+            }
+        }
+    } 
+}

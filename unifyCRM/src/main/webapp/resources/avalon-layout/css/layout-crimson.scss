@@ -1,0 +1,24 @@
+$topbarLeftGradientStartBgColor:#521c52 !default;
+$topbarLeftGradientEndBgColor:#612761 !default;
+$topbarRightGradientStartBgColor:#642b73 !default;
+$topbarRightGradientEndBgColor:#c6426e !default;
+$topbarTextColor:#ffffff !default;
+$menuGradientStartBgColor:#ffffff !default;
+$menuGradientEndBgColor:#ffffff !default;
+$menuitemHoverBgColor:#e8e8e8 !default;
+$menuitemActiveColor:#612761 !default;
+$menuitemActiveBgColor:#e8e8e8 !default;
+$menuButtonBgColor:#ffffff !default;
+$menuButtonColor:#521c52 !default;
+$badgeBgColor:#3eb839 !default;
+$badgeColor:#ffffff !default;
+$darkMenuGradientStartBgColor:#521c52 !default;
+$darkMenuGradientEndBgColor:#612761 !default;
+$darkMenuHoverBgColor:#391539 !default;
+$darkMenuRootMenuitemColor: rgba(255, 255, 255, 0.65) !default;
+$darkMenuMenuitemColor:#ffffff !default;
+$darkMenuMenuitemActiveColor:#E9D1E9 !default;
+$darkMenuMenuitemActiveBgColor:#2D112D !default;
+
+@import '../../sass/variables/layout/_variables';
+@import '../../sass/layout/_layout';

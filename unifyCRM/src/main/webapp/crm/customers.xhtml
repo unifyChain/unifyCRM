@@ -1,0 +1,1142 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+	</ui:define>
+	<ui:define name="title">
+        客户
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="客户" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				<h:form id="CustomerSearchForm">
+					<div class="card">
+						<div class="col-12">
+							<div class="ui-fluid formgrid grid">
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="跟进状态" for="followStatus" />
+									<p:selectCheckboxMenu id="followStatus"
+										value="#{customerController.selected.followStatuss}"
+										multiple="true" required="false" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItems value="#{dictController.followStatuss}"
+											var="followStatus" itemLabel="#{followStatus.dictLabel}"
+											itemValue="#{followStatus.dictCode}" />
+									</p:selectCheckboxMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="客户类型" for="customerType" />
+									<p:selectCheckboxMenu id="customerType"
+										value="#{customerController.selected.customerTypes}"
+										multiple="true" required="false" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItems value="#{dictController.customerTypes}"
+											var="customerType" itemLabel="#{customerType.dictLabel}"
+											itemValue="#{customerType.dictCode}" />
+									</p:selectCheckboxMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="部门" for="departmentName" />
+									<div class="ui-inputgroup">
+										<p:inputText id="departmentName"
+											value="#{customerController.selected.departmentName}"
+											title="departmentName" disabled="true" />
+										<p:commandButton icon="pi pi-search"
+											styleClass="ui-button-warning"
+											oncomplete="PF('DepartmentSelectedDialog').show()" />
+									</div>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="负责人" for="personId" />
+									<p:selectCheckboxMenu id="personId"
+										value="#{customerController.selected.personIds}"
+										multiple="true" required="false" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItems value="#{userController.items}" var="status"
+											itemLabel="#{status.firstName}"
+											itemValue="#{status.username}" />
+									</p:selectCheckboxMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="客户来源" for="customerSource" />
+									<p:selectCheckboxMenu id="customerSource"
+										value="#{customerController.selected.customerSources}"
+										multiple="true" required="false" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItems value="#{dictController.customerFroms}"
+											var="customerSource" itemLabel="#{customerSource.dictLabel}"
+											itemValue="#{customerSource.dictCode}" />
+									</p:selectCheckboxMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="创建时间" for="createDate" />
+									<p:selectOneMenu id="createDate"
+										value="#{customerController.selected.createDate}"
+										required="false">
+										<f:selectItem itemLabel="请选择"></f:selectItem>
+										<f:selectItem itemLabel="今日" itemValue="今日"></f:selectItem>
+										<f:selectItem itemLabel="本周" itemValue="本周"></f:selectItem>
+										<f:selectItem itemLabel="本月" itemValue="本月"></f:selectItem>
+										<f:selectItem itemLabel="本季度" itemValue="本季度"></f:selectItem>
+										<f:selectItem itemLabel="本年" itemValue="本年"></f:selectItem>
+										<p:ajax update="dateRange"
+											listener="#{customerController.createDate}" />
+									</p:selectOneMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="自定义" for="dateRange" />
+									<p:datePicker id="dateRange"
+										value="#{customerController.selected.createDateRange}"
+										selectionMode="range" readonlyInput="true"
+										pattern="yyyy-MM-dd HH:mm:ss" showTime="true">
+										<p:ajax event="dateSelect"
+											listener="#{customerController.dateRange}"
+											update="createDate" />
+									</p:datePicker>
+								</div>
+								<div class="field col-12 md:col-6">
+									<div class="ui-inputgroup">
+										<p:commandButton value="查询"
+											style="width:auto;margin-left:5px;"
+											action="#{customerController.search}"
+											update="CustomerListForm" icon="pi pi-search" />
+										<p:commandButton value="高级查询"
+											actionListener="#{customerController.prepareCreate}"
+											style="width:auto;margin-left:5px;" update=":SearchForm"
+											icon="pi pi-filter" oncomplete="PF('SearchDialog').show()" />
+										<p:commandButton value="重置" icon="pi pi-replay"
+											action="#{customerController.reset}"
+											update="CustomerSearchForm" process="@this"
+											style="width:auto;margin-left:5px;"
+											styleClass="p-mr-2 ui-button-outlined">
+										</p:commandButton>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</h:form>
+				<h:form id="CustomerListForm">
+					<div class="card">
+						<p:tabView style="margin-top:5px;">
+							<p:tab title="全部客户">
+
+								<p:toolbar>
+									<p:toolbarGroup>
+										<c:forEach items="#{customerController.modules}" var="model">
+											<p:commandButton id="createButton" value="新增"
+												action="#{customerController.prepareCreate}"
+												style="width:auto;" rendered="#{model.name eq '新增'}"
+												icon="pi pi-file" />
+										</c:forEach>
+									</p:toolbarGroup>
+
+									<p:toolbarGroup align="right">
+
+										<c:forEach items="#{customerController.modules}" var="model">
+											<p:menuButton value="导出" rendered="#{model.name eq '导出'}"
+												icon="pi pi-upload">
+												<p:menuitem value="XLS">
+													<p:dataExporter type="xls" target="datalist"
+														fileName="全部客户" />
+												</p:menuitem>
+												<p:menuitem value="XLSX">
+													<p:dataExporter type="xlsxstream" target="datalist"
+														fileName="全部客户" />
+												</p:menuitem>
+												<p:menuitem value="PDF">
+													<p:dataExporter type="pdf" target="datalist"
+														fileName="全部客户" />
+												</p:menuitem>
+												<p:menuitem value="CSV">
+													<p:dataExporter type="csv" target="datalist"
+														fileName="全部客户" />
+												</p:menuitem>
+												<p:menuitem value="XML">
+													<p:dataExporter type="xml" target="datalist"
+														fileName="全部客户" />
+												</p:menuitem>
+												<p:menuitem value="TXT">
+													<p:dataExporter type="txt" target="datalist"
+														fileName="全部客户" />
+												</p:menuitem>
+											</p:menuButton>
+											<p:commandButton value="导入"
+												style="width:auto;margin-left:5px;"
+												oncomplete="PF('CustomerImportDialogs').show()"
+												update=":CustomerImportForms"
+												rendered="#{model.name eq '导入'}" icon="pi pi-download" />
+											<p:commandButton value="下载" ajax="false"
+												onclick="PrimeFaces.monitorDownload(start, stop);"
+												rendered="#{model.name eq '下载'}" icon="pi pi-cloud-download"
+												styleClass="p-mr-2" style="width:auto;margin-left:5px;">
+												<p:fileDownload value="#{customerController.file}" />
+											</p:commandButton>
+										</c:forEach>
+										<p:commandButton id="toggler" type="button" value="显示列"
+											styleClass="light-btn" style="width:auto;" icon="pi pi-cog" />
+										<p:columnToggler datasource="datalist" trigger="toggler" />
+
+									</p:toolbarGroup>
+								</p:toolbar>
+								<p:dataTable id="datalist" var="item"
+									value="#{customerController.items}"
+									selection="#{customerController.selectedCustomers}"
+									editable="true" style="margin-bottom:20px" rowKey="#{item.id}"
+									reflow="true" resizableColumns="true" showGridlines="true"
+									scrollHeight="100%" tableStyle="width:auto" emptyMessage="无记录">
+									<p:ajax event="rowToggle" />
+
+									<p:column selectionMode="multiple"
+										style="width:16px;text-align:center" />
+									<p:column>
+										<f:facet name="header">操作</f:facet>
+										<c:forEach items="#{customerController.modules}" var="model">
+											<p:commandButton icon="pi pi-search"
+												action="#{customerController.view}"
+												rendered="#{model.name eq '查看'}"
+												styleClass="edit-button rounded-button ui-button-success"
+												process="@this">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:commandButton class="ui-button-warning rounded-button"
+												icon="pi pi-pencil" process="@this"
+												rendered="#{model.name eq '编辑'}"
+												action="#{customerController.edit}">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:commandButton icon="pi pi-trash"
+												action="#{customerController.remove}"
+												rendered="#{model.name eq '删除'}"
+												oncomplete="PF('confirmDialogRemove').show()"
+												styleClass="edit-button rounded-button ui-button-success"
+												process="@this">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:confirmDialog message="确定删除吗?" header="提示"
+												severity="alert" widgetVar="confirmDialogRemove">
+												<p:commandButton value="是" styleClass="ui-confirmdialog-yes"
+													action="#{customerController.destroy}" icon="pi pi-check"
+													style="width:auto;" update=":growl,datalist" ajax="true"
+													oncomplete="PF('confirmDialogRemove').hide()" />
+												<p:commandButton value="否" styleClass="ui-confirmdialog-no"
+													style="width:auto;" icon="pi pi-times"
+													onclick="PF('confirmDialogRemove').hide();" type="button" />
+											</p:confirmDialog>
+											<p:commandButton icon="pi pi-sort-alt"
+												action="#{customerController.remove}"
+												rendered="#{model.name eq '转移至客户公海'}"
+												oncomplete="PF('confirmDialogPool').show()"
+												styleClass="edit-button rounded-button ui-button-success"
+												process="@this">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:confirmDialog message="确定转移吗?" header="提示"
+												severity="alert" widgetVar="confirmDialogPool">
+												<p:commandButton value="是" styleClass="ui-confirmdialog-yes"
+													action="#{customerController.customerHighseass}" icon="pi pi-check"
+													style="width:auto;" update=":growl,datalist" ajax="true"
+													oncomplete="PF('confirmDialogPool').hide()" />
+												<p:commandButton value="否" styleClass="ui-confirmdialog-no"
+													style="width:auto;" icon="pi pi-times"
+													onclick="PF('confirmDialogPool').hide();" type="button" />
+											</p:confirmDialog>
+										</c:forEach>
+									</p:column>
+									<p:column sortBy="#{item.corporateName}"
+										filterBy="#{item.corporateName}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="公司名称" />
+										</f:facet>
+										<h:outputText value="#{item.corporateName}" />
+									</p:column>
+									<p:column sortBy="#{item.name}" filterBy="#{item.name}"
+										styleClass="singleLine" filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="客户名称" />
+										</f:facet>
+										<h:outputText value="#{item.name}" />
+									</p:column>
+									<p:column field="customerTypeName" headerText="客户类型"
+										filterMatchMode="exact" sortBy="#{item.customerTypeName}"
+										styleClass="singleLine">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('dataTable').filter()"
+												styleClass="custom-filter">
+												<f:selectItem itemLabel="全部" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{dictController.customerTypes}"
+													var="customer_type" itemLabel="#{customer_type.dictLabel}"
+													itemValue="#{customer_type.dictLabel}" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{item.customerTypeName}" />
+									</p:column>
+									<p:column field="followStatusName" headerText="跟进状态"
+										filterMatchMode="exact" sortBy="#{item.followStatusName}"
+										styleClass="singleLine">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('dataTable').filter()"
+												styleClass="custom-filter">
+												<f:selectItem itemLabel="全部" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{dictController.followStatuss}"
+													var="customer_type" itemLabel="#{customer_type.dictLabel}"
+													itemValue="#{customer_type.dictLabel}" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{item.followStatusName}" />
+									</p:column>
+									<p:column sortBy="#{item.telephone}"
+										filterBy="#{item.telephone}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="电话" />
+										</f:facet>
+										<h:outputText value="#{item.telephone}" />
+									</p:column>
+									<p:column sortBy="#{item.phone}" filterBy="#{item.phone}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="手机" />
+										</f:facet>
+										<h:outputText value="#{item.phone}" />
+									</p:column>
+									<p:column field="customerSourceName" headerText="客户来源"
+										filterMatchMode="exact" sortBy="#{item.customerSourceName}"
+										styleClass="singleLine">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('dataTable').filter()"
+												styleClass="custom-filter">
+												<f:selectItem itemLabel="全部" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{dictController.customerFroms}"
+													var="customer_type" itemLabel="#{customer_type.dictLabel}"
+													itemValue="#{customer_type.dictLabel}" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{item.customerSourceName}" />
+									</p:column>
+									<p:column sortBy="#{item.parentCustomerName}"
+										filterBy="#{item.parentCustomerName}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="上级客户" />
+										</f:facet>
+										<h:outputText value="#{item.parentCustomerName}" />
+									</p:column>
+									<p:column sortBy="#{item.wxid}" filterBy="#{item.wxid}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="微信" />
+										</f:facet>
+										<h:outputText value="#{item.wxid}" />
+									</p:column>
+									<p:column sortBy="#{item.qq}" filterBy="#{item.qq}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="QQ" />
+										</f:facet>
+										<h:outputText value="#{item.qq}" />
+									</p:column>
+									<p:column sortBy="#{item.wangwang}" filterBy="#{item.wangwang}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="旺旺" />
+										</f:facet>
+										<h:outputText value="#{item.wangwang}" />
+									</p:column>
+									<p:column sortBy="#{item.email}" filterBy="#{item.email}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="邮箱" />
+										</f:facet>
+										<h:outputText value="#{item.email}" />
+									</p:column>
+									<p:column sortBy="#{item.website}" filterBy="#{item.website}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="网址" />
+										</f:facet>
+										<h:outputText value="#{item.website}" />
+									</p:column>
+									<p:column sortBy="#{item.fax}" filterBy="#{item.fax}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="传真" />
+										</f:facet>
+										<h:outputText value="#{item.fax}" />
+									</p:column>
+									<p:column sortBy="#{item.zipCode}" filterBy="#{item.zipCode}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="邮编" />
+										</f:facet>
+										<h:outputText value="#{item.zipCode}" />
+									</p:column>
+									<p:column field="industryName" headerText="所属行业"
+										filterMatchMode="exact" sortBy="#{item.industryName}"
+										styleClass="singleLine">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('dataTable').filter()"
+												styleClass="custom-filter">
+												<f:selectItem itemLabel="全部" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{dictController.industrys}"
+													var="customer_from" itemLabel="#{customer_from.dictLabel}"
+													itemValue="#{customer_from.dictCode}!_#{customer_from.dictLabel}" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{item.industryName}" />
+									</p:column>
+									<p:column field="departmentName" headerText="所属部门"
+										filterMatchMode="exact" sortBy="#{item.departmentName}"
+										styleClass="singleLine">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('dataTable').filter()"
+												styleClass="custom-filter">
+												<f:selectItem itemLabel="全部" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems
+													value="#{departmentController.itemsDepartment}"
+													var="status" itemLabel="#{status.name}"
+													itemValue="#{status.id}!_#{status.name}" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{item.departmentName}" />
+									</p:column>
+									<p:column field="personnelSizeName" headerText="人员规模"
+										filterMatchMode="exact" sortBy="#{item.personnelSizeName}"
+										styleClass="singleLine">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('dataTable').filter()"
+												styleClass="custom-filter">
+												<f:selectItem itemLabel="全部" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{dictController.staffSizes}"
+													var="staff_size" itemLabel="#{staff_size.dictLabel}"
+													itemValue="#{staff_size.dictCode}!_#{staff_size.dictLabel}" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{item.personnelSizeName}" />
+									</p:column>
+									<p:column sortBy="#{item.updateDate}"
+										filterBy="#{item.updateDate}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="修改时间" />
+										</f:facet>
+										<h:outputText value="#{item.updateDate}" />
+									</p:column>
+									<p:column sortBy="#{item.remarks}" filterBy="#{item.remarks}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="备注" />
+										</f:facet>
+										<h:outputText value="#{item.remarks}" />
+									</p:column>
+									<p:column sortBy="#{item.personName}"
+										filterBy="#{item.personName}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="负责人" />
+										</f:facet>
+										<h:outputText value="#{item.personName}" />
+									</p:column>
+									<p:column sortBy="#{item.nextFollowTime}"
+										filterBy="#{item.nextFollowTime}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="下次跟进时间" />
+										</f:facet>
+										<h:outputText value="#{item.nextFollowTime}" />
+									</p:column>
+									<p:column sortBy="#{item.createName}"
+										filterBy="#{item.createName}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="创建人" />
+										</f:facet>
+										<h:outputText value="#{item.createName}" />
+									</p:column>
+									<p:column sortBy="#{item.createDate}"
+										filterBy="#{item.createDate}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="创建时间" />
+										</f:facet>
+										<h:outputText value="#{item.createDate}" />
+									</p:column>
+									<p:column>
+										<f:facet name="header">写跟进</f:facet>
+										<p:commandButton update=":growl,:FollowupForm"
+											oncomplete="PF('FollowupDialog').show()" title="写跟进"
+											icon="pi pi-edit" style="width:45px;margin-left:5px;"
+											ajax="true">
+											<f:setPropertyActionListener value="#{item}"
+												target="#{customerController.selected}" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode">
+									<p:commandButton value="是" type="button"
+										styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+									<p:commandButton value="否" type="button"
+										styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+								</p:confirmDialog>
+							</p:tab>
+
+							<p:tab title="我的客户">
+								<p:toolbar>
+									<p:toolbarGroup>
+										<c:forEach items="#{customerController.modules}" var="model">
+											<p:commandButton value="新增"
+												action="#{customerController.prepareCreate}"
+												style="width:auto;" rendered="#{model.name eq '新增'}"
+												icon="pi pi-file" />
+										</c:forEach>
+									</p:toolbarGroup>
+
+									<p:toolbarGroup align="right">
+
+										<c:forEach items="#{customerController.modules}" var="model">
+											<p:menuButton value="导出" rendered="#{model.name eq '导出'}"
+												icon="pi pi-upload">
+												<p:menuitem value="XLS">
+													<p:dataExporter type="xls" target="datalist1"
+														fileName="全部客户" />
+												</p:menuitem>
+												<p:menuitem value="XLSX">
+													<p:dataExporter type="xlsxstream" target="datalist1"
+														fileName="全部客户" />
+												</p:menuitem>
+												<p:menuitem value="PDF">
+													<p:dataExporter type="pdf" target="datalist1"
+														fileName="全部客户" />
+												</p:menuitem>
+												<p:menuitem value="CSV">
+													<p:dataExporter type="csv" target="datalist1"
+														fileName="全部客户" />
+												</p:menuitem>
+												<p:menuitem value="XML">
+													<p:dataExporter type="xml" target="datalist1"
+														fileName="全部客户" />
+												</p:menuitem>
+												<p:menuitem value="TXT">
+													<p:dataExporter type="txt" target="datalist1"
+														fileName="全部客户" />
+												</p:menuitem>
+											</p:menuButton>
+											<p:commandButton value="导入"
+												style="width:auto;margin-left:5px;"
+												oncomplete="PF('CustomerImportDialogs').show()"
+												update=":CustomerImportForms"
+												rendered="#{model.name eq '导入'}" icon="pi pi-download" />
+											<p:commandButton value="下载" ajax="false"
+												onclick="PrimeFaces.monitorDownload(start, stop);"
+												rendered="#{model.name eq '下载'}" icon="pi pi-cloud-download"
+												styleClass="p-mr-2" style="width:auto;margin-left:5px;">
+												<p:fileDownload value="#{customerController.file}" />
+											</p:commandButton>
+										</c:forEach>
+										<p:commandButton id="togglers" type="button" value="显示列"
+											styleClass="light-btn" style="width:auto;" icon="pi pi-cog" />
+										<p:columnToggler datasource="datalist1" trigger="togglers" />
+
+									</p:toolbarGroup>
+								</p:toolbar>
+								<p:dataTable id="datalist1" var="item"
+									value="#{customerController.itemsOfMy}"
+									selection="#{customerController.selectedCustomers}"
+									editable="true" style="margin-bottom:20px" rowKey="#{item.id}"
+									reflow="true" resizableColumns="true" showGridlines="true"
+									scrollHeight="100%" tableStyle="width:auto" emptyMessage="无记录">
+									<p:ajax event="rowToggle" />
+									<p:column selectionMode="multiple"
+										style="width:16px;text-align:center" />
+									<p:column>
+										<f:facet name="header">操作</f:facet>
+										<c:forEach items="#{customerController.modules}" var="model">
+											<p:commandButton icon="pi pi-search"
+												action="#{customerController.view}"
+												rendered="#{model.name eq '查看'}"
+												styleClass="edit-button rounded-button ui-button-success"
+												process="@this">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:commandButton class="ui-button-warning rounded-button"
+												icon="pi pi-pencil" process="@this"
+												rendered="#{model.name eq '编辑'}"
+												action="#{customerController.edit}">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:commandButton icon="pi pi-trash"
+												action="#{customerController.remove}"
+												rendered="#{model.name eq '删除'}"
+												oncomplete="PF('confirmDialogRemoveMy').show()"
+												styleClass="edit-button rounded-button ui-button-success"
+												process="@this">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:confirmDialog message="确定删除吗?" header="提示"
+												severity="alert" widgetVar="confirmDialogRemoveMy">
+												<p:commandButton value="是" styleClass="ui-confirmdialog-yes"
+													action="#{customerController.destroy}" icon="pi pi-check"
+													style="width:auto;" update=":growl,datalist1" ajax="true"
+													oncomplete="PF('confirmDialogRemoveMy').hide()" />
+												<p:commandButton value="否" styleClass="ui-confirmdialog-no"
+													style="width:auto;" icon="pi pi-times"
+													onclick="PF('confirmDialogRemoveMy').hide();" type="button" />
+											</p:confirmDialog>
+											<p:commandButton icon="pi pi-sort-alt"
+												action="#{customerController.remove}"
+												rendered="#{model.name eq '转移至客户公海'}"
+												oncomplete="PF('confirmDialogMyPool').show()"
+												styleClass="edit-button rounded-button ui-button-success"
+												process="@this">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:confirmDialog message="确定转移吗?" header="提示"
+												severity="alert" widgetVar="confirmDialogMyPool">
+												<p:commandButton value="是" styleClass="ui-confirmdialog-yes"
+													action="#{customerController.customerHighseass}" icon="pi pi-check"
+													style="width:auto;" update=":growl,datalist1" ajax="true"
+													oncomplete="PF('confirmDialogMyPool').hide()" />
+												<p:commandButton value="否" styleClass="ui-confirmdialog-no"
+													style="width:auto;" icon="pi pi-times"
+													onclick="PF('confirmDialogMyPool').hide();" type="button" />
+											</p:confirmDialog>
+										</c:forEach>
+									</p:column>
+									<p:column sortBy="#{item.corporateName}"
+										filterBy="#{item.corporateName}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="公司名称" />
+										</f:facet>
+										<h:outputText value="#{item.corporateName}" />
+									</p:column>
+									<p:column sortBy="#{item.name}" filterBy="#{item.name}"
+										styleClass="singleLine" filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="客户名称" />
+										</f:facet>
+										<h:outputText value="#{item.name}" />
+									</p:column>
+									<p:column field="customerTypeName" headerText="客户类型"
+										filterMatchMode="exact" sortBy="#{item.customerTypeName}"
+										styleClass="singleLine">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('dataTable').filter()"
+												styleClass="custom-filter">
+												<f:selectItem itemLabel="全部" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{dictController.customerTypes}"
+													var="customer_type" itemLabel="#{customer_type.dictLabel}"
+													itemValue="#{customer_type.dictLabel}" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{item.customerTypeName}" />
+									</p:column>
+									<p:column field="followStatusName" headerText="跟进状态"
+										filterMatchMode="exact" sortBy="#{item.followStatusName}"
+										styleClass="singleLine">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('dataTable').filter()"
+												styleClass="custom-filter">
+												<f:selectItem itemLabel="全部" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{dictController.followStatuss}"
+													var="customer_type" itemLabel="#{customer_type.dictLabel}"
+													itemValue="#{customer_type.dictLabel}" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{item.followStatusName}" />
+									</p:column>
+									<p:column sortBy="#{item.telephone}"
+										filterBy="#{item.telephone}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="电话" />
+										</f:facet>
+										<h:outputText value="#{item.telephone}" />
+									</p:column>
+									<p:column sortBy="#{item.phone}" filterBy="#{item.phone}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="手机" />
+										</f:facet>
+										<h:outputText value="#{item.phone}" />
+									</p:column>
+									<p:column field="customerSourceName" headerText="客户来源"
+										filterMatchMode="exact" sortBy="#{item.customerSourceName}"
+										styleClass="singleLine">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('dataTable').filter()"
+												styleClass="custom-filter">
+												<f:selectItem itemLabel="全部" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{dictController.customerFroms}"
+													var="customer_type" itemLabel="#{customer_type.dictLabel}"
+													itemValue="#{customer_type.dictLabel}" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{item.customerSourceName}" />
+									</p:column>
+									<p:column sortBy="#{item.parentCustomerName}"
+										filterBy="#{item.parentCustomerName}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="上级客户" />
+										</f:facet>
+										<h:outputText value="#{item.parentCustomerName}" />
+									</p:column>
+									<p:column sortBy="#{item.wxid}" filterBy="#{item.wxid}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="微信" />
+										</f:facet>
+										<h:outputText value="#{item.wxid}" />
+									</p:column>
+									<p:column sortBy="#{item.qq}" filterBy="#{item.qq}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="QQ" />
+										</f:facet>
+										<h:outputText value="#{item.qq}" />
+									</p:column>
+									<p:column sortBy="#{item.wangwang}" filterBy="#{item.wangwang}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="旺旺" />
+										</f:facet>
+										<h:outputText value="#{item.wangwang}" />
+									</p:column>
+									<p:column sortBy="#{item.email}" filterBy="#{item.email}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="邮箱" />
+										</f:facet>
+										<h:outputText value="#{item.email}" />
+									</p:column>
+									<p:column sortBy="#{item.website}" filterBy="#{item.website}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="网址" />
+										</f:facet>
+										<h:outputText value="#{item.website}" />
+									</p:column>
+									<p:column sortBy="#{item.fax}" filterBy="#{item.fax}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="传真" />
+										</f:facet>
+										<h:outputText value="#{item.fax}" />
+									</p:column>
+									<p:column sortBy="#{item.zipCode}" filterBy="#{item.zipCode}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="邮编" />
+										</f:facet>
+										<h:outputText value="#{item.zipCode}" />
+									</p:column>
+									<p:column field="industryName" headerText="所属行业"
+										filterMatchMode="exact" sortBy="#{item.industryName}"
+										styleClass="singleLine">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('dataTable').filter()"
+												styleClass="custom-filter">
+												<f:selectItem itemLabel="全部" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{dictController.industrys}"
+													var="customer_from" itemLabel="#{customer_from.dictLabel}"
+													itemValue="#{customer_from.dictCode}!_#{customer_from.dictLabel}" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{item.industryName}" />
+									</p:column>
+									<p:column field="departmentName" headerText="所属部门"
+										filterMatchMode="exact" sortBy="#{item.departmentName}"
+										styleClass="singleLine">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('dataTable').filter()"
+												styleClass="custom-filter">
+												<f:selectItem itemLabel="全部" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems
+													value="#{departmentController.itemsDepartment}"
+													var="status" itemLabel="#{status.name}"
+													itemValue="#{status.id}!_#{status.name}" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{item.departmentName}" />
+									</p:column>
+									<p:column field="personnelSizeName" headerText="人员规模"
+										filterMatchMode="exact" sortBy="#{item.personnelSizeName}"
+										styleClass="singleLine">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('dataTable').filter()"
+												styleClass="custom-filter">
+												<f:selectItem itemLabel="全部" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{dictController.staffSizes}"
+													var="staff_size" itemLabel="#{staff_size.dictLabel}"
+													itemValue="#{staff_size.dictCode}!_#{staff_size.dictLabel}" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{item.personnelSizeName}" />
+									</p:column>
+									<p:column sortBy="#{item.updateDate}"
+										filterBy="#{item.updateDate}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="修改时间" />
+										</f:facet>
+										<h:outputText value="#{item.updateDate}" />
+									</p:column>
+									<p:column sortBy="#{item.remarks}" filterBy="#{item.remarks}"
+										styleClass="singleLine" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="备注" />
+										</f:facet>
+										<h:outputText value="#{item.remarks}" />
+									</p:column>
+									<p:column sortBy="#{item.personName}"
+										filterBy="#{item.personName}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="负责人" />
+										</f:facet>
+										<h:outputText value="#{item.personName}" />
+									</p:column>
+									<p:column sortBy="#{item.nextFollowTime}"
+										filterBy="#{item.nextFollowTime}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="下次跟进时间" />
+										</f:facet>
+										<h:outputText value="#{item.nextFollowTime}" />
+									</p:column>
+									<p:column sortBy="#{item.collaboratorName}"
+										filterBy="#{item.collaboratorName}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="协作人" />
+										</f:facet>
+										<h:outputText value="#{item.collaboratorName}" />
+									</p:column>
+									<p:column sortBy="#{item.createName}"
+										filterBy="#{item.createName}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="创建人" />
+										</f:facet>
+										<h:outputText value="#{item.createName}" />
+									</p:column>
+									<p:column sortBy="#{item.createDate}"
+										filterBy="#{item.createDate}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="创建时间" />
+										</f:facet>
+										<h:outputText value="#{item.createDate}" />
+									</p:column>
+									<p:column>
+										<f:facet name="header">写跟进</f:facet>
+										<p:commandButton update=":growl,:FollowupForm"
+											oncomplete="PF('FollowupDialog').show()" title="写跟进"
+											icon="pi pi-edit" style="width:45px;margin-left:5px;"
+											ajax="true">
+											<f:setPropertyActionListener value="#{item}"
+												target="#{customerController.selected}" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode">
+									<p:commandButton value="是" type="button"
+										styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+									<p:commandButton value="否" type="button"
+										styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+								</p:confirmDialog>
+							</p:tab>
+
+						</p:tabView>
+					</div>
+
+				</h:form>
+				<p:dialog id="FollowupDlg" widgetVar="FollowupDialog" modal="true"
+					resizable="false" appendTo="@(body)" header="写跟进" width="800px"
+					style="max-height:600px;max-width:1000px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+					<h:form id="FollowupForm">
+							<h:panelGroup id="display">
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="跟进类型" for="folloType" />
+												<p:selectOneMenu  id="folloType"
+													value="#{customerController.selected.folloType}" required="false">
+													<f:selectItem itemLabel="电话" itemValue="电话" />
+													<f:selectItem itemLabel="QQ" itemValue="QQ" />
+													<f:selectItem itemLabel="微信" itemValue="微信" />
+													<f:selectItem itemLabel="拜访" itemValue="拜访" /> 
+													<f:selectItem itemLabel="邮件" itemValue="邮件" />
+													<f:selectItem itemLabel="短信" itemValue="短信" />
+													<f:selectItem itemLabel="其他" itemValue="其他" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="跟进时间" for="time" /> 
+												<p:datePicker id="time"  value="#{customerController.selected.time}" showTime="true" required="true"/>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="客户" for="name" />
+							                    <p:inputText id="name" value="#{customerController.selected.name}"
+													title="name"  disabled="true"/>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="跟进状态" for="followStatus" />
+												<p:selectOneMenu  id="followStatus" 
+													value="#{customerController.selected.followStatus}" required="false">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+										            <f:selectItems value="#{dictController.follow_status}"  var="follow_status" itemLabel="#{follow_status.dictLabel}" itemValue="#{follow_status.dictLabel}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												 <p:outputLabel value="联系人" for="contactsId" />
+												 <p:selectOneMenu  id="contactsId"
+													value="#{customerController.selected.contactsId}" required="false">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+										            <f:selectItems value="#{contactsController.items}"  var="lxr" itemLabel="#{lxr.name}" itemValue="#{lxr.id}!_#{lxr.name}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="下次跟进时间" for="nextFollowTime" />
+												<p:datePicker id="nextFollowTime"  value="#{customerController.selected.nextFollowTime}" showTime="true" required="true"/>
+											</div>
+											<div class="field col-12 md:col-12">
+												<p:outputLabel value="描述" for="content" />
+												<p:inputTextarea rows="3" id="content" 
+													value="#{customerController.selected.content}"
+													autoResize="false" />
+											</div>
+										</div>
+									</div>
+								</div>
+								<br /> 
+								<div class="EmptyBox10"></div> 
+								<p:toolbar>
+									<p:toolbarGroup align="right">
+										<p:commandButton value="保存" styleClass="ui-confirmdialog-yes"
+											icon="pi pi-save" action="#{customerController.createFollowUp}"
+											style="width:auto;"
+											update=":growl,display,:CustomerListForm" ajax="true"
+		 									oncomplete="handleSubmit(args, 'FollowupDialog');"/>
+									</p:toolbarGroup>
+								</p:toolbar>
+							</h:panelGroup>
+						</h:form>
+				</p:dialog>
+				<p:dialog modal="true" widgetVar="statusDialog" header="Status"
+					draggable="false" closable="false" resizable="false">
+					<i class="pi pi-spinner pi-spin" style="font-size: 3rem"></i>
+				</p:dialog>
+				<p:dialog id="CustomerImportDlgs" widgetVar="CustomerImportDialogs"
+					modal="true" resizable="false" appendTo="@(body)" header="客户导入"
+					style="max-height:550px;max-width:850px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+					<h:form id="CustomerImportForms">
+						<h:panelGroup id="display">
+							<h:panelGrid columns="4">
+								<div style="margin-left: 4.8em;">
+									1.选择后缀名为.xls的excel文件上传<br /> 2.文件大小不得超过100000KB(97MB)
+								</div>
+							</h:panelGrid>
+							<h:panelGrid columns="4">
+								<h:outputText value="客户导入：" for="gg"
+									style="font-family: 黑体;font-size: 7px;" />
+								<p:fileUpload listener="#{customerController.uploadExcel}"
+									mode="advanced" label="选择文件" auto="true"
+									onclick="PF('CustomerImportDialogs').hide();"
+									update=":CustomerListForm" style="width:500px;"
+									sizeLimit="500000000" allowTypes="/(\.|\/)(xls)$/"
+									fileLimit="1" />
+							</h:panelGrid>
+
+						</h:panelGroup>
+
+					</h:form>
+				</p:dialog>
+
+				<p:dialog id="SearchDlg" widgetVar="SearchDialog" modal="true"
+					resizable="false" appendTo="@(body)" header="高级查询" width="800px"
+					style="max-height:600px;max-width:1000px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+					<h:form id="SearchForm">
+						<h:panelGroup id="display">
+							<div class="col-12">
+								<div class="card">
+									<div class="ui-fluid formgrid grid">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel value="区域" for="region" />
+											<p:selectCheckboxMenu id="region"
+												value="#{customerController.selected.regions}"
+												multiple="true" required="false" filter="true"
+												filterMatchMode="startsWith">
+												<f:selectItems value="#{dictController.regions}"
+													var="region" itemLabel="#{region.dictLabel}"
+													itemValue="#{region.dictLabel}" />
+											</p:selectCheckboxMenu>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel value="所属行业" for="industry" />
+											<p:selectCheckboxMenu id="industry"
+												value="#{customerController.selected.industrys}"
+												multiple="true" required="false" filter="true"
+												filterMatchMode="startsWith">
+												<f:selectItems value="#{dictController.industrys}"
+													var="industry" itemLabel="#{industry.dictLabel}"
+													itemValue="#{industry.dictCode}" />
+											</p:selectCheckboxMenu>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel value="人员规模" for="personnelSize" />
+											<p:selectCheckboxMenu id="personnelSize"
+												value="#{customerController.selected.personnelSizes}"
+												multiple="true" required="false" filter="true"
+												filterMatchMode="startsWith">
+												<f:selectItems value="#{dictController.staffSizes}"
+													var="staff_size" itemLabel="#{staff_size.dictLabel}"
+													itemValue="#{staff_size.dictCode}" />
+											</p:selectCheckboxMenu>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel value="创建人" for="createId" />
+											<p:selectCheckboxMenu id="createId"
+												value="#{customerController.selected.createIds}"
+												multiple="true" required="false" filter="true"
+												filterMatchMode="startsWith">
+												<f:selectItems value="#{userController.items}" var="status"
+													itemLabel="#{status.firstName}"
+													itemValue="#{status.username}" />
+											</p:selectCheckboxMenu>
+										</div>
+										<div class="field col-12 md:col-3">
+											<p:outputLabel value="下次跟进时间" for="nextFollowTimes" />
+											<p:selectOneMenu id="nextFollowTimes"
+												value="#{customerController.selected.nextFollowTimes}"
+												required="false">
+												<f:selectItem itemLabel="请选择"></f:selectItem>
+												<f:selectItem itemLabel="今日" itemValue="今日"></f:selectItem>
+												<f:selectItem itemLabel="本周" itemValue="本周"></f:selectItem>
+												<f:selectItem itemLabel="本月" itemValue="本月"></f:selectItem>
+												<f:selectItem itemLabel="本季度" itemValue="本季度"></f:selectItem>
+												<f:selectItem itemLabel="本年" itemValue="本年"></f:selectItem>
+												<p:ajax update="dateRanges"
+													listener="#{customerController.nextFollowTimes}" />
+											</p:selectOneMenu>
+										</div>
+										<div class="field col-12 md:col-3">
+											<p:outputLabel value="自定义" for="dateRanges" />
+											<p:datePicker id="dateRanges"
+												value="#{customerController.selected.nextFollowTimeDateRange}"
+												selectionMode="range" readonlyInput="true"
+												pattern="yyyy-MM-dd HH:mm:ss" showTime="true">
+												<p:ajax event="dateSelect"
+													listener="#{customerController.dateRanges}"
+													update="nextFollowTimes" />
+											</p:datePicker>
+										</div>
+										<div class="field col-12 md:col-3">
+											<p:outputLabel value="更新于" for="updateDate" />
+											<p:selectOneMenu id="updateDate"
+												value="#{customerController.selected.updateDate}"
+												required="false">
+												<f:selectItem itemLabel="请选择"></f:selectItem>
+												<f:selectItem itemLabel="今日" itemValue="今日"></f:selectItem>
+												<f:selectItem itemLabel="本周" itemValue="本周"></f:selectItem>
+												<f:selectItem itemLabel="本月" itemValue="本月"></f:selectItem>
+												<f:selectItem itemLabel="本季度" itemValue="本季度"></f:selectItem>
+												<f:selectItem itemLabel="本年" itemValue="本年"></f:selectItem>
+												<p:ajax update="updateDateRange"
+													listener="#{customerController.updateDate}" />
+											</p:selectOneMenu>
+										</div>
+										<div class="field col-12 md:col-3">
+											<p:outputLabel value="自定义" for="updateDateRange" />
+											<p:datePicker id="updateDateRange"
+												value="#{customerController.selected.updateDateRange}"
+												selectionMode="range" readonlyInput="true"
+												pattern="yyyy-MM-dd HH:mm:ss" showTime="true">
+												<p:ajax event="dateSelect"
+													listener="#{customerController.updateDateRange}"
+													update="updateDate" />
+											</p:datePicker>
+										</div>
+									</div>
+								</div>
+							</div>
+							<br />
+							<div class="EmptyBox10"></div>
+							<p:toolbar>
+								<p:toolbarGroup align="right">
+									<p:commandButton value="查询" style="width:auto;margin-left:5px;"
+										oncomplete="handleSubmit(args, 'SearchDialog');"
+										action="#{customerController.search}"
+										update="CustomerListForm" icon="pi pi-search" />
+								</p:toolbarGroup>
+							</p:toolbar>
+						</h:panelGroup>
+					</h:form>
+				</p:dialog>
+				<p:dialog id="DepartmentSelectedDlg"
+					widgetVar="DepartmentSelectedDialog" modal="true" resizable="false"
+					appendTo="@(body)" header="选择部门"
+					style="max-height:550px;max-width:850px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+					<h:panelGroup id="selectDepartmentPG">
+						<h:form id="departmentItemsSelectedForm">
+							<p:panelGrid columns="1">
+								<p:tree value="#{departmentController.root}" var="doc"
+									selectionMode="single"
+									selection="#{departmentController.selectedNode}"
+									filterBy="#{doc}">
+									<p:treeNode collapsedIcon="ui-icon ui-icon-folder-collapsed">
+										<h:outputText value="#{doc}" />
+									</p:treeNode>
+								</p:tree>
+								<p:commandButton value="确定"
+									update=",:CustomerSearchForm:departmentName"
+									oncomplete="handleSubmit(args, 'DepartmentSelectedDialog');"
+									style="width:auto;margin-top:10px;"
+									actionListener="#{customerController.displaySelectedMultipledepartment(departmentController.selectedNode)}" />
+							</p:panelGrid>
+						</h:form>
+						<div class="EmptyBox10"></div>
+					</h:panelGroup>
+				</p:dialog>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

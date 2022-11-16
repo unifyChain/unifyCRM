@@ -1,0 +1,161 @@
+.invoice-wrapper {
+    padding: 0;
+    padding-bottom: 10px;
+    background-color: #ffffff;
+    min-width: 768px;
+
+    .invoice-header{        
+        padding: 40px;
+        background-color: $darkMenuMenuitemActiveColor;
+
+        .title-date{
+            text-align: right;
+
+            .title{
+                font-size: 24px;
+                color:$textColor;
+            }
+        }
+
+        .logo-adress{
+            text-align: left;
+        }
+    }
+
+    .card {
+        background-color: transparent;
+
+        &.invoice-table {
+            padding: 0px;
+            margin-bottom: 42px ;
+            width: 100%;
+    
+            h2,p {            
+                margin: 0;
+            }
+
+            .table-header {
+                padding: 0px 40px;
+                margin-top: -40px;
+                padding-top: 10px;
+    
+                h2 {
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: #292b2c;
+                    background-color: #ffffff;
+                    padding: 10px;
+                    display: inline;
+                    border-radius: 4px;
+
+                }
+            }
+
+            .table-content-row {
+                padding: 10px 45px;
+                font-weight: 500;
+                color:#212121; 
+    
+                h2 {
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: rgba(0, 0, 0, 0.6);
+                }       
+                
+                &.even {
+                    background-color: #f9f9f9;
+                }
+            }
+    
+            .total {
+                color: $topbarLeftGradientStartBgColor;
+
+                h2 {
+                    color: $topbarLeftGradientStartBgColor;
+                }
+            }
+
+             &.products-table {
+                .table-header {
+                    h2 {
+                        background-color: #f9f9f9;
+                    }
+                }
+             }
+
+             &.bank-total-table {
+                 .table-header {
+                    background-color: $darkMenuMenuitemActiveColor;
+                 }
+             }
+        }
+    }
+
+    .table-g-6 {
+        padding: 0;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+    
+    .text-right {
+        text-align: right;
+    }
+    
+    hr {
+        border:none;    
+        border-top: 1px dashed rgba(0, 0, 0, 0.22);
+        color:#fff;
+        background-color:#fff;
+        height:50px;
+        margin: 50px 50px;
+       
+    }
+}
+
+@media (max-width: 992px) {
+    .invoice-wrapper {
+        .invoice-header {
+            padding: 15px;
+            padding-bottom: 40px;
+        }
+
+        .card {
+            &.invoice-table {
+                .table-header {
+                    padding: 0px;
+                    margin-top: -30px;
+                }
+
+                .table-content-row {
+                    padding: 10px 5px;
+                }
+
+                &.bank-total-table {
+                    .table-header {
+                        padding-top: 10px;
+                        background-color: $darkMenuMenuitemActiveColor;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #invoice-content * {
+        visibility: visible;
+    }
+    #invoice-content {
+        width: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 0;
+        margin: 0;
+    }
+}

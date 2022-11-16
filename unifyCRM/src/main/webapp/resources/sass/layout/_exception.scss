@@ -1,0 +1,103 @@
+.exception-body {
+    overflow: hidden;
+	margin: 0 auto;
+	position: relative;
+    min-height: 100%;
+
+    &.error {
+        background: url("\#{resource['avalon-layout:images/exception/bg-error.png']}") no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+    
+    &.access {
+        background: url("\#{resource['avalon-layout:images/exception/bg-access.png']}") no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+    
+    &.notfound {
+        background: url("\#{resource['avalon-layout:images/exception/bg-404.png']}") no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+    
+    .exception-text {
+        text-align: center;
+        font-size: 36px;
+        padding-top: 30px;
+        font-weight: bold;
+        color: #ffffff;
+        
+        .exception-box {
+            display: inline-block;
+            padding: 2px 8px;
+            color: #292b2c;
+            background-color: #ffffff;
+        }
+        
+        .notfound-box {
+            display: inline-block;
+            padding: 2px 8px;
+            color: #ffffff;
+            background-color: #292b2c;
+        }
+        
+        .notfound-text {
+            color: #292b2c;
+        }
+    }
+    
+    .exception-image {
+        width: 100%;
+        position: absolute;
+        top: -36px;
+        text-align: center;
+        z-index: 1;
+    }
+
+    .exception-panel {
+        width: 100%;
+        height: 160px;
+        position: absolute;
+        bottom: 0;
+        text-align: center;
+        background-color: #292b2c;
+
+        .exception-panel-content {
+            width: 400px;
+            position: relative;
+            margin-left: -200px;
+            top: 30px;
+            left: 50%;
+            color: #ffffff;
+
+            span.secondary {
+                margin: 0;
+                font-size: 90px;
+                font-weight: 300;
+                margin-left: 110px;
+                position: relative;
+                top: -25px;
+            }
+
+            .information-text {
+                padding: 15px;
+
+                h3 {
+                    margin: 0;
+                    margin-bottom: 7px;
+                }
+
+                p {
+                    margin: 0;
+                }
+            }
+
+            p {
+                font-weight: 400;
+                margin: 0;
+            }
+        }
+    }
+}

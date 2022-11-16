@@ -1,0 +1,99 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+    button.ui-button {
+        margin-right: .5rem;
+    }
+</style>
+	</ui:define>
+	<ui:define name="title">
+        角色管理(数据权限)
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="角色管理"  url="department"/>
+							<p:menuitem value="数据权限(#{departmentController.roleName})" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				<div class="card">
+					<h:form id="DepartmentListForm">
+					<p:toolbar>
+			            <p:toolbarGroup>
+							<p:commandButton action="#{departmentController.createDepartment}"
+								style="width:auto;" value="保存" id="add"
+								update=":growl" 
+								icon="pi pi-save" styleClass="btn btn-primary">
+								<f:param name="from" value="list" />
+							</p:commandButton>
+			            </p:toolbarGroup>
+			
+			        </p:toolbar>
+							<p:fieldset legend="角色分配数据权限" style="margin-top:5px;">
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="角色名称" for="roleName" />
+										<p:inputText id="roleName" value="#{departmentController.roleName}"
+											title="departmentmc" required="true"  style="width:180px;" disabled="true"/>
+										<p:outputLabel value="角色编码" for="roleId" />
+										<p:inputText id="roleId" value="#{departmentController.roleId}" title="departmentid" style="width:180px;" required="false" disabled="true"/>
+									</p:panelGrid>
+									<p:panelGrid columns="2"
+										columnClasses="ui-grid-col-2,ui-grid-col-10"
+										layout="grid" styleClass="ui-panelgrid-blank"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="数据范围" for="dataRange" />
+								        <p:selectOneRadio id="dataRange" value="#{departmentController.dataRange}" unselectable="true">
+								            <f:selectItem itemLabel="未设置" itemValue="未设置"/>
+								            <f:selectItem itemLabel="全部数据" itemValue="全部"/>
+								            <f:selectItem itemLabel="自定义数据" itemValue="自定义数据"/>
+								            <f:selectItem itemLabel="本部门数据" itemValue="本部门"/>
+								            <p:ajax update=",:DepartmentListForms" listener="#{departmentController.choice}" />
+								        </p:selectOneRadio>
+									</p:panelGrid>
+							</p:fieldset>
+					</h:form>
+					<h:form id="DepartmentListForms">
+								<c:if test="#{departmentController.dataRange=='自定义数据'}">
+							<p:fieldset legend="授权数据权限" style="margin-top:5px;" >
+					            <p:treeTable id="datalist" value="#{departmentController.items}" var="item" selectionMode="checkbox"
+									resizableColumns="true" resizeMode="expand" scrollHeight="100%"
+									selection="#{departmentController.selectedNodes}" rowKey="#{item.id}"
+									paginator="true" rows="100" emptyMessage="无记录" rowIndexVar="rowIndex">
+									<p:column sortBy="#{item.name}" filterBy="#{item.name}"
+										 >
+										<f:facet name="header">
+											<h:outputText value="名称" />
+										</f:facet>
+										<h:outputText value="#{item.name}" />
+									</p:column>
+					            </p:treeTable>
+					            
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="explode">
+								<p:commandButton value="是" type="button"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+								<p:commandButton value="否" type="button"
+									styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+							</p:confirmDialog>
+							</p:fieldset>
+								</c:if>
+					</h:form>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

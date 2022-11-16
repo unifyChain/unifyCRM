@@ -1,0 +1,71 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+    button.ui-button {
+        margin-right: .5rem;
+    }
+</style>
+	</ui:define>
+	<ui:define name="title">
+        角色管理(权限设置)
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="角色管理"  url="roles"/>
+							<p:menuitem value="权限设置(#{roleController.roleName})" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				<div class="card">
+					<h:form id="RoleListForm">
+				            <p:treeTable id="datalist" value="#{roleController.itemRoles}" var="item" selectionMode="checkbox"
+								resizableColumns="true" resizeMode="expand" scrollHeight="100%"
+								selection="#{roleController.selectedNodes}" rowKey="#{item.id}"
+								paginator="true" rows="100" emptyMessage="无记录" rowIndexVar="rowIndex">
+								<f:facet name="header">
+									<p:commandButton action="#{roleController.createModule}"
+										style="width:auto;" value="保存" id="add"
+										update=":growl" 
+										icon="pi pi-save" styleClass="btn btn-primary">
+										<f:param name="from" value="list" />
+									</p:commandButton>
+								</f:facet>
+								<p:column sortBy="#{item.name}" filterBy="#{item.name}">
+									<f:facet name="header">
+										<h:outputText value="名称" />
+									</f:facet>
+									<h:outputText value="#{item.name}" />
+								</p:column>
+								<p:column sortBy="#{item.type}" filterBy="#{item.type}"
+									>
+									<f:facet name="header">
+										<h:outputText value="类型" />
+									</f:facet>
+									<h:outputText value="#{item.type}" />
+								</p:column>
+				            </p:treeTable>
+				            
+						<p:confirmDialog global="true" showEffect="fade"
+							hideEffect="explode">
+							<p:commandButton value="是" type="button"
+								styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+							<p:commandButton value="否" type="button"
+								styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+						</p:confirmDialog>
+					</h:form>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

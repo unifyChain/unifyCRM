@@ -1,0 +1,317 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+		    button.ui-button {
+		        margin-right: .5rem;
+		    }
+		</style>
+	</ui:define>
+	<ui:define name="title">
+        用户
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="用户" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				<div class="card">
+					<h:form id="UserListForm">
+					
+						<p:toolbar>
+							<p:toolbarGroup>
+								<c:forEach items="#{userController.modules}" var="model">
+									<p:commandButton id="createButton" value="新增"
+										actionListener="#{userController.prepareCreate}"
+										style="width:auto;" update=":UserCreateForm"
+										rendered="#{model.name eq '新增'}"
+										icon="pi pi-file" 
+										oncomplete="PF('UserCreateDialog').show()" 
+										scrollable="true" scrollHeight="100"
+                                   	 	styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines"/>
+								</c:forEach>
+							</p:toolbarGroup>
+
+							<p:toolbarGroup align="right">
+
+								<c:forEach items="#{userController.modules}" var="model">
+									<p:menuButton value="导出" rendered="#{model.name eq '导出'}">
+										<p:menuitem value="XLS" icon="pi pi-cloud-download">
+											<p:dataExporter type="xls" target="datalist"
+												fileName="用户" pageOnly="true" />
+										</p:menuitem>
+										<p:menuitem value="XLSX" icon="pi pi-cloud-download">
+											<p:dataExporter type="xlsxstream" target="datalist"
+												fileName="用户" pageOnly="true" />
+										</p:menuitem>
+										<p:menuitem value="PDF" icon="pi pi-cloud-download">
+											<p:dataExporter type="pdf" target="datalist"
+												fileName="用户" pageOnly="true" />
+										</p:menuitem>
+										<p:menuitem value="CSV" icon="pi pi-cloud-download">
+											<p:dataExporter type="csv" target="datalist"
+												fileName="用户" pageOnly="true" />
+										</p:menuitem>
+										<p:menuitem value="XML" icon="pi pi-cloud-download">
+											<p:dataExporter type="xml" target="datalist"
+												fileName="用户" pageOnly="true" />
+										</p:menuitem>
+										<p:menuitem value="TXT" icon="pi pi-cloud-download">
+											<p:dataExporter type="txt" target="datalist"
+												fileName="用户" pageOnly="true" />
+										</p:menuitem>
+									</p:menuButton>
+             						<p:fileUpload mode="simple" skinSimple="true" label="导入" chooseIcon="pi pi-download" style="margin-left:5px;"  rendered="#{model.name eq '导入'}"/>
+									<p:commandButton value="下载"
+										style="width:auto;" 
+										rendered="#{model.name eq '下载'}"
+										icon="pi pi-cloud-download" />
+								</c:forEach>
+								<p:commandButton id="toggler" type="button" value="显示列"
+									styleClass="light-btn" style="width:auto;margin-left:5px;"
+									icon="pi pi-cog" />
+								<p:columnToggler datasource="datalist" trigger="toggler" />
+								
+							</p:toolbarGroup>
+						</p:toolbar>
+						<p:dataTable id="datalist" var="item" widgetVar="dataTable"
+							selectionMode="single" value="#{userController.items}"
+							resizableColumns="true" resizeMode="expand" scrollHeight="100%"
+							selection="#{userController.selected}" rowKey="#{item.id}"
+							paginator="true" rows="100" emptyMessage="无记录" tableStyle="width:auto"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="100,500,1000,5000" reflow="true"
+							rowIndexVar="rowIndex">
+							<p:column headerText="操作">
+								<c:forEach items="#{userController.modules}" var="model">
+					                <p:commandButton icon="pi pi-align-justify" action="#{userController.usermechanism}"
+										 			 rendered="#{model.name eq '用户权限'}" 
+					                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
+										<f:param name="firstName" value="#{item.firstName}" />
+										<f:param name="id" value="#{item.id}" />
+					                </p:commandButton>
+					                <p:commandButton icon="pi pi-search" update=":UserViewForm" action="#{userController.edit}"
+												   	 rendered="#{model.name eq '查看'}" 
+					                                 oncomplete="PF('UserViewDialog').show()"
+					                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
+										<f:param name="id" value="#{item.id}" />
+					                </p:commandButton>
+					                <p:commandButton class="ui-button-warning rounded-button" update=":UserEditForm" icon="pi pi-pencil" process="@this"
+												     rendered="#{model.name eq '编辑'}" 
+					                                 oncomplete="PF('UserEditDialog').show()" action="#{userController.edit}">
+										<f:param name="id" value="#{item.id}" />
+					                </p:commandButton>
+								</c:forEach>
+							</p:column> 
+							<p:column headerText="序号" style="width:4%">
+							                #{rowIndex+1}
+							            </p:column>
+							<p:column sortBy="#{item.firstName}" filterBy="#{item.firstName}"
+								filterMatchMode="contains" >
+								<f:facet name="header">
+									<h:outputText value="姓名" />
+								</f:facet>
+								<h:outputText value="#{item.firstName}" />
+							</p:column>
+							<p:column sortBy="#{item.phoneNumber}" filterBy="#{item.phoneNumber}"
+								filterMatchMode="contains" >
+								<f:facet name="header">
+									<h:outputText value="手机号" />
+								</f:facet>
+								<h:outputText value="#{item.phoneNumber}" />
+							</p:column>
+							<p:column sortBy="#{item.email}" filterBy="#{item.email}"
+								filterMatchMode="contains" >
+								<f:facet name="header">
+									<h:outputText value="邮箱" />
+								</f:facet>
+								<h:outputText value="#{item.email}" />
+							</p:column>
+							<p:column sortBy="#{item.departmentName}" filterBy="#{item.departmentName}"
+								filterMatchMode="contains" >
+								<f:facet name="header">
+									<h:outputText value="部门" />
+								</f:facet>
+								<h:outputText value="#{item.departmentName}" />
+							</p:column>
+						</p:dataTable>
+						<p:confirmDialog global="true" showEffect="fade"
+							hideEffect="explode">
+							<p:commandButton value="是" type="button"
+								styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+							<p:commandButton value="否" type="button"
+								styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+						</p:confirmDialog>
+					</h:form>
+				<p:dialog id="UserCreateDlg" widgetVar="UserCreateDialog"
+					modal="true" resizable="false" appendTo="@(body)" header="新增"
+						style="height:auto;width:450px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;"
+					>
+						<h:form id="UserCreateForm">
+							<h:panelGroup id="display">
+								<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+									<p:outputLabel value="姓名" for="first_name" />
+									<p:inputText id="first_name" value="#{userController.selected.firstName}"
+										required="true" maxlength="200" title="first_name"  />
+									<p:outputLabel value="手机号" for="phone_number" />
+									<p:inputText id="phone_number" value="#{userController.selected.phoneNumber}"
+										required="true" maxlength="200" title="phone_number"  />
+									<p:outputLabel value="邮箱" for="email" />
+									<p:inputText id="email" value="#{userController.selected.email}"
+										required="false" maxlength="100" title="email"  /> 
+									<p:outputLabel value="密码" for="password" />
+									<p:password id="password" value="#{userController.selected.password}" required="true"  />
+									<p:outputLabel value="确认密码" for="confirmPassword" />
+									<p:password id="confirmPassword" value="#{userController.selected.confirmPassword}" required="true"  />
+									<p:outputLabel value="部门" for="departmentName" />
+									<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+					                    <p:inputText id="departmentName" value="#{userController.selected.departmentName}"
+											title="departmentName" style="width:125px;" disabled="true" required="true" />
+					                    <p:commandButton icon="pi pi-search" styleClass="ui-button-warning"
+											update=":departmentItemsSelectedForm" 
+											oncomplete="PF('DepartmentSelectedDialogxz').show()" style="width:30px;"/>
+									</p:panelGrid>
+								</p:panelGrid>
+
+								<br />
+								<p:commandButton value="保存" styleClass="ui-confirmdialog-yes"
+									icon="pi pi-save" action="#{userController.create}"
+									style="width:auto;"
+									update=":growl,display,:UserListForm:datalist" ajax="true"
+ 									oncomplete="handleSubmit(args, 'UserCreateDialog');"/>
+							</h:panelGroup>
+						</h:form>
+					</p:dialog>
+					<p:dialog id="UserEditDlg" widgetVar="UserEditDialog" modal="true"
+						style="height:auto;width:450px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;"
+						resizable="false" appendTo="@(body)" header="编辑">
+						<h:form id="UserEditForm">
+							<h:panelGroup id="display">
+								<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+									<p:outputLabel value="姓名" for="first_name" />
+									<p:inputText id="first_name" value="#{userController.selected.firstName}"
+										required="true" maxlength="200" title="first_name"  />
+									<p:outputLabel value="手机号" for="phone_number" />
+									<p:inputText id="phone_number" value="#{userController.selected.phoneNumber}"
+										required="true" maxlength="200" title="phone_number"  disabled="true"/>
+									<p:outputLabel value="邮箱" for="email" />
+									<p:inputText id="email" value="#{userController.selected.email}"
+										required="false" maxlength="100" title="email"  /> 
+									
+									<p:outputLabel value="密码" for="password" />
+									<p:password id="password" value="#{userController.selected.password}" required="false"  />
+									<p:outputLabel value="确认密码" for="confirmPassword" />
+									<p:password id="confirmPassword" value="#{userController.selected.confirmPassword}" required="false"  />
+								</p:panelGrid>
+								<p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
+									<p:outputLabel value="部门" for="departmentName" />
+				                    <p:inputText id="departmentName" value="#{userController.selected.departmentName}"
+										title="departmentName" style="width:125px;" disabled="true" required="true"/>
+				                    <p:commandButton icon="pi pi-search" styleClass="ui-button-warning"
+										update=":departmentItemsSelectedForm" 
+										oncomplete="PF('DepartmentSelectedDialog').show()" style="width:30px;"/>
+								</p:panelGrid>
+								<br />
+								<div class="EmptyBox10"></div>
+								<p:commandButton value="保存" styleClass="ui-confirmdialog-yes"
+									icon="pi pi-save" action="#{userController.update}"
+									style="width:auto;"
+									update=":growl,display,:UserListForm:datalist" ajax="true"
+ 									oncomplete="handleSubmit(args, 'UserEditDialog');"/>
+							</h:panelGroup>
+						</h:form>
+					</p:dialog>
+					
+					<p:dialog id="UserViewDlg" widgetVar="UserViewDialog" modal="true"
+						resizable="false" appendTo="@(body)" header="查看">
+						<h:form id="UserViewForm">
+							<h:panelGroup id="display">
+								<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+									<p:outputLabel value="姓名" for="first_name" />
+									<p:inputText id="first_name" value="#{userController.selected.firstName}"
+										 maxlength="200" title="first_name" disabled="true" />
+									<p:outputLabel value="手机号" for="phone_number" />
+									<p:inputText id="phone_number" value="#{userController.selected.phoneNumber}"
+										 maxlength="200" title="phone_number"  disabled="true"/>
+									<p:outputLabel value="邮箱" for="email" />
+									<p:inputText id="email" value="#{userController.selected.email}"
+										 maxlength="100" title="email"  disabled="true" /> 
+									
+									<p:outputLabel value="密码" for="password" />
+									<p:password id="password" value="#{userController.selected.password}" disabled="true" />
+									<p:outputLabel value="确认密码" for="confirmPassword" />
+									<p:password id="confirmPassword" value="#{userController.selected.confirmPassword}" disabled="true"  />
+								</p:panelGrid>
+								<p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
+									<p:outputLabel value="部门" for="departmentName" />
+				                    <p:inputText id="departmentName" value="#{userController.selected.departmentName}"
+										title="departmentName" style="width:125px;" disabled="true" />
+				                    <p:commandButton icon="pi pi-search" styleClass="ui-button-warning"
+										update=":departmentItemsSelectedForm" 
+										oncomplete="PF('DepartmentSelectedDialog').show()" style="width:30px;"/>
+								</p:panelGrid>
+								<br />
+								<div class="EmptyBox10"></div>
+						        <p:commandButton value="删除"  styleClass="p-mr-2" action="#{userController.destroy}" update=":growl,:UserListForm" icon="pi pi-check" style="width:auto;margin-left:5px;">
+						            <p:confirm type="popup" header="Confirmation" message="确定删除吗?" icon="pi pi-exclamation-triangle"/>
+						        </p:commandButton>
+						        <p:confirmPopup global="true">
+						            <p:commandButton value="否"  styleClass="ui-confirm-popup-no ui-button-flat"/>
+						            <p:commandButton value="是"  styleClass="ui-confirm-popup-yes"  onclick="PF('UserViewDialog').hide();"  />
+						        </p:confirmPopup>
+							</h:panelGroup>
+						</h:form>
+					</p:dialog>
+					<p:dialog id="DepartmentSelectedDlgxz" widgetVar="DepartmentSelectedDialogxz"
+						modal="true" resizable="false" appendTo="@(body)" header="选择部门"
+						style="max-height:550px;max-width:850px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+						<h:panelGroup id="selectSpPGxz">
+							<h:form id="departmentItemsSelectedFormxz">
+								<p:panelGrid columns="1">
+			                        <p:tree value="#{departmentController.rootDepartment}" var="doc"
+			                                selectionMode="single" selection="#{departmentController.selectedNode}"  filterBy="#{doc}">
+			                            <p:treeNode collapsedIcon="ui-icon ui-icon-folder-collapsed">
+			                                <h:outputText value="#{doc}" />
+			                            </p:treeNode>
+			                        </p:tree>
+							    	<p:commandButton value="确定" update=":growl,:UserCreateForm:departmentName" oncomplete="handleSubmit(args, 'DepartmentSelectedDialogxz');" style="width:auto;margin-top:10px;"  actionListener="#{userController.displaySelectedMultiple(departmentController.selectedNode)}"/>
+								</p:panelGrid>
+							</h:form>
+							<div class="EmptyBox10"></div>
+						</h:panelGroup>
+					</p:dialog>
+					<p:dialog id="DepartmentSelectedDlg" widgetVar="DepartmentSelectedDialog"
+						modal="true" resizable="false" appendTo="@(body)" header="选择部门"
+						style="max-height:550px;max-width:850px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+						<h:panelGroup id="selectSpPG">
+							<h:form id="departmentItemsSelectedForm">
+								<p:panelGrid columns="1">
+			                        <p:tree value="#{departmentController.rootDepartment}" var="doc"
+			                                selectionMode="single" selection="#{departmentController.selectedNode}"  filterBy="#{doc}">
+			                            <p:treeNode collapsedIcon="ui-icon ui-icon-folder-collapsed">
+			                                <h:outputText value="#{doc}" />
+			                            </p:treeNode>
+			                        </p:tree>
+							    	<p:commandButton value="确定" update=":growl,:UserEditForm:departmentName" oncomplete="handleSubmit(args, 'DepartmentSelectedDialog');" style="width:auto;margin-top:10px;"  actionListener="#{userController.displaySelectedMultiple(departmentController.selectedNode)}"/>
+								</p:panelGrid>
+							</h:form>
+							<div class="EmptyBox10"></div>
+						</h:panelGroup>
+					</p:dialog>
+					
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

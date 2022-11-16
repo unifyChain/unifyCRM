@@ -1,0 +1,37 @@
+/* Utils */
+.clearfix:after {
+  content:" ";
+  display:block;
+  clear:both;
+}
+
+.card {
+  @include border-radius($borderRadius);
+  background: #ffffff;
+  padding: 16px;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+
+  .card-header {
+    @include flex();
+    @include flex-align-center();
+    @include flex-justify-between();
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.sr-only {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal !important;
+}

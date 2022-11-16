@@ -1,0 +1,315 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+    button.ui-button {
+        margin-right: .5rem;
+    }
+</style> 
+	</ui:define>
+	<ui:define name="title">
+        跟进记录报表
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="跟进记录报表" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				            <div class="card">
+					<h:form id="FollowUpForms">
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="field col-12 md:col-6">
+										        <p:splitButton value="写跟进时间"  icon="pi pi-server" style="width:auto;" >
+											           <p:menuitem value="全部" action="#{reportController.writeFollowUp('全部')}" update="FollowUpForm" />
+											           <p:menuitem value="今日" action="#{reportController.writeFollowUp('今日')}" update="FollowUpForm" />
+											           <p:menuitem value="本周" action="#{reportController.writeFollowUp('本周')}" update="FollowUpForm" />
+											           <p:menuitem value="本月" action="#{reportController.writeFollowUp('本月')}" update="FollowUpForm" />
+											           <p:menuitem value="本季度" action="#{reportController.writeFollowUp('本季度')}" update="FollowUpForm" />
+											           <p:menuitem value="本年" action="#{reportController.writeFollowUp('本年')}" update="FollowUpForm" />
+										        </p:splitButton>
+											</div>
+											<div class="field col-12 md:col-6">
+										        <p:splitButton value="实际跟进时间"  icon="pi pi-server" style="width:auto;" >
+											           <p:menuitem value="全部" action="#{reportController.actualFollowUp('全部')}" update="FollowUpForm" />
+											           <p:menuitem value="今日" action="#{reportController.actualFollowUp('今日')}" update="FollowUpForm" />
+											           <p:menuitem value="本周" action="#{reportController.actualFollowUp('本周')}" update="FollowUpForm" />
+											           <p:menuitem value="本月" action="#{reportController.actualFollowUp('本月')}" update="FollowUpForm" />
+											           <p:menuitem value="本季度" action="#{reportController.actualFollowUp('本季度')}" update="FollowUpForm" />
+											           <p:menuitem value="本年" action="#{reportController.actualFollowUp('本年')}" update="FollowUpForm" />
+										        </p:splitButton>
+											</div> 
+											<div class="p-field col-12 p-md-6" >
+												<p:outputLabel value="用户" for="userId" />
+												 <p:selectOneMenu  id="userId"
+													value="#{reportController.selectedReport.userId}" required="false">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+										            <f:selectItems value="#{userController.items}"  var="status" itemLabel="#{status.firstName}" itemValue="#{status.username}" />
+										            <p:ajax update="FollowUpForm" listener="#{reportController.calcs}" />
+												</p:selectOneMenu>
+										
+											</div>
+											<div class="field col-12 md:col-4">
+												<p:outputLabel value="部门" for="departmentName" />
+							                    <p:inputText id="departmentName" value="#{reportController.selectedReport.departmentName}"
+													title="departmentName"  disabled="true" />
+											</div>
+											<div class="p-field col-12 p-md-2">
+							                    <p:commandButton icon="pi pi-search" styleClass="ui-button-warning"
+													oncomplete="PF('DepartmentSelectedDialog').show()" style="width:30px;margin-top: 25px;"/>
+											</div>
+										</div>
+									</div>
+								</div>
+						<p:toolbar>
+							<p:toolbarGroup>
+						        <p:splitButton value="KanBan"  icon="pi pi-server" style="width:auto;" >
+							           <p:menuitem value="跟进对象次数" action="#{reportController.type('跟进对象次数')}" update="FollowUpForm" />
+							           <p:menuitem value="跟进类型" action="#{reportController.type('跟进类型')}" update="FollowUpForm" />
+						        </p:splitButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+					</h:form>
+				
+					<h:form id="FollowUpForm">
+						<c:if test="#{reportController.type=='跟进对象次数'}">
+	    					<p:barChart model="#{reportController.barModel}" style="width: 100%; height: 500px;" id="barModel"/>
+							<p:toolbar>
+								<p:toolbarGroup>
+								</p:toolbarGroup> 
+	
+								<p:toolbarGroup align="right">
+	
+									<c:forEach items="#{reportController.modules}" var="model">
+										<p:menuButton value="导出" icon="pi pi-upload" rendered="#{model.name eq '导出'}">
+											<p:menuitem value="XLS" >
+												<p:dataExporter type="xls" target="datalist"
+													fileName="跟进记录报表"  />
+											</p:menuitem>
+											<p:menuitem value="XLSX" >
+												<p:dataExporter type="xlsxstream" target="datalist"
+													fileName="跟进记录报表"  />
+											</p:menuitem>
+											<p:menuitem value="PDF" >
+												<p:dataExporter type="pdf" target="datalist"
+													fileName="跟进记录报表"  />
+											</p:menuitem>
+											<p:menuitem value="CSV" >
+												<p:dataExporter type="csv" target="datalist"
+													fileName="跟进记录报表"  />
+											</p:menuitem>
+											<p:menuitem value="XML" >
+												<p:dataExporter type="xml" target="datalist"
+													fileName="跟进记录报表"  />
+											</p:menuitem>
+											<p:menuitem value="TXT" >
+												<p:dataExporter type="txt" target="datalist"
+													fileName="跟进记录报表"  />
+											</p:menuitem>
+										</p:menuButton>
+									</c:forEach>
+									<p:commandButton id="toggler" type="button" value="显示列"
+										styleClass="light-btn" style="width:auto;margin-left:5px;"
+										icon="pi pi-cog" />
+									<p:columnToggler datasource="datalist" trigger="toggler" />
+								</p:toolbarGroup>
+							</p:toolbar>
+									<p:dataTable id="datalist" var="item"
+										value="#{reportController.items}"
+										selection="#{reportController.selectedReport}" editable="true"
+										style="margin-bottom:20px" rowKey="#{item.id}" reflow="true"
+										resizableColumns="true" showGridlines="true"
+										scrollHeight="100%" emptyMessage="无记录">
+								<p:column sortBy="#{item.ranking}" filterBy="#{item.ranking}"
+									filterMatchMode="contains" >
+									<f:facet name="header">
+										<h:outputText value="跟进次数" />
+									</f:facet>
+									<h:outputText value="#{item.ranking}" />
+								</p:column>
+								<p:column sortBy="#{item.clueNumber}" filterBy="#{item.clueNumber}"
+									filterMatchMode="contains">
+									<f:facet name="header">
+										<h:outputText value="跟进线索次数" />
+									</f:facet>
+									<h:outputText value="#{item.clueNumber}" />
+								</p:column>
+								<p:column sortBy="#{item.customerNumber}" filterBy="#{item.customerNumber}"
+									filterMatchMode="contains" >
+									<f:facet name="header">
+										<h:outputText value="跟进客户次数" />
+									</f:facet>
+									<h:outputText value="#{item.customerNumber}" />
+								</p:column>
+								<p:column sortBy="#{item.businessOpportunitiesNumber}" filterBy="#{item.businessOpportunitiesNumber}"
+									filterMatchMode="contains" >
+									<f:facet name="header">
+										<h:outputText value="跟进商机次数" />
+									</f:facet>
+									<h:outputText value="#{item.businessOpportunitiesNumber}" />
+								</p:column>
+								<p:column sortBy="#{item.contractsNumber}" filterBy="#{item.contractsNumber}"
+									filterMatchMode="contains">
+									<f:facet name="header">
+										<h:outputText value="跟进合同次数" />
+									</f:facet>
+									<h:outputText value="#{item.contractsNumber}" />
+								</p:column>
+							</p:dataTable>
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="explode">
+								<p:commandButton value="是" type="button"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+								<p:commandButton value="否" type="button"
+									styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+							</p:confirmDialog>
+						</c:if>
+						<c:if test="#{reportController.type=='跟进类型'}">
+							<p:barChart model="#{reportController.barModellx}" style="width: 100%; height: 500px;" id="barModellx"/>
+							<p:toolbar>
+								<p:toolbarGroup> 
+								</p:toolbarGroup>
+	
+								<p:toolbarGroup align="right">
+	
+									<c:forEach items="#{reportController.modules}" var="model">
+										<p:menuButton value="导出" icon="pi pi-upload" rendered="#{model.name eq '导出'}">
+											<p:menuitem value="XLS" >
+												<p:dataExporter type="xls" target="datalistlx"
+													fileName="跟进记录报表"  />
+											</p:menuitem>
+											<p:menuitem value="XLSX" >
+												<p:dataExporter type="xlsxstream" target="datalistlx"
+													fileName="跟进记录报表"  />
+											</p:menuitem>
+											<p:menuitem value="PDF" >
+												<p:dataExporter type="pdf" target="datalistlx"
+													fileName="跟进记录报表"  />
+											</p:menuitem>
+											<p:menuitem value="CSV" >
+												<p:dataExporter type="csv" target="datalistlx"
+													fileName="跟进记录报表"  />
+											</p:menuitem>
+											<p:menuitem value="XML" >
+												<p:dataExporter type="xml" target="datalistlx"
+													fileName="跟进记录报表"  />
+											</p:menuitem>
+											<p:menuitem value="TXT" >
+												<p:dataExporter type="txt" target="datalistlx"
+													fileName="跟进记录报表"  />
+											</p:menuitem>
+										</p:menuButton>
+									</c:forEach>
+									<p:commandButton id="togglers" type="button" value="显示列"
+										styleClass="light-btn" style="width:auto;margin-left:5px;"
+										icon="pi pi-cog" />
+									<p:columnToggler datasource="datalistlx" trigger="togglers" />
+								</p:toolbarGroup>
+							</p:toolbar>
+									<p:dataTable id="datalistlx" var="item"
+										value="#{reportController.itemslx}"
+										selection="#{reportController.selectedReport}" editable="true"
+										style="margin-bottom:20px" rowKey="#{item.id}" reflow="true"
+										resizableColumns="true" showGridlines="true"
+										scrollHeight="100%" emptyMessage="无记录">
+									<p:column sortBy="#{item.ranking}" filterBy="#{item.ranking}"
+										filterMatchMode="contains" >
+										<f:facet name="header">
+											<h:outputText value="跟进次数" />
+										</f:facet>
+										<h:outputText value="#{item.ranking}" />
+									</p:column>
+									<p:column sortBy="#{item.dh}" filterBy="#{item.dh}"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="电话次数" />
+										</f:facet>
+										<h:outputText value="#{item.dh}" />
+									</p:column>
+									<p:column sortBy="#{item.qq}" filterBy="#{item.qq}"
+										filterMatchMode="contains" >
+										<f:facet name="header">
+											<h:outputText value="QQ次数" />
+										</f:facet>
+										<h:outputText value="#{item.qq}" />
+									</p:column>
+									<p:column sortBy="#{item.wx}" filterBy="#{item.wx}"
+										filterMatchMode="contains" >
+										<f:facet name="header">
+											<h:outputText value="微信次数" />
+										</f:facet>
+										<h:outputText value="#{item.wx}" />
+									</p:column>
+									<p:column sortBy="#{item.bf}" filterBy="#{item.bf}"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="拜访次数" />
+										</f:facet>
+										<h:outputText value="#{item.bf}" />
+									</p:column>
+									<p:column sortBy="#{item.yj}" filterBy="#{item.yj}"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="邮件次数" />
+										</f:facet>
+										<h:outputText value="#{item.yj}" />
+									</p:column>
+									<p:column sortBy="#{item.dx}" filterBy="#{item.dx}"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="短信次数" />
+										</f:facet>
+										<h:outputText value="#{item.dx}" />
+									</p:column>
+									<p:column sortBy="#{item.qt}" filterBy="#{item.qt}"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="其他次数" />
+										</f:facet>
+										<h:outputText value="#{item.qt}" />
+									</p:column>
+								</p:dataTable>
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode">
+									<p:commandButton value="是" type="button"
+										styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+									<p:commandButton value="否" type="button"
+										styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+								</p:confirmDialog>
+						</c:if>
+					</h:form>
+					<p:dialog id="DepartmentSelectedDlg" widgetVar="DepartmentSelectedDialog"
+						modal="true" resizable="false" appendTo="@(body)" header="选择部门"
+						style="max-height:550px;max-width:850px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+						<h:panelGroup id="selectDepartmentPG">
+							<h:form id="departmentItemsSelectedForm">
+								<p:panelGrid columns="1">
+			                        <p:tree value="#{departmentController.root}" var="doc"
+			                                selectionMode="single" selection="#{departmentController.selectedNode}"  filterBy="#{doc}">
+			                            <p:treeNode collapsedIcon="ui-icon ui-icon-folder-collapsed">
+			                                <h:outputText value="#{doc}" />
+			                            </p:treeNode> 
+			                        </p:tree>
+							    	<p:commandButton value="确定" update=":growl,:FollowUpForms:departmentName,:FollowUpForm" oncomplete="handleSubmit(args, 'DepartmentSelectedDialog');" style="width:auto;margin-top:10px;"  actionListener="#{reportController.displaySelectedMultipledepartment(departmentController.selectedNode)}"/>
+								</p:panelGrid>
+							</h:form>
+							<div class="EmptyBox10"></div>
+						</h:panelGroup>
+					</p:dialog>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

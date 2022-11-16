@@ -1,0 +1,715 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+	</ui:define>
+	<ui:define name="title">
+        开票记录
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="开票记录" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				<h:form id="CollectionSearchForm">
+
+					<div class="card">
+						<div class="col-12">
+							<div class="ui-fluid formgrid grid">
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="开票日期" for="invoicingDate" />
+									<p:selectOneMenu id="invoicingDate"
+										value="#{collectionController.selectedInvoicing.invoicingDates}"
+										required="false">
+										<f:selectItem itemLabel="请选择"></f:selectItem>
+										<f:selectItem itemLabel="今日" itemValue="今日"></f:selectItem>
+										<f:selectItem itemLabel="本周" itemValue="本周"></f:selectItem>
+										<f:selectItem itemLabel="本月" itemValue="本月"></f:selectItem>
+										<f:selectItem itemLabel="本季度" itemValue="本季度"></f:selectItem>
+										<f:selectItem itemLabel="本年" itemValue="本年"></f:selectItem>
+										<p:ajax update="invoicingDateRange"
+											listener="#{collectionController.invoicingDate}" />
+									</p:selectOneMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="自定义" for="invoicingDateRange" />
+									<p:datePicker id="invoicingDateRange"
+										value="#{collectionController.selectedInvoicing.invoicingDateRange}"
+										selectionMode="range" readonlyInput="true"
+										pattern="yyyy-MM-dd">
+										<p:ajax event="dateSelect"
+											listener="#{collectionController.invoicingDateRange}"
+											update="invoicingDate" />
+									</p:datePicker>
+								</div>
+								<div class="field col-12 md:col-6">
+									<p:outputLabel value="开票金额" for="invoicingAmount" />
+									<div class="ui-inputgroup">
+										<p:inputNumber id="invoicingAmount"
+											value="#{collectionController.selectedInvoicing.invoicingAmount}"
+											modifyValueOnWheel="false" title="totalContractAmount"
+											required="false" placeholder="最小值" />
+										<p:outputLabel value="~" for="totalContractAmounts" />
+										<p:inputNumber id="totalContractAmounts"
+											value="#{collectionController.selectedInvoicing.invoicingAmounts}"
+											modifyValueOnWheel="false" title="totalContractAmounts"
+											required="false" placeholder="最大值" />
+									</div>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="对应客户" for="customerId" />
+									<p:selectCheckboxMenu id="customerId"
+										value="#{collectionController.selectedInvoicing.customerIds}"
+										multiple="true" required="false" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItems value="#{customerController.parentCustomer}"
+											var="customer" itemLabel="#{customer.name}"
+											itemValue="#{customer.id}" />
+									</p:selectCheckboxMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="合同标题" for="contractId" />
+									<p:selectCheckboxMenu id="contractId"
+										value="#{collectionController.selectedInvoicing.contractIds}"
+										multiple="true" required="false" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItems value="#{contractController.items}"
+											var="contract" itemLabel="#{contract.contractTitle}"
+											itemValue="#{contract.id}" />
+									</p:selectCheckboxMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="票据类型" for="invoiceType" />
+									<p:selectCheckboxMenu id="invoiceType"
+										value="#{collectionController.selectedInvoicing.invoiceTypes}"
+										multiple="true" required="false" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItems value="#{dictController.invoiceTypes}"
+											var="invoice_type" itemLabel="#{invoice_type.dictLabel}"
+											itemValue="#{invoice_type.dictLabel}" />
+									</p:selectCheckboxMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<p:outputLabel value="经手人" for="contractLeader" />
+									<p:selectCheckboxMenu id="contractLeader"
+										value="#{collectionController.selectedInvoicing.contractLeaders}"
+										multiple="true" required="false" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItems value="#{userController.items}" var="status"
+											itemLabel="#{status.firstName}"
+											itemValue="#{status.firstName}" />
+									</p:selectCheckboxMenu>
+								</div>
+								<div class="field col-12 md:col-3">
+									<div class="ui-inputgroup">
+										<p:commandButton value="查询"
+											style="width:auto;margin-left:5px;"
+											action="#{collectionController.searchs}"
+											update="CollectionListForm" icon="pi pi-search" />
+										<p:commandButton value="重置" icon="pi pi-replay"
+											action="#{collectionController.resets}"
+											update="CollectionSearchForm" process="@this"
+											style="width:auto;margin-left:5px;"
+											styleClass="p-mr-2 ui-button-outlined">
+										</p:commandButton>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</h:form>
+				<h:form id="CollectionListForm">
+					<div class="card">
+						<p:tabView style="margin-top:5px;">
+							<p:tab title="全部开票记录">
+								<p:toolbar>
+									<p:toolbarGroup>
+										<c:forEach items="#{collectionController.modelsInvoicing}"
+											var="model">
+											<p:commandButton value="新增"
+												actionListener="#{collectionController.prepareCreateinvoicing}"
+												style="width:auto;" update=":CollectionInvoicingCreateForm"
+												rendered="#{model.name eq '新增'}" icon="pi pi-file"
+												oncomplete="PF('CollectionInvoicingCreateDialog').show()" />
+										</c:forEach>
+									</p:toolbarGroup>
+
+									<p:toolbarGroup align="right">
+
+										<c:forEach items="#{collectionController.modelsInvoicing}"
+											var="model">
+											<p:menuButton value="导出" rendered="#{model.name eq '导出'}"
+												icon="pi pi-upload">
+												<p:menuitem value="XLS">
+													<p:dataExporter type="xls" target="datalist2"
+														fileName="开票记录" />
+												</p:menuitem>
+												<p:menuitem value="XLSX">
+													<p:dataExporter type="xlsxstream" target="datalist2"
+														fileName="开票记录" />
+												</p:menuitem>
+												<p:menuitem value="PDF">
+													<p:dataExporter type="pdf" target="datalist2"
+														fileName="开票记录" />
+												</p:menuitem>
+												<p:menuitem value="CSV">
+													<p:dataExporter type="csv" target="datalist2"
+														fileName="开票记录" />
+												</p:menuitem>
+												<p:menuitem value="XML">
+													<p:dataExporter type="xml" target="datalist2"
+														fileName="开票记录" />
+												</p:menuitem>
+												<p:menuitem value="TXT">
+													<p:dataExporter type="txt" target="datalist2"
+														fileName="开票记录" />
+												</p:menuitem>
+											</p:menuButton>
+											<p:fileUpload mode="simple" skinSimple="true" label="导入"
+												chooseIcon="pi pi-download" style="margin-left:5px;"
+												rendered="#{model.name eq '导入'}" />
+											<p:commandButton value="下载"
+												style="width:auto;margin-left:5px;"
+												rendered="#{model.name eq '下载'}" icon="pi pi-cloud-download" />
+										</c:forEach>
+										<p:commandButton id="togglerInvoicing" type="button"
+											value="显示列" styleClass="light-btn" style="width:auto;"
+											icon="pi pi-cog" />
+										<p:columnToggler datasource="datalist2"
+											trigger="togglerInvoicing" />
+
+									</p:toolbarGroup>
+								</p:toolbar>
+								<p:dataTable id="datalist2" var="item"
+									value="#{collectionController.itemsInvoicing}"
+									selection="#{collectionController.selectedInvoicing}"
+									editable="true" style="margin-bottom:20px" rowKey="#{item.id}"
+									reflow="true" resizableColumns="true" showGridlines="true"
+									scrollHeight="100%" tableStyle="width:auto" emptyMessage="无记录">
+									<p:column>
+										<f:facet name="header">操作</f:facet>
+										<p:commandButton icon="pi pi-search"
+											update=":CollectionViewForm"
+											action="#{collectionController.viewInvoicing}"
+											onclick="PF('CollectionViewDialog').show()"
+											styleClass="edit-button rounded-button ui-button-success"
+											process="@this">
+											<f:param name="id" value="#{item.id}" />
+										</p:commandButton>
+										<c:forEach items="#{collectionController.modelsInvoicing}"
+											var="model">
+											<p:commandButton icon="pi pi-trash"
+												action="#{collectionController.remove}"
+												rendered="#{model.name eq '删除'}"
+												oncomplete="PF('confirmDialogInvoicing').show()"
+												styleClass="edit-button rounded-button ui-button-success"
+												process="@this">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:confirmDialog message="确定删除吗?" header="提示"
+												severity="alert" widgetVar="confirmDialogInvoicing">
+												<p:commandButton value="是" styleClass="ui-confirmdialog-yes"
+													action="#{collectionController.destroyss}"
+													icon="pi pi-check" style="width:auto;"
+													update=":growl,datalist2" ajax="true"
+													oncomplete="PF('confirmDialogInvoicing').hide()" />
+												<p:commandButton value="否" styleClass="ui-confirmdialog-no"
+													style="width:auto;" icon="pi pi-times"
+													onclick="PF('confirmDialogInvoicing').hide();"
+													type="button" />
+											</p:confirmDialog>
+										</c:forEach>
+									</p:column>
+									<p:column sortBy="#{item.invoicingDate}"
+										filterBy="#{item.invoicingDate}" styleClass="singleLine"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="开票日期" />
+										</f:facet>
+										<h:outputText value="#{item.invoicingDate}" />
+									</p:column>
+									<p:column sortBy="#{item.invoicingAmount}"
+										filterBy="#{item.invoicingAmount}" styleClass="singleLine"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="开票金额" />
+										</f:facet>
+										<h:outputText value="#{item.invoicingAmount}" />
+									</p:column>
+									<p:column sortBy="#{item.invoicingContent}"
+										filterBy="#{item.invoicingContent}" styleClass="singleLine"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="票据内容" />
+										</f:facet>
+										<h:outputText value="#{item.invoicingContent}" />
+									</p:column>
+									<p:column sortBy="#{item.customerName}"
+										filterBy="#{item.customerName}" styleClass="singleLine"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="对应客户" />
+										</f:facet>
+										<h:outputText value="#{item.customerName}" />
+									</p:column>
+									<p:column sortBy="#{item.contractName}"
+										filterBy="#{item.contractName}" styleClass="singleLine"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="合同标题" />
+										</f:facet>
+										<h:outputText value="#{item.contractName}" />
+									</p:column>
+									<p:column sortBy="#{item.invoicingNum}"
+										filterBy="#{item.invoicingNum}" styleClass="singleLine"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="发票号码" />
+										</f:facet>
+										<h:outputText value="#{item.invoicingNum}" />
+									</p:column>
+									<p:column sortBy="#{item.contractLeader}"
+										filterBy="#{item.contractLeader}" styleClass="singleLine"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="经手人" />
+										</f:facet>
+										<h:outputText value="#{item.contractLeader}" />
+									</p:column>
+									<p:column sortBy="#{item.createName}"
+										filterBy="#{item.createName}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="创建人" />
+										</f:facet>
+										<h:outputText value="#{item.createName}" />
+									</p:column>
+									<p:column sortBy="#{item.createDate}"
+										filterBy="#{item.createDate}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="创建时间" />
+										</f:facet>
+										<h:outputText value="#{item.createDate}" />
+									</p:column>
+								</p:dataTable>
+
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode">
+									<p:commandButton value="是" type="button"
+										styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+									<p:commandButton value="否" type="button"
+										styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+								</p:confirmDialog>
+							</p:tab>
+							<p:tab title="我的开票记录">
+								<p:toolbar>
+									<p:toolbarGroup>
+										<c:forEach items="#{collectionController.modelsInvoicing}"
+											var="model">
+											<p:commandButton value="新增"
+												actionListener="#{collectionController.prepareCreateinvoicing}"
+												style="width:auto;" update=":CollectionInvoicingCreateForm"
+												rendered="#{model.name eq '新增'}" icon="pi pi-file"
+												oncomplete="PF('CollectionInvoicingCreateDialog').show()" />
+										</c:forEach>
+									</p:toolbarGroup>
+
+									<p:toolbarGroup align="right">
+
+										<c:forEach items="#{collectionController.modelsInvoicing}"
+											var="model">
+											<p:menuButton value="导出" rendered="#{model.name eq '导出'}"
+												icon="pi pi-upload">
+												<p:menuitem value="XLS">
+													<p:dataExporter type="xls" target="datalist"
+														fileName="开票记录" />
+												</p:menuitem>
+												<p:menuitem value="XLSX">
+													<p:dataExporter type="xlsxstream" target="datalist"
+														fileName="开票记录" />
+												</p:menuitem>
+												<p:menuitem value="PDF">
+													<p:dataExporter type="pdf" target="datalist"
+														fileName="开票记录" />
+												</p:menuitem>
+												<p:menuitem value="CSV">
+													<p:dataExporter type="csv" target="datalist"
+														fileName="开票记录" />
+												</p:menuitem>
+												<p:menuitem value="XML">
+													<p:dataExporter type="xml" target="datalist"
+														fileName="开票记录" />
+												</p:menuitem>
+												<p:menuitem value="TXT">
+													<p:dataExporter type="txt" target="datalist"
+														fileName="开票记录" />
+												</p:menuitem>
+											</p:menuButton>
+											<p:fileUpload mode="simple" skinSimple="true" label="导入"
+												chooseIcon="pi pi-download" style="margin-left:5px;"
+												rendered="#{model.name eq '导入'}" />
+											<p:commandButton value="下载"
+												style="width:auto;margin-left:5px;"
+												rendered="#{model.name eq '下载'}" icon="pi pi-cloud-download" />
+										</c:forEach>
+										<p:commandButton id="togglerInvoicings" type="button"
+											value="显示列" styleClass="light-btn" style="width:auto;"
+											icon="pi pi-cog" />
+										<p:columnToggler datasource="datalist"
+											trigger="togglerInvoicings" />
+
+									</p:toolbarGroup>
+								</p:toolbar>
+								<p:dataTable id="datalist" var="item"
+									value="#{collectionController.itemsInvoicingOfMy}"
+									selection="#{collectionController.selectedInvoicing}"
+									editable="true" style="margin-bottom:20px" rowKey="#{item.id}"
+									reflow="true" resizableColumns="true" showGridlines="true"
+									scrollHeight="100%" tableStyle="width:auto" emptyMessage="无记录">
+									<p:column>
+										<f:facet name="header">操作</f:facet>
+										<p:commandButton icon="pi pi-search"
+											update=":CollectionViewForm"
+											action="#{collectionController.viewInvoicing}"
+											onclick="PF('CollectionViewDialog').show()"
+											styleClass="edit-button rounded-button ui-button-success"
+											process="@this">
+											<f:param name="id" value="#{item.id}" />
+										</p:commandButton>
+										<c:forEach items="#{collectionController.modelsInvoicing}"
+											var="model">
+											<p:commandButton icon="pi pi-trash"
+												action="#{collectionController.remove}"
+												rendered="#{model.name eq '删除'}"
+												oncomplete="PF('confirmDialogInvoicings').show()"
+												styleClass="edit-button rounded-button ui-button-success"
+												process="@this">
+												<f:param name="id" value="#{item.id}" />
+											</p:commandButton>
+											<p:confirmDialog message="确定删除吗?" header="提示"
+												severity="alert" widgetVar="confirmDialogInvoicings">
+												<p:commandButton value="是" styleClass="ui-confirmdialog-yes"
+													action="#{collectionController.destroyss}"
+													icon="pi pi-check" style="width:auto;"
+													update=":growl,datalist" ajax="true"
+													oncomplete="PF('confirmDialogInvoicings').hide()" />
+												<p:commandButton value="否" styleClass="ui-confirmdialog-no"
+													style="width:auto;" icon="pi pi-times"
+													onclick="PF('confirmDialogInvoicings').hide();"
+													type="button" />
+											</p:confirmDialog>
+										</c:forEach>
+									</p:column>
+									<p:column sortBy="#{item.invoicingDate}"
+										filterBy="#{item.invoicingDate}" styleClass="singleLine"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="开票日期" />
+										</f:facet>
+										<h:outputText value="#{item.invoicingDate}" />
+									</p:column>
+									<p:column sortBy="#{item.invoicingAmount}"
+										filterBy="#{item.invoicingAmount}" styleClass="singleLine"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="开票金额" />
+										</f:facet>
+										<h:outputText value="#{item.invoicingAmount}" />
+									</p:column>
+									<p:column sortBy="#{item.invoicingContent}"
+										filterBy="#{item.invoicingContent}" styleClass="singleLine"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="票据内容" />
+										</f:facet>
+										<h:outputText value="#{item.invoicingContent}" />
+									</p:column>
+									<p:column sortBy="#{item.customerName}"
+										filterBy="#{item.customerName}" styleClass="singleLine"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="对应客户" />
+										</f:facet>
+										<h:outputText value="#{item.customerName}" />
+									</p:column>
+									<p:column sortBy="#{item.contractName}"
+										filterBy="#{item.contractName}" styleClass="singleLine"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="合同标题" />
+										</f:facet>
+										<h:outputText value="#{item.contractName}" />
+									</p:column>
+									<p:column sortBy="#{item.invoicingNum}"
+										filterBy="#{item.invoicingNum}" styleClass="singleLine"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="发票号码" />
+										</f:facet>
+										<h:outputText value="#{item.invoicingNum}" />
+									</p:column>
+									<p:column sortBy="#{item.contractLeader}"
+										filterBy="#{item.contractLeader}" styleClass="singleLine"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<h:outputText value="经手人" />
+										</f:facet>
+										<h:outputText value="#{item.contractLeader}" />
+									</p:column>
+									<p:column sortBy="#{item.createName}"
+										filterBy="#{item.createName}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="创建人" />
+										</f:facet>
+										<h:outputText value="#{item.createName}" />
+									</p:column>
+									<p:column sortBy="#{item.createDate}"
+										filterBy="#{item.createDate}" styleClass="singleLine"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="创建时间" />
+										</f:facet>
+										<h:outputText value="#{item.createDate}" />
+									</p:column>
+								</p:dataTable>
+
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode">
+									<p:commandButton value="是" type="button"
+										styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+									<p:commandButton value="否" type="button"
+										styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+								</p:confirmDialog>
+							</p:tab>
+						</p:tabView>
+					</div>
+				</h:form>
+
+				<p:dialog id="CollectionInvoicingCreateDlg"
+					widgetVar="CollectionInvoicingCreateDialog" modal="true"
+					resizable="false" appendTo="@(body)" header="新增" width="800px;"
+					style="max-height:600px;max-width:1000px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+					<h:form id="CollectionInvoicingCreateForm">
+						<h:panelGroup id="display">
+							<div class="col-12">
+								<div class="card">
+									<div class="ui-fluid formgrid grid">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel value="开票日期" for="invoicingDate" />
+											<p:datePicker id="invoicingDate"
+												value="#{collectionController.selectedInvoicing.invoicingDate}"
+												showTime="true" required="true" />
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel value="票据内容" for="invoicingContent" />
+											<p:inputText id="invoicingContent"
+												value="#{collectionController.selectedInvoicing.invoicingContent}"
+												title="invoicingContent" required="false" />
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel value="开票金额" for="invoicingAmount" />
+											<p:inputText id="invoicingAmount"
+												value="#{collectionController.selectedInvoicing.invoicingAmount}"
+												title="invoicingAmount" required="false" />
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel value="对应客户" for="customerId" />
+											<p:selectOneMenu id="customerId"
+												value="#{collectionController.selectedInvoicing.customerId}"
+												required="false">
+												<f:selectItem itemLabel="请选择"></f:selectItem>
+												<f:selectItems value="#{customerController.parentCustomer}"
+													var="sjkh" itemLabel="#{sjkh.name}"
+													itemValue="#{sjkh.id}!_#{sjkh.name}" />
+											</p:selectOneMenu>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel value="合同标题" for="contractId" />
+											<p:selectOneMenu id="contractId"
+												value="#{collectionController.selectedInvoicing.contractId}"
+												required="false">
+												<f:selectItem itemLabel="请选择"></f:selectItem>
+												<f:selectItems value="#{contractController.items}"
+													var="sjkh" itemLabel="#{sjkh.contractTitle}"
+													itemValue="#{sjkh.id}!_#{sjkh.contractTitle}" />
+											</p:selectOneMenu>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel value="票据类型" for="invoiceType" />
+											<p:selectOneMenu id="invoiceType"
+												value="#{collectionController.selectedInvoicing.invoiceType}"
+												required="false">
+												<f:selectItem itemLabel="请选择"></f:selectItem>
+												<f:selectItems value="#{dictController.invoiceTypes}"
+													var="invoice_type" itemLabel="#{invoice_type.dictLabel}"
+													itemValue="#{invoice_type.dictLabel}" />
+											</p:selectOneMenu>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel value="发票号码" for="invoicingNum" />
+											<p:inputText id="invoicingNum"
+												value="#{collectionController.selectedInvoicing.invoicingNum}"
+												title="invoicingNum" required="false" />
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel value="经手人" for="contractLeader" />
+											<p:selectOneMenu id="contractLeader"
+												value="#{collectionController.selectedInvoicing.contractLeader}"
+												required="false">
+												<f:selectItem itemLabel="请选择"></f:selectItem>
+												<f:selectItems value="#{userController.items}" var="status"
+													itemLabel="#{status.firstName}"
+													itemValue="#{status.firstName}" />
+											</p:selectOneMenu>
+										</div>
+										<div class="p-field col-12 p-md-12">
+											<p:outputLabel value="备注信息" for="remark" />
+											<p:inputTextarea rows="3" id="remark"
+												value="#{collectionController.selectedInvoicing.remark}"
+												autoResize="false" />
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<br />
+							<p:toolbar>
+								<p:toolbarGroup>
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right">
+									<p:commandButton value="保存" styleClass="ui-confirmdialog-yes"
+										icon="pi pi-save"
+										action="#{collectionController.createInvoicing}"
+										style="width:auto;" update=":growl,:CollectionListForm"
+										ajax="true"
+										oncomplete="handleSubmit(args, 'CollectionInvoicingCreateDialog');" />
+								</p:toolbarGroup>
+							</p:toolbar>
+						</h:panelGroup>
+					</h:form>
+				</p:dialog>
+
+				<p:sidebar widgetVar="CollectionViewDialog" position="right"
+					style="width: 80%;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+					<h:form id="CollectionViewForm">
+						<h:panelGroup id="display">
+							<div class="card">
+								<div class="col-12">
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-3,ui-grid-col-4,ui-grid-col-3,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="对应客户：" for="customer" />
+										<h:outputText id="customer"
+											value="#{collectionController.selectedInvoicing.customerName}"
+											title="position" disabled="true" />
+										<h:outputText value="合同标题：" for="contractId" />
+										<h:outputText id="contractId"
+											value="#{collectionController.selectedInvoicing.contractName}"
+											required="false" disabled="true" />
+									</p:panelGrid>
+								</div>
+							</div>
+							<div class="card" style="margin-top: 5px;">
+								<p:tabView>
+									<p:tab title="详细信息">
+										<div class="col-12">
+											<div class="card">
+												<div class="ui-fluid formgrid grid">
+													<div class="field col-12 md:col-6">
+														<p:outputLabel value="开票日期" for="invoicingDate" />
+														<p:datePicker id="invoicingDate"
+															value="#{collectionController.selectedInvoicing.invoicingDate}"
+															showTime="true" required="true" disabled="true" />
+													</div>
+													<div class="field col-12 md:col-6">
+														<p:outputLabel value="票据内容" for="invoicingContent" />
+														<p:inputText id="invoicingContent"
+															value="#{collectionController.selectedInvoicing.invoicingContent}"
+															title="invoicingContent" required="false" disabled="true" />
+													</div>
+													<div class="field col-12 md:col-6">
+														<p:outputLabel value="开票金额" for="invoicingAmount" />
+														<p:inputText id="invoicingAmount"
+															value="#{collectionController.selectedInvoicing.invoicingAmount}"
+															title="invoicingAmount" required="false" disabled="true" />
+													</div>
+													<div class="field col-12 md:col-6">
+														<p:outputLabel value="票据类型" for="invoiceType" />
+														<p:selectOneMenu id="invoiceType" disabled="true"
+															value="#{collectionController.selectedInvoicing.invoiceType}"
+															required="false">
+															<f:selectItem itemLabel="请选择"></f:selectItem>
+															<f:selectItems value="#{dictController.invoiceTypes}"
+																var="invoice_type" itemLabel="#{invoice_type.dictLabel}"
+																itemValue="#{invoice_type.dictLabel}" />
+														</p:selectOneMenu>
+													</div>
+													<div class="field col-12 md:col-6">
+														<p:outputLabel value="发票号码" for="invoicingNum" />
+														<p:inputText id="invoicingNum" disabled="true"
+															value="#{collectionController.selectedInvoicing.invoicingNum}"
+															title="invoicingNum" required="false" />
+													</div>
+													<div class="field col-12 md:col-6">
+														<p:outputLabel value="经手人" for="contractLeader" />
+														<p:selectOneMenu id="contractLeader" disabled="true"
+															value="#{collectionController.selectedInvoicing.contractLeader}"
+															required="false">
+															<f:selectItem itemLabel="请选择"></f:selectItem>
+															<f:selectItems value="#{userController.items}"
+																var="status" itemLabel="#{status.firstName}"
+																itemValue="#{status.firstName}" />
+														</p:selectOneMenu>
+													</div>
+													<div class="p-field col-12 p-md-12">
+														<p:outputLabel value="备注信息" for="remark" />
+														<p:inputTextarea rows="3" id="remark" disabled="true"
+															value="#{collectionController.selectedInvoicing.remark}"
+															autoResize="false" />
+													</div>
+												</div>
+											</div>
+										</div>
+									</p:tab>
+								</p:tabView>
+							</div>
+
+						</h:panelGroup>
+					</h:form>
+				</p:sidebar>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

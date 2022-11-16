@@ -1,0 +1,515 @@
+.widget-overview {
+  padding: 15px;
+  color: #ffffff;
+  min-height: 100px;
+  @include border-radius($borderRadius);
+  margin: 0 !important;
+
+  .overview-box-title {
+    font-weight: bold;
+    width: 100%;
+
+    i {
+      vertical-align: middle;
+      font-size: 20px;
+    }
+
+    span {
+      margin-left: .5em;
+      vertical-align: middle;
+    }
+  }
+
+  .overview-box-count {
+    color: #ffffff;
+    font-size: 24px;
+    width: 100%;
+    display: block;
+    padding: 5px 0;
+  }
+
+  &.overview-box-1 {
+    background-color: #007bff;
+    border: solid 1px #007bff;
+    color: #ffffff;
+  }
+
+  &.overview-box-2 {
+    background-color: #28a745;
+    border: solid 1px #28a745;
+    color: #ffffff;
+  }
+
+  &.overview-box-3 {
+    background-color: #fd7e14;
+    border: solid 1px #fd7e14;
+    color: #ffffff;
+  }
+
+  &.overview-box-4 {
+    background-color: #6f42c1;
+    border: solid 1px #6f42c1;
+    color: #ffffff
+  }
+}
+
+.widget-sale-table {
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 15px;
+    }
+
+    tbody {
+      tr {
+        &:nth-child(odd) {
+          background: #f9f9f9;
+        }
+
+        img {
+          width: 36px;
+          height: 36px;
+        }
+
+        td {
+          padding: 10px 15px;
+
+          &:nth-child(1) {
+            font-weight: 700;
+            text-align: center;
+          }
+
+          &:nth-child(3) {
+            font-weight: 700;
+          }
+        }
+      }
+    }
+  }
+}
+
+.widget-statistics {
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    td {
+      padding: 10px 15px;
+
+      &.col-overview {
+        max-width: 48px;
+
+        div {
+          width: 45px;
+          height: 45px;
+          line-height: 45px;
+          color: #ffffff;
+          text-align: center;
+          font-size: 24px;
+          @include border-radius(50%);
+        }
+
+        &.col-wait {
+          div {
+            background-color: #d9534f;
+          }
+        }
+
+        &.col-success {
+          div {
+            background-color: #5cb85c;
+          }
+        }
+
+        &.col-delay {
+          div {
+            background-color: #f0ad4e;
+          }
+        }
+
+        &.col-preorder {
+          div {
+            background-color: #2ea59f;
+          }
+        }
+      }
+
+      &.col-status {
+        .status-time {
+          display: block;
+          width: 100%;
+          color: $textSecondaryColor;
+        }
+
+        .status-text {
+          font-weight: bold;
+        }
+      }
+
+      &.col-numbers {
+        font-weight: bold;
+
+        span {
+          margin-left: 10px;
+          color: $textSecondaryColor;
+        }
+      }
+    }
+  }
+}
+
+.widget-graph {
+  background-color: #ffffff;
+  border: solid 1px #dddddd;
+  padding: 15px;
+  width: 100%;
+  height: 100%;
+  @include border-radius($borderRadius);
+
+  .graph-title {
+    display: block;
+    font-size: 16px;
+    color: $textSecondaryColor;
+  }
+
+  .graph-value {
+    display: block;
+    margin: 10px 0;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .graph-change {
+    color: $textSecondaryColor;
+  }
+
+  img {
+    width: 100%;
+  }
+}
+
+.widget-task-list {
+  overflow: hidden;
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      padding: 10px 15px;
+      border-bottom: 1px solid $dividerColor;
+
+      &:last-child {
+        border-bottom: 0 none;
+      }
+    }
+
+    .ui-chkbox-box {
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    .task-name {
+      vertical-align: middle;
+    }
+
+    i {
+      color: $textSecondaryColor;
+      float: right;
+      font-size: 16px;
+    }
+  }
+}
+
+.widget-contact-form {
+  overflow: hidden;
+
+  .col-12 {
+    padding: 10px 15px;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.widget-contacts {
+  overflow: hidden;
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      border-bottom: 1px solid $dividerColor;
+      padding: 10px 15px;
+      width: 100%;
+      box-sizing: border-box;
+      text-decoration: none;
+      position: relative;
+      display: block;
+      @include border-radius(2px);
+      @include transition(background-color .2s);
+
+      img {
+        float: left;
+        margin-right: 8px;
+      }
+
+      .contact-info {
+        float: left;
+
+        .name {
+          display: block;
+          margin-top: 4px;
+          font-size: 14px;
+        }
+
+        .location {
+          margin-top: 4px;
+          display: block;
+          font-size: 12px;
+          color: $textSecondaryColor;
+        }
+      }
+
+      .contact-actions {
+        float: right;
+        padding-top: 12px;
+
+        .connection-status {
+          color: #ffffff;
+          padding: 2px 3px;
+          @include border-radius($borderRadius);
+
+          &.online {
+            background-color: #5cb85c;
+          }
+
+          &.offline {
+            background-color: #d9534f;
+          }
+        }
+
+        i {
+          color: $textSecondaryColor;
+          margin-left: 5px;
+          font-size: 1.25em;
+        }
+      }
+
+      &:last-child {
+        border: 0;
+      }
+    }
+  }
+}
+
+.widget-timeline {
+  height: 100%;
+  box-sizing: border-box;
+
+  > .grid {
+    .col-3 {
+      font-size: 14px;
+      position: relative;
+      border-right: 1px solid $dividerColor;
+
+      i {
+        background-color: #ffffff;
+        font-size: 24px;
+        position: absolute;
+        top: 6px;
+        right: -12px;
+      }
+    }
+
+    .col-9 {
+      padding-left: 1.5em;
+
+      .event-text {
+        color: $textSecondaryColor;
+        font-size: 14px;
+        display: block;
+        padding-bottom: 20px;
+      }
+
+      .event-content {
+        img {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.widget-chat {
+  ul {
+    padding: 12px;
+    margin: 0;
+    list-style-type: none;
+
+    li {
+      padding: 6px 0;
+
+      img {
+        width: 36px;
+        float: left;
+      }
+
+      span {
+        padding: 6px 12px;
+        float: left;
+        display: inline-block;
+        margin: 4px 0;
+        @include border-radius($borderRadius);
+      }
+
+      &.message-from {
+
+
+        img, span {
+          float: left;
+        }
+
+        img {
+          margin-right: 8px;
+        }
+
+        span {
+          background-color: #dff0d8;
+          border: solid 1px #d6e9c6;
+        }
+      }
+
+      &.message-own {
+        img, span {
+          float: right;
+        }
+
+        img {
+          margin-left: 8px;
+        }
+
+        span {
+          background-color: #d9edf7;
+          border: solid 1px #bce8f1;
+        }
+      }
+    }
+  }
+
+  .new-message {
+    height: 40px;
+    border-top: 1px solid $dividerColor;
+    color: #afafc0;
+
+    .message-attachment {
+      display: inline-block;
+      border-right: 1px solid $dividerColor;
+      width: 40px;
+      line-height: 40px;
+      height: 100%;
+      text-align: center;
+
+      i {
+        line-height: inherit;
+        font-size: 24px;
+      }
+    }
+
+    .message-input {
+      position: relative;
+      top: -4px;
+      width: calc(100% - 100px);
+      display: inline-block;
+
+      input {
+        border: 0 none;
+        font-size: 14px;
+        width: 100%;
+        background-color: transparent;
+        outline: 0 none;
+        padding-left: 8px;
+        @include no-shadow();
+      }
+    }
+  }
+}
+
+.widget-messages {
+  .message {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+
+  .messager {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+  }
+
+  .messager-img {
+    margin-top: 4px;
+    margin-right: 10px;
+    margin-bottom: 4px;
+    border-left: 3px solid rgba(0, 0, 0, 0);
+  }
+
+  .message-body {
+    @include pull-to(left);
+    width: auto;
+    max-width: 80%;
+  }
+
+  .message-text {
+    font-size: 14px;
+    line-height: 20px;
+    padding-right: 50px;
+    text-align: left;
+    color: $textSecondaryColor;
+  }
+
+  .messager-img,
+  .message {
+    position: relative;
+    display: inline-block;
+    @include pull-to(left);
+  }
+
+  .message-box {
+    padding-right: 15px;
+  }
+
+  .message-box:hover {
+    cursor: pointer;
+
+    .messager-img  {
+      margin-left: -15px;
+      padding-left:15px;
+      border-left: 3px solid #337ab7;
+    }
+  }
+
+  .online {
+    margin-left: 5px;
+    color: #8ad88a;
+  }
+
+  .offline {
+    margin-left: 5px;
+    color: #de7470;
+  }
+
+  .date {
+    font-weight: 500;
+    color: #ccc;
+  }
+}

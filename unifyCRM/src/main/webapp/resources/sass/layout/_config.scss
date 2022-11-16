@@ -1,0 +1,161 @@
+.layout-config {
+    position: fixed;
+    padding: 0;
+    top: 60px;
+    display: block;
+    right: 0;
+    width: 21em;
+    z-index: 996;
+    height: calc(100% - 60px);
+    transform: translate3d(21em, 0px, 0px);
+    @include transition(transform $transitionDuration);
+    background-color: #ffffff;
+    backface-visibility: hidden;
+    box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2),
+    0 5px 22px 4px rgba(0, 0, 0, 0.12),
+    0 12px 17px 2px rgba(0, 0, 0, 0.14);
+
+    &.layout-config-active {
+        transform: translate3d(0px, 0px, 0px);
+        
+        .layout-config-button {
+            i {
+                @include rotate(360deg);
+            }
+        }
+    }
+
+    .layout-config-button {
+        display: block;
+        position: absolute;
+        width: 52px;
+        height: 52px;
+        line-height: 52px;
+        background-color: #fafafa;
+        text-align: center;
+        top: 230px;
+        left: -51px;
+        z-index: -1;
+        overflow: hidden;
+        cursor: pointer;
+        opacity: 1;
+        color: $topbarLeftGradientStartBgColor;
+        @include border-radius-left($borderRadius);
+        @include transition(background-color $transitionDuration);
+        box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2),
+        0 5px 22px 4px rgba(0, 0, 0, 0.12),
+        0 12px 17px 2px rgba(0, 0, 0, 0.14);
+
+        i {
+            font-size: 32px;
+            font-weight: bold;
+            line-height: inherit;
+            cursor: pointer;
+            @include rotate(0deg);
+            @include transition(transform 1s);
+        }
+
+        &:hover {
+            color: lighten($topbarLeftGradientStartBgColor, 15%);
+        }
+    }
+
+    .layout-config-close {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        right: 20px;
+        top: 10px;
+        z-index: 999;
+        background-color: #e0284f;
+        @include border-radius(50%);
+        @include transition(background-color $transitionDuration);
+
+        i {
+            color: #ffffff;
+            line-height: inherit;
+            font-size: 12px;
+        }
+
+        &:hover {
+            background-color: #d44d69;
+        }
+    }
+
+    .layout-config-content {
+        position: relative;
+        height: 100%;
+        padding: 1em;
+        overflow: auto;
+
+        .layout-themes {
+            display: flex;
+            flex-wrap: wrap;
+
+            > div {
+                padding: .25rem;
+            }
+
+            a {
+                width: 2rem;
+                height: 2rem;
+                border-radius: $borderRadius;
+                display: block;
+                position: relative;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: transform $transitionDuration;
+                box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+
+                i {
+                    font-size: 1rem;
+                    position: absolute;
+                    color: #ffffff;
+                    top: 50%;
+                    left: 50%;
+                    margin-left: -.5rem;
+                    margin-top: -.5rem;
+                }
+
+                &:hover {
+                    transform: scale(1.1);
+                }
+            }
+        }
+    }
+
+    .col {
+        text-align: center;
+    }
+
+    p {
+        line-height: 1.5;
+        margin-top: 0;
+        color: $textSecondaryColor;
+    }
+
+    .grid-radio td {
+        padding: 0 .5rem 1rem 0;
+    }
+}
+
+.blocked-scroll-config{
+    overflow: hidden;
+}
+
+@media screen and (max-width: 1024px) {
+    .layout-config {
+        transform: translate3d(21em, 0px, 0px);
+
+        &.layout-config-active {
+            transform: translate3d(0px, 0px, 0px);
+        }
+        
+        .layout-config-close {
+            right: 29px;
+        }
+    }
+}

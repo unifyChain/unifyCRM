@@ -1,0 +1,222 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <div class="grid">
+            <div class="col-12">
+                <div class="help-wrapper">
+                    <div class=" card help-header">
+                        <div class="grid header-title">
+                            <div class="col-2 icon">
+                                <i class="pi pi-book"/>
+                            </div>
+                            <div class="col-9">
+                                <h1>Frequently Asked Questions</h1>
+                                <span>Advice and answers from Avalon Team</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid help-content">
+                        <div class="col-12 lg:col-6">
+                            <div class="col-12 card accordion-card">
+                                <div class="grid card-header">
+                                    <div class="col-7 title">
+                                        <div class="col-2 icon">
+                                            <i class="pi pi-bookmark"/>
+                                        </div>
+                                        <div class="col-9">
+                                            <h1>The Basics</h1>
+                                            <span>3 articles in tihis collection</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-5 feedback-buttons">
+                                        <button class="not-helpful">👎 Not Helpful</button>
+                                        <button class="helpful">👍 Helpful</button>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <p:outputPanel>
+                                        <div class="questions">
+                                            <p:accordionPanel multiple="false" styleClass="sub-accordion">
+                                                <p:tab title="Which do I need to develop a SaaS application?">
+                                                    <h:outputText
+                                                        value="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pellentesque ligula dolor, pretium tincidunt libero sodales in. Integer at eros posuere, elementum felis a, laoreet libero. In sed nunc accumsan, dapibus nibh sit amet, aliquet ipsum. " />
+                                                </p:tab>
+                                                <p:tab
+                                                    title="I’m a freelancer/agency. Can I use the item for an end product I’m doing for a client?">
+                                                    <h:outputText
+                                                        value="Aliquam erat volutpat. Nulla hendrerit, arcu non lobortis fringilla, ipsum orci condimentum risus, ac hendrerit mauris justo eget lectus." />
+                                                </p:tab>
+                                                <p:tab
+                                                    title="We’re a reseller, are we able to purchase a license on behalf of our client? ">
+                                                    <h:outputText
+                                                        value="Ut leo tellus, imperdiet tristique turpis eu, eleifend rhoncus dolor. Fusce eu feugiat urna. Nullam venenatis nisi varius justo ultrices, non aliquam nisi dapibus. Duis viverra nulla ipsum, ac laoreet mauris dapibus eu. " />
+                                                </p:tab>
+                                            </p:accordionPanel>
+                                        </div>
+                                    </p:outputPanel>
+                                </div>
+
+
+
+                            </div>
+                            <div class="col-12 card accordion-card ">
+                                <div class="grid card-header">
+                                    <div class="col-7 title">
+                                        <div class="col-2 icon">
+                                            <i class="pi pi-bookmark"/>
+                                        </div>
+                                        <div class="col-9">
+                                            <h1>Frequently Asked Questions</h1>
+                                            <span>6 articles in tihis collection</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-5 feedback-buttons">
+                                        <button class="not-helpful">👎 Not Helpful</button>
+                                        <button class="helpful">👍 Helpful</button>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <p:outputPanel>
+                                        <div class="questions">
+                                            <p:accordionPanel multiple="false" styleClass="sub-accordion">
+                                                <p:tab
+                                                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit ?">
+                                                    <h:outputText
+                                                        value="Vivamus in tortor arcu. Morbi ornare ex mi, sit amet pretium nibh sollicitudin eu." />
+                                                </p:tab>
+                                                <p:tab
+                                                    title="Sed ut massa accumsan, consequat ligula sit amet, dignissim diam ?">
+                                                    <h:outputText
+                                                        value="Curabitur elit enim, scelerisque at eros ac, sagittis volutpat ante. Mauris ac accumsan lorem, in viverra turpis." />
+                                                </p:tab>
+                                                <p:tab
+                                                    title=" Vivamus lobortis lacinia eros vel viverra. Vestibulum molestie tortor metus, ac dapibus massa sodales eget ?">
+                                                    <h:outputText
+                                                        value="Donec ut justo sit amet erat eleifend vulputate ut at mi. " />
+                                                </p:tab>
+                                                <p:tab
+                                                    title="Donec finibus tristique leo, consectetur tincidunt velit ?">
+                                                    <h:outputText
+                                                        value="Maecenas mattis malesuada lobortis. Praesent hendrerit eros quam. Praesent volutpat mauris ut dignissim maximus." />
+                                                </p:tab>
+                                                <p:tab title="Praesent suscipit, magna at lacinia tempor ?">
+                                                    <h:outputText
+                                                        value="Velit leo commodo magna, at pharetra risus libero vitae urna." />
+                                                </p:tab>
+                                                <p:tab title="Nulla auctor urna eget purus placerat maximus ?">
+                                                    <h:outputText
+                                                        value="Et malesuada fames ac ante ipsum primis in faucibus." />
+                                                </p:tab>
+                                            </p:accordionPanel>
+                                        </div>
+                                    </p:outputPanel>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 lg:col-6">
+                            <div class="col-12 card api-card">
+                                <div class="grid card-header">
+                                    <div class="col-6 title">
+                                        <h2>Avalon Web Application / API</h2>
+                                    </div>
+                                    <div class="col-6  status">
+                                        <p>Operational</p>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <div class="progress-bars">
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar fail"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                        <div class="progress-bar"></div>
+                                    </div>
+                                    <div class="days col-6">
+                                        30 Days Ago
+                                    </div>
+                                    <div class="today col-6">
+                                        Today
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 card blog-card ">
+                                <div class="grid card-header">
+                                    <div class="col-12 title">
+                                        <div class="col-2 icon">
+                                            <i class="pi pi-th-large"/>
+                                        </div>
+                                        <div class="col-10">
+                                            <h1>Blog posts</h1>
+                                            <span>4 posts in tihis collection</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <div class="blog-post">
+                                        <div class="blog-text">
+                                            <h1>Lorem ipsum dolor sit amet?</h1>
+                                            <span>Subtitle of lorem ipsum</span>
+                                        </div>
+                                        <div class="blog-profile">
+                                                <p:graphicImage name="images/extensions/avatar-rachel.jpg" library="avalon-layout" />
+                                        </div>
+                                    </div>
+                                 
+                                    <div class="blog-post">
+                                        <div class="blog-text">
+                                            <h1>Lorem ipsum dolor sit amet?</h1>
+                                            <span>Subtitle of lorem ipsum</span>
+                                        </div>
+                                        <div class="blog-profile">
+                                                <p:graphicImage name="images/extensions/avatar-melissa.jpg" library="avalon-layout" />
+                                        </div>
+                                    </div>
+                                    <div class="blog-post">
+                                        <div class="blog-text">
+                                            <h1>Lorem ipsum dolor sit amet?</h1>
+                                            <span>Subtitle of lorem ipsum</span>
+                                        </div>
+                                        <div class="blog-profile">
+                                                <p:graphicImage name="images/extensions/avatar-mike.jpg" library="avalon-layout" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,313 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">
+        回款计划
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="回款计划" url="collections" />
+							<p:menuitem value="新增" url="#" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				<div class="card">
+					<h:form id="CollectionCreateForm">
+						<p:toolbar>
+							<p:toolbarGroup>
+							</p:toolbarGroup>
+							<p:toolbarGroup align="right">
+								<p:commandButton action="#{collectionController.create}"
+									style="width:auto;" value="保存" id="add" update=":growl"
+									widgetVar="saveButton1" onclick="PF('saveButton1').disable()"
+									oncomplete="PF('saveButton1').enable();PF('dlg2').hide();handleSubmit(args,'CollectionCreateDialog');"
+									icon="pi pi-save" styleClass="btn btn-primary">
+									<f:param name="from" value="list" />
+								</p:commandButton>
+							</p:toolbarGroup>
+
+						</p:toolbar>
+
+						<p:fieldset legend="基本信息" style="margin-top:5px;">
+
+							<c:if test="#{collectionController.selected.from=='查看'}">
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="对应客户" for="customerId" />
+												<p:selectOneMenu id="customerId" disabled="true"
+													value="#{collectionController.selected.customerId}"
+													required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{customerController.items}"
+														var="sjkh" itemLabel="#{sjkh.name}"
+														itemValue="#{sjkh.id}!_#{sjkh.name}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="合同标题" for="contractId" />
+												<p:selectOneMenu id="contractId" disabled="true"
+													value="#{collectionController.selected.contractId}"
+													required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{contractController.items}"
+														var="sjkh" itemLabel="#{sjkh.contractTitle}"
+														itemValue="#{sjkh.id}!_#{sjkh.contractTitle}!_#{sjkh.totalContractAmount}!_#{sjkh.signingDate}" />
+													<p:ajax
+														update="collectionAmount,collectionDate,:CollectionDetailListForm:datalist"
+														listener="#{collectionController.calcht}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="合同总金额" for="collectionAmount" />
+												<p:inputText id="collectionAmount" disabled="true"
+													value="#{collectionController.selected.collectionAmount}"
+													title="collectionAmount" required="true" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="签约日期" for="collectionDate" />
+												<p:inputText id="collectionDate" disabled="true"
+													value="#{collectionController.selected.collectionDate}"
+													title="collectionDate" required="true" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</c:if>
+							<c:if test="#{collectionController.selected.from!='查看'}">
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="对应客户" for="customerId" />
+												<p:selectOneMenu id="customerId"
+													value="#{collectionController.selected.customerId}"
+													required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{customerController.items}"
+														var="sjkh" itemLabel="#{sjkh.name}"
+														itemValue="#{sjkh.id}!_#{sjkh.name}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="合同标题" for="contractId" />
+												<p:selectOneMenu id="contractId"
+													value="#{collectionController.selected.contractId}"
+													required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItems value="#{contractController.items}"
+														var="sjkh" itemLabel="#{sjkh.contractTitle}"
+														itemValue="#{sjkh.id}!_#{sjkh.contractTitle}!_#{sjkh.totalContractAmount}!_#{sjkh.signingDate}" />
+													<p:ajax
+														update="collectionAmount,collectionDate,:CollectionDetailListForm:datalist"
+														listener="#{collectionController.calcht}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="合同总金额" for="collectionAmount" />
+												<p:inputText id="collectionAmount"
+													value="#{collectionController.selected.collectionAmount}"
+													title="collectionAmount" required="true" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="签约日期" for="collectionDate" />
+												<p:inputText id="collectionDate"
+													value="#{collectionController.selected.collectionDate}"
+													title="collectionDate" required="true" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</c:if>
+						</p:fieldset>
+					</h:form>
+					<div class="card">
+						<h:form id="CollectionDetailListForm">
+							<p:dataTable id="datalist" var="collectionDetail"
+								widgetVar="dataTable"
+								value="#{collectionController.collectionDetailList}"
+								resizableColumns="true" resizeMode="expand" emptyMessage="无记录"
+								selectionMode="single"
+								selection="#{collectionController.collectionDetail}"
+								rowKey="#{collectionDetail.id}" paginator="true" rows="500"
+								tableStyle="width:auto"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="500,1000,5000,20000" reflow="true"
+								rowIndexVar="rowIndex">
+
+								<p:column headerText="期数" style="width:4%">
+					                #{rowIndex+1}
+					            </p:column>
+								<p:column sortBy="#{collectionDetail.detailDate}"
+									filterBy="#{collectionDetail.detailDate}">
+									<f:facet name="header">
+										<h:outputLabel value="计划回款日期" />
+									</f:facet>
+									<h:outputText value="#{collectionDetail.detailDate}" />
+								</p:column>
+								<p:column sortBy="#{collectionDetail.collectionProportion}"
+									filterBy="#{collectionDetail.collectionProportion}">
+									<f:facet name="header">
+										<h:outputLabel value="计划回款占比" />
+									</f:facet>
+									<h:outputText value="#{collectionDetail.collectionProportion}" />
+								</p:column>
+								<p:column sortBy="#{collectionDetail.collectionAmount}"
+									filterBy="#{collectionDetail.collectionAmount}">
+									<f:facet name="header">
+										<h:outputLabel value="计划回款金额" />
+									</f:facet>
+									<h:outputText value="#{collectionDetail.collectionAmount}" />
+								</p:column>
+								<f:facet name="footer">
+									<p:commandButton id="createButton" value="新增" icon="pi pi-file"
+										actionListener="#{collectionController.prepareCreatemx}"
+										update="CollectionCreatemxForm" style="width:auto;"
+										oncomplete="PF('CollectionCreateDialog').show()" />
+									<p:commandButton id="editButton" value="编辑" icon="pi pi-pencil"
+										update=":CollectionEditForm"
+										style="width:auto;margin-left:10px;"
+										oncomplete="PF('CollectionEditDialog').show()" />
+								</f:facet>
+							</p:dataTable>
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="explode">
+								<p:commandButton value="是" type="button"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+								<p:commandButton value="否" type="button"
+									styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+							</p:confirmDialog>
+						</h:form>
+						<p:dialog id="CollectionCreateDlg"
+							widgetVar="CollectionCreateDialog" modal="true" resizable="false"
+							appendTo="@(body)" header="新增"
+							style="contentWidth:100%;contentHeight:100%;">
+							<h:form id="CollectionCreatemxForm">
+								<h:panelGroup id="display">
+									<div class="col-12">
+										<div class="card">
+											<div class="ui-fluid formgrid grid">
+												<div class="p-field col-12 p-md-12">
+													<p:outputLabel value="回款日期" for="collectionDate" />
+													<p:datePicker id="collectionDate"
+														value="#{collectionController.collectionDetail.collectionDate}"
+														required="true" pattern="yyyy-MM-dd" />
+												</div>
+												<div class="p-field col-12 p-md-12">
+													<p:outputLabel value="回款占比" for="collectionProportion" />
+													<p:inputText id="collectionProportion"
+														value="#{collectionController.collectionDetail.collectionProportion}"
+														required="false" maxlength="45"
+														title="collectionProportion">
+														<p:ajax event="keyup" update=":growl,collectionAmount"
+															listener="#{collectionController.calcHkje}" />
+													</p:inputText>
+												</div>
+												<div class="p-field col-12 p-md-12">
+													<p:outputLabel value="回款金额" for="collectionAmount" />
+													<p:inputText id="collectionAmount"
+														value="#{collectionController.collectionDetail.collectionAmount}"
+														required="false" maxlength="45" title="collectionAmount">
+														<p:ajax event="keyup" update=":growl,collectionProportion"
+															listener="#{collectionController.calcHkzb}" />
+													</p:inputText>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="EmptyBox10"></div>
+									<p:toolbar>
+										<p:toolbarGroup>
+										</p:toolbarGroup>
+										<p:toolbarGroup align="right">
+											<p:commandButton
+												actionListener="#{collectionController.addCollectionDetail}"
+												value="保存" icon="pi pi-save" widgetVar="saveButton1"
+												onclick="PF('saveButton1').disable()"
+												oncomplete="PF('saveButton1').enable();PF('dlg2').hide();"
+												update=":growl,:CollectionDetailListForm:datalist,:CollectionCreatemxForm"
+												style="width:auto;margin-top:10px;" />
+										</p:toolbarGroup>
+									</p:toolbar>
+								</h:panelGroup>
+							</h:form>
+						</p:dialog>
+						<p:dialog id="CollectionEditDlg" widgetVar="CollectionEditDialog"
+							modal="true" resizable="false" appendTo="@(body)" header="编辑"
+							style="max-height:550px;max-width:850px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+							<h:form id="CollectionEditForm">
+								<h:panelGroup id="display">
+									<div class="col-12">
+										<div class="card">
+											<div class="ui-fluid formgrid grid">
+												<div class="p-field col-12 p-md-12">
+													<p:outputLabel value="回款日期" for="collectionDate" />
+													<p:datePicker id="collectionDate"
+														value="#{collectionController.collectionDetail.collectionDate}"
+														required="true" pattern="yyyy-MM-dd" />
+												</div>
+												<div class="p-field col-12 p-md-12">
+													<p:outputLabel value="回款占比" for="collectionProportion" />
+													<p:inputText id="collectionProportion"
+														value="#{collectionController.collectionDetail.collectionProportion}"
+														required="false" maxlength="45"
+														title="collectionProportion">
+														<p:ajax event="keyup" update=":growl,collectionAmount"
+															listener="#{collectionController.calcHkje}" />
+													</p:inputText>
+												</div>
+												<div class="p-field col-12 p-md-12">
+													<p:outputLabel value="回款金额" for="collectionAmount" />
+													<p:inputText id="collectionAmount"
+														value="#{collectionController.collectionDetail.collectionAmount}"
+														required="false" maxlength="45" title="collectionAmount">
+														<p:ajax event="keyup" update=":growl,collectionProportion"
+															listener="#{collectionController.calcHkzb}" />
+													</p:inputText>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="EmptyBox10"></div>
+									<p:toolbar>
+										<p:toolbarGroup>
+										</p:toolbarGroup>
+										<p:toolbarGroup align="right">
+											<p:commandButton
+												actionListener="#{collectionController.editCollectionDetail}"
+												value="保存" icon="pi pi-save"
+												update=":growl,:CollectionDetailListForm:datalist"
+												style="width:auto;margin-top:10px;" widgetVar="saveButton1"
+												onclick="PF('saveButton1').disable()"
+												oncomplete="PF('saveButton1').enable();PF('dlg2').hide();handleSubmit(args,'CollectionEditDialog');" />
+											<p:commandButton
+												actionListener="#{collectionController.deleteAction}"
+												value="删除"
+												update=":growl,:CollectionDetailListForm:datalist"
+												icon="pi pi-save"
+												oncomplete="handleSubmit(args,'CollectionEditDialog');" />
+										</p:toolbarGroup>
+									</p:toolbar>
+								</h:panelGroup>
+							</h:form>
+						</p:dialog>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<p:dialog id="dlg2" widgetVar="dlg2" modal="true" resizable="false"
+			appendTo="@(body)" header="新增">
+		</p:dialog>
+	</ui:define>
+</ui:composition>

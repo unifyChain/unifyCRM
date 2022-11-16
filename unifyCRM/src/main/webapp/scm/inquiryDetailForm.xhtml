@@ -1,0 +1,332 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+
+	<ui:define name="title">
+        询价单
+    </ui:define>
+	<ui:define name="content">
+			<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+								<c:if test="#{inquiryController.selected.type=='编辑'}">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="询价单" url="inquirys" />
+							<p:menuitem value="编辑" url="#" />
+						</p:breadCrumb>
+								</c:if>
+								<c:if test="#{inquiryController.selected.type=='新增'}">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="询价单" url="inquirys" />
+							<p:menuitem value="新增" url="#" />
+						</p:breadCrumb>
+								</c:if>
+								<c:if test="#{inquiryController.selected.type=='查看'}">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="询价单" url="inquirys" />
+							<p:menuitem value="查看" url="#" />
+						</p:breadCrumb>
+								</c:if>
+					</div>
+				</h:form>
+				<div class="card">
+					<h:form id="InquiryListForm">
+							<p:toolbar>
+					            <p:toolbarGroup align="right">
+					            	<c:if test="#{inquiryController.selected.type=='编辑'}">
+										<p:commandButton action="#{inquiryController.update}"
+											style="width:auto;" value="保存" id="add"
+											update=":growl" 
+			 								widgetVar="saveButton1"  onclick="PF('saveButton1').disable()" oncomplete="PF('saveButton1').enable();PF('dlg2').hide();"
+											icon="pi pi-save" styleClass="btn btn-primary">
+											<f:param name="type" value="list" />
+										</p:commandButton>
+									</c:if>
+									<c:if test="#{inquiryController.selected.type=='新增'}">	
+										<p:commandButton action="#{inquiryController.create}"
+											style="width:auto;" value="保存" id="add"
+											update=":growl" 
+			 								widgetVar="saveButton1"  onclick="PF('saveButton1').disable()" oncomplete="PF('saveButton1').enable();PF('dlg2').hide();"
+											icon="pi pi-save" styleClass="btn btn-primary">
+											<f:param name="type" value="list" />
+										</p:commandButton>
+									</c:if>
+									<c:if test="#{inquiryController.selected.type=='查看'}">	
+										<p:commandButton value="删除" style="width:auto;margin-left:5px;"
+											styleClass="warn-btn" id="deleteButton" type="button"
+											icon="pi pi-trash"
+											onclick="PF('confirmDialog').show()" />
+										<p:confirmDialog message="确定删除吗?" header="提示" severity="alert"
+											widgetVar="confirmDialog">
+											<p:commandButton value="是" styleClass="ui-confirmdialog-yes"
+												action="#{inquiryController.destroy}" icon="pi pi-check"
+												style="width:auto;" update=":growl" ajax="true"
+												oncomplete="PF('confirmDialog').hide()" />
+											<p:commandButton value="否" styleClass="ui-confirmdialog-no"
+												style="width:auto;" icon="pi pi-times"
+												onclick="PF('confirmDialog').hide();" type="button" />
+										</p:confirmDialog>
+									</c:if>
+					            </p:toolbarGroup>
+					        </p:toolbar>
+						
+						
+							<p:fieldset legend="基本信息" style="margin-top:5px;">
+								<c:if test="#{inquiryController.selected.type=='查看'}">
+									<div class="ui-fluid formgrid grid">
+				                        <div class="field col-12 md:col-3">
+											<p:outputLabel value="供应商" for="supplierId" />
+													<p:inputText id="supplierId" value="#{inquiryController.selected.supplierName}" title="name"  required="true" disabled="true"/>
+				                        </div>
+				                        
+				                        <div class="field col-12 md:col-3">
+													<p:outputLabel for="name" value="标题"/>
+													<p:inputText id="name" value="#{inquiryController.selected.name}" title="name"  required="true"/>
+				                        </div>
+				                    </div>
+								</c:if>
+							
+								<c:if test="#{inquiryController.selected.type!='查看' ||inquiryController.selected.type=='新增'}">
+								
+									<div class="col-12">
+						                <div class="card">
+						                    <div class="ui-fluid formgrid grid">
+						                        <div class="field col-12 md:col-3">
+													<p:outputLabel value="供应商" for="supplierId" />
+													<p:selectOneMenu  id="supplierId" autoWidth="false" 
+														value="#{inquiryController.selected.supplierId}" required="true">
+														<f:selectItem itemLabel="请选择"></f:selectItem>
+														<p:ajax listener="#{inquiryController.supplierSelected}" />
+											            <f:selectItems value="#{customerController.itemsOfMySupplier}"  var="sjkh" itemLabel="#{sjkh.name}" itemValue="#{sjkh.id}!_#{sjkh.name}!_#{sjkh.relationMechanismId}!_#{sjkh.relationMechanismName}" />
+													</p:selectOneMenu>
+						                        </div>
+						                        
+						                        <div class="field col-12 md:col-3">
+													<p:outputLabel for="name" value="标题"/>
+													<p:inputText id="name" value="#{inquiryController.selected.name}" title="name"  required="true"/>
+						                        </div>
+						                        
+						                    </div>
+						                </div>
+						            </div>
+								</c:if>
+						</p:fieldset>
+					</h:form>
+					<h:form id="InquiryProductListForm">
+						<p:dataTable id="datalist" var="inquiryProduct" widgetVar="dataTable"
+							value="#{inquiryController.inquiryProductList}" resizableColumns="true"
+							resizeMode="expand" emptyMessage="无记录" selectionMode="single"
+							selection="#{inquiryController.inquiryProduct}" rowKey="#{inquiryProduct.id}"
+							paginator="true" rows="100" tableStyle="width:auto"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="200,500,1000,5000" reflow="true"
+							rowIndexVar="rowIndex">
+
+							<p:column sortBy="#{inquiryProduct.productId}" filterBy="#{inquiryProduct.productId}">
+								<f:facet name="header">
+									<h:outputText value="商品编码" />
+								</f:facet>
+								<h:outputText value="#{inquiryProduct.productId}" />
+							</p:column>
+							<p:column sortBy="#{inquiryProduct.productName}" filterBy="#{inquiryProduct.productName}">
+								<f:facet name="header">
+									<h:outputText value="商品名称" />
+								</f:facet>
+								<h:outputText value="#{inquiryProduct.productName}" />
+							</p:column>
+							<p:column sortBy="#{inquiryProduct.barCode}" filterBy="#{inquiryProduct.barCode}">
+								<f:facet name="header">
+									<h:outputText value="主条码" />
+								</f:facet>
+								<h:outputText value="#{inquiryProduct.barCode}" />
+							</p:column>
+							<p:column sortBy="#{inquiryProduct.quantity}" filterBy="#{inquiryProduct.quantity}">
+								<f:facet name="header">
+									<h:outputText value="数量" />
+								</f:facet>
+								<h:outputText value="#{inquiryProduct.quantity}" />
+							</p:column>
+							<p:column sortBy="#{inquiryProduct.price}" filterBy="#{inquiryProduct.price}">
+								<f:facet name="header">
+									<h:outputText value="询价" />
+								</f:facet>
+								<h:outputText value="#{inquiryProduct.price}" />
+							</p:column>
+							<p:column sortBy="#{inquiryProduct.quotedPrice}" filterBy="#{inquiryProduct.quotedPrice}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputLabel value="报价" />
+								</f:facet>
+								<h:outputText value="#{inquiryProduct.quotedPrice}" />
+							</p:column>
+							<f:facet name="footer">
+									<c:if test="#{inquiryController.selected.type!='查看'}">
+								<p:commandButton id="createButton" value="新增"
+									icon="pi pi-file"
+									actionListener="#{inquiryController.prepareCreatemx}"
+									update=":InquiryCreateForm" style="width:auto;"
+									oncomplete="PF('InquiryCreateDialog').show()" />
+									
+								<p:commandButton id="editButton" value="编辑" icon="pi pi-pencil"
+									update=":InquiryEditForm" style="width:auto;margin-left:10px;"
+									actionListener="#{inquiryController.editmx}"
+									oncomplete="PF('InquiryEditDialog').show()"
+									disabled="#{empty inquiryController.inquiryProduct}" />
+									</c:if>
+							</f:facet>
+						</p:dataTable>
+						<p:confirmDialog global="true" showEffect="fade"
+							hideEffect="explode">
+							<p:commandButton value="是" type="button"
+								styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+							<p:commandButton value="否" type="button"
+								styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+						</p:confirmDialog>
+					</h:form>
+					
+					<p:dialog id="InquiryCreateDlg" widgetVar="InquiryCreateDialog"
+						modal="true" resizable="false" appendTo="@(body)" header="新增"
+						style="max-height:550px;max-width:950px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+						<h:form id="InquiryCreateForm">
+							<h:panelGroup id="selectSpPG">
+								<div class="col-12">
+					                <div class="card">
+					                    <div class="ui-fluid formgrid grid">
+					                    	<div class="field col-12 md:col-6">
+												<p:outputLabel value="商品编码" for="productId" />
+											<p:inputText id="productId"  value="#{inquiryController.inquiryProduct.productId}"
+												required="false" readonly="true" maxlength="45" title="productId">
+											</p:inputText>
+					                        </div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="主条码" for="barCode" />
+								<p:inputText id="barCode" value="#{inquiryController.inquiryProduct.barCode}"  rendered="true"
+									onkeyup="this.value=this.value.replace(/\D/g,'')" 
+									required="true" maxlength="45" title="barCode">
+									<p:ajax event="change"
+										update=":growl,price,productName,productId"
+										listener="#{inquiryController.getMasterBarcode}" />
+								</p:inputText> 
+					                        </div>
+					                        <div class="field col-12 md:col-6">
+												<p:outputLabel value="商品名称" for="productName" />
+								<p:inputText id="productName"  value="#{inquiryController.inquiryProduct.productName}"
+									required="false" readonly="true" maxlength="45" title="productName">
+								</p:inputText>
+					                        </div>
+					                        <div class="field col-12 md:col-6">
+												<p:outputLabel value="数量" for="quantity" />
+								<p:inputText id="quantity"  value="#{inquiryController.inquiryProduct.quantity}"  rendered="true"
+									required="true" maxlength="45" title="quantity">
+								</p:inputText>
+					                        </div>
+					                        <div class="field col-12 md:col-6">
+												<p:outputLabel value="询价" for="price" />
+								<p:inputText id="price"  value="#{inquiryController.inquiryProduct.price}"  rendered="true"
+									required="true" maxlength="45" title="price">
+								</p:inputText>
+					                        </div>
+					                        
+					                    </div>
+					                </div>
+						        </div>
+								<div class="EmptyBox10"></div>
+									<p:toolbar>
+						            	<p:toolbarGroup align="right">
+											<p:commandButton actionListener="#{inquiryController.addInquiryProduct}"
+												icon="pi pi-save" value="保存"
+												style="width:auto;margin-top: 10px;" widgetVar="saveButton5"
+												onclick="PF('saveButton5').disable()"
+												oncomplete="PF('saveButton5').enable();PF('dlg2').hide();"
+												update=":growl,:InquiryProductListForm:datalist,:InquiryCreateForm" />
+									
+							            </p:toolbarGroup>
+							        </p:toolbar>		
+							</h:panelGroup>
+						</h:form>
+					</p:dialog>
+					<p:dialog id="InquiryEditDlg" widgetVar="InquiryEditDialog" modal="true"
+						resizable="false" appendTo="@(body)" header="编辑"
+						style="max-height:550px;max-width:950px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+						<h:form id="InquiryEditForm">
+							<h:panelGroup id="selectSpPG">
+
+								<div class="col-12">
+					                <div class="card">
+					                    <div class="ui-fluid formgrid grid">
+					                    	<div class="field col-12 md:col-6">
+												<p:outputLabel value="商品编码" for="productId" />
+											<p:inputText id="productId"  value="#{inquiryController.inquiryProduct.productId}"
+												required="false" readonly="true" maxlength="45" title="productId">
+											</p:inputText>
+					                        </div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel value="主条码" for="barCode" />
+								<p:inputText id="barCode" value="#{inquiryController.inquiryProduct.barCode}"
+									onkeyup="this.value=this.value.replace(/\D/g,'')"  rendered="true"
+									required="true" maxlength="45" title="barCode">
+									<p:ajax event="change"
+										update=":growl,price,productName,productId"
+										listener="#{inquiryController.getMasterBarcode}" />
+								</p:inputText> 
+					                        </div>
+					                        <div class="field col-12 md:col-6">
+												<p:outputLabel value="商品名称" for="productName" />
+								<p:inputText id="productName"  value="#{inquiryController.inquiryProduct.productName}"
+									required="false" readonly="true" maxlength="45" title="productName">
+								</p:inputText>
+					                        </div>
+					                        <div class="field col-12 md:col-6">
+												<p:outputLabel value="数量" for="quantity" />
+								<p:inputText id="quantity"  value="#{inquiryController.inquiryProduct.quantity}"  rendered="true"
+									required="true" maxlength="45" title="quantity">
+								</p:inputText>
+					                        </div>
+					                        <div class="field col-12 md:col-6">
+												<p:outputLabel value="询价" for="price" />
+								<p:inputText id="price"  value="#{inquiryController.inquiryProduct.price}"  rendered="true"
+									required="true" maxlength="45" title="price">
+								</p:inputText>
+					                        </div>
+					                    </div>
+					                </div>
+						        </div>
+						        <p:toolbar>
+					            	<p:toolbarGroup align="right">
+					            		<p:commandButton actionListener="#{inquiryController.editInquiryProduct}"
+											icon="pi pi-save" value="保存"
+											style="width:auto;" widgetVar="saveButton6"
+											onclick="PF('saveButton6').disable()"
+											oncomplete="PF('saveButton6').enable();PF('dlg2').hide();handleSubmit(args,'InquiryEditDialog');"
+											update=":growl,:InquiryProductListForm:datalist" />
+										
+										<p:commandButton actionListener="#{inquiryController.deleteInquiryProduct}"
+											value="删除" icon="pi pi-trash" style="width:auto;margin-left:5px;"
+											update=":growl,:InquiryProductListForm:datalist"
+											oncomplete="handleSubmit(args,'InquiryEditDialog');" />
+					            	</p:toolbarGroup>
+					            </p:toolbar>
+								
+								<div class="EmptyBox10"></div>
+							</h:panelGroup> 
+						</h:form>
+					</p:dialog>
+					
+						
+					<p:dialog id="dlg2" widgetVar="dlg2" modal="true" resizable="false"
+						appendTo="@(body)" header="新增">
+					</p:dialog>
+					</div>
+				</div>
+				
+			</div>
+	</ui:define>
+</ui:composition>

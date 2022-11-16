@@ -1,0 +1,108 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <div id="layout-config" class="layout-config">
+        <a href="#" id="layout-config-button" class="layout-config-button">
+            <i class="pi pi-cog"/>
+        </a>
+        <a href="#" class="layout-config-close">
+            <i class="pi pi-times"/>
+        </a>
+
+        <div class="layout-config-content">
+            <h:form id="config-form">
+                <h5 style="margin-top: 0;">菜单模式</h5>
+                <p:selectOneRadio value="#{guestPreferences.menuLayout}" layout="responsive" columns="2">
+                    <f:selectItem itemLabel="Static" itemValue="static" />
+                    <f:selectItem itemLabel="Overlay" itemValue="overlay" />
+                    <f:selectItem itemLabel="Horizontal" itemValue="horizontal" />
+                    <f:selectItem itemLabel="Slim" itemValue="slim" />
+                    <p:ajax listener="#{guestPreferences.onLayoutChange}" process="@this" update=":config-form menuform" />
+                </p:selectOneRadio>
+
+                <h5>菜单主题</h5>
+                <p:selectOneRadio value="#{guestPreferences.menuClass}" layout="responsive" columns="2">
+                    <f:selectItem itemLabel="Dark" itemValue="layout-menu-dark" />
+                    <f:selectItem itemLabel="Light" itemValue="" />
+                    <p:ajax listener="#{guestPreferences.onMenuThemeChange()}"/>
+                </p:selectOneRadio>
+
+                <h5>用户配置模式</h5>
+                <p:selectOneRadio value="#{guestPreferences.profileMode}" layout="responsive" columns="2">
+                    <f:selectItem itemLabel="Inline" itemValue="inline"
+                                  itemDisabled="#{guestPreferences.menuLayout == 'horizontal'}"/>
+                    <f:selectItem itemLabel="Overlay" itemValue="overlay"
+                                  itemDisabled="#{guestPreferences.menuLayout == 'horizontal'}"/>
+                    <p:ajax process="@this" update=":config-form menuform topbar-items-form" />
+                </p:selectOneRadio>
+
+                <h5>输入背景</h5>
+                <p:selectOneRadio value="#{guestPreferences.inputStyle}" layout="responsive" columns="2"
+                                  onchange="PrimeFaces.AvalonConfigurator.updateInputStyle(event.target.value)">
+                    <f:selectItem itemLabel="Outlined" itemValue="outlined" />
+                    <f:selectItem itemLabel="Filled" itemValue="filled" />
+                </p:selectOneRadio>
+
+                <h5>平面布局颜色</h5>
+                <p:outputPanel id="layoutflatcolors-panel">
+                    <div class="layout-themes">
+                        <ui:repeat value="#{guestPreferences.layoutThemes}" var="layoutTheme">
+                            <div>
+                                <p:commandLink actionListener="#{guestPreferences.setLayout(layoutTheme.file, layoutTheme.special)}"
+                                               style="background-color: #{layoutTheme.color}" title="#{layoutTheme.name}"
+                                               process="@this" update=":config-form"
+                                               onstart="PrimeFaces.AvalonConfigurator.beforeResourceChange()"
+                                               oncomplete="PrimeFaces.AvalonConfigurator.changeLayout('#{layoutTheme.file}')">
+                                    <ui:fragment rendered="#{layoutTheme.file eq guestPreferences.layout}">
+                                        <i class="pi pi-check"/>
+                                    </ui:fragment>
+                                </p:commandLink>
+                            </div>
+                        </ui:repeat>
+                    </div>
+                </p:outputPanel>
+
+                <h5>特殊布局颜色</h5>
+                <p:outputPanel id="specialLayoutColors-panel">
+                    <div class="layout-themes">
+                        <ui:repeat value="#{guestPreferences.layoutSpecialThemes}" var="layoutSpecialTheme">
+                            <div>
+                                <p:commandLink actionListener="#{guestPreferences.setLayout(layoutSpecialTheme.file, layoutSpecialTheme.special)}"
+                                               style="background-image: linear-gradient(to right, #{layoutSpecialTheme.color1}, #{layoutSpecialTheme.color2})"
+                                               process="@this" update=":config-form"
+                                               onstart="PrimeFaces.AvalonConfigurator.beforeResourceChange()"
+                                               oncomplete="PrimeFaces.AvalonConfigurator.changeLayout('#{layoutSpecialTheme.file}')">
+                                    <ui:fragment rendered="#{layoutSpecialTheme.file eq guestPreferences.layout}">
+                                        <i class="pi pi-check"/>
+                                    </ui:fragment>
+                                </p:commandLink>
+                            </div>
+                        </ui:repeat>
+                    </div>
+                </p:outputPanel>
+
+                <h5>组件主题</h5>
+                <p:outputPanel id="componentThemes-panel">
+                    <div class="layout-themes">
+                        <ui:repeat value="#{guestPreferences.componentThemes}" var="componentTheme">
+                            <div>
+                                <p:commandLink actionListener="#{guestPreferences.setTheme(componentTheme.file)}"
+                                               style="background-color: #{componentTheme.color}"
+                                               process="@this" update=":config-form"
+                                               onstart="PrimeFaces.AvalonConfigurator.beforeResourceChange()"
+                                               oncomplete="PrimeFaces.AvalonConfigurator.changeComponentsTheme('#{componentTheme.file}')">
+                                    <ui:fragment rendered="#{componentTheme.file eq guestPreferences.theme}">
+                                        <i class="pi pi-check"/>
+                                    </ui:fragment>
+                                </p:commandLink>
+                            </div>
+                        </ui:repeat>
+                    </div>
+                </p:outputPanel>
+            </h:form>
+        </div>
+    </div>
+</ui:composition>

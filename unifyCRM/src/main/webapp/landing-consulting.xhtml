@@ -1,0 +1,620 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template-unify.xhtml">
+	<ui:define name="content">
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main id="content" role="main">
+    <!-- Hero -->
+    <div class="position-relative overflow-hidden">
+      <div class="container">
+        <div class="row content-space-t-1 content-space-t-lg-4 content-space-b-lg-3">
+          <div class="col-md-6 col-lg-5 order-md-2">
+            <!-- Heading -->
+            <div class="mb-4">
+              <h1>为每个<span class="text-primary">团队</span>解决问题</h1>
+              <p>基于标准web技术，团队使用大风起在很短的时间内构建出漂亮的跨平台混合应用程序。</p>
+            </div>
+            <!-- End Heading -->
+
+            <!-- Form -->
+            <form class="js-validate">
+              
+              <div class="row gx-3">
+                <div class="col-sm-6">
+                  <!-- Form -->
+                  <div class="mb-3">
+                    <label class="form-label visually-hidden" for="signupFormFirstName">First name</label>
+                    <input type="text" class="form-control form-control-lg" name="signupFormFirstName" id="signupFormFirstName" placeholder="First name" aria-label="First name" />
+                    <span class="invalid-feedback">Please enter your first name.</span>
+                  </div>
+                  <!-- End Form -->
+                </div>
+
+                <div class="col-sm-6">
+                  <!-- Form -->
+                  <div class="mb-3">
+                    <label class="form-label visually-hidden" for="signupFormLastName">Last name</label>
+                    <input type="text" class="form-control form-control-lg" name="signupFormLastName" id="signupFormLastName" placeholder="Last name" aria-label="Last name" />
+                    <span class="invalid-feedback">Please enter your last name.</span>
+                  </div>
+                  <!-- End Form -->
+                </div>
+              </div>
+              <!-- End Form -->
+
+              <!-- Form -->
+              <div class="mb-3">
+                <label class="form-label visually-hidden" for="signupFormEmail">Business email</label>
+                <input type="email" class="form-control form-control-lg" name="signupFormEmailName" id="signupFormEmail" placeholder="Business email address" aria-label="Business email address" />
+                <span class="invalid-feedback">Please enter a valid email address.</span>
+              </div>
+              <!-- End Form -->
+
+              <!-- Form -->
+              <div class="mb-3">
+                <label class="form-label visually-hidden" for="loginFormPassword">Password</label>
+
+                <div class="input-group-merge">
+                  <input type="password" class="js-toggle-password form-control form-control-lg" name="loginFormPasswordName" id="loginFormPassword" placeholder="Password" aria-label="Password" 
+                         data-hs-toggle-password-options='{
+                           "target": "#loginFormChangePassTarget",
+                           "defaultClass": "bi-eye-slash",
+                           "showClass": "bi-eye",
+                           "classChangeTarget": "#changePassIcon"
+                         }'/>
+                  <span class="invalid-feedback">Your password is invalid. Please try again.</span>
+
+                  <a id="loginFormChangePassTarget" class="input-group-append input-group-text" href="javascript:;">
+                    <i id="changePassIcon" class="bi-eye"></i>
+                  </a>
+                </div>
+              </div>
+              <!-- End Form -->
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">Sign up</button>
+              </div>
+            </form>
+            <!-- End Form -->
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+      </div>
+
+      <div class="position-md-absolute top-0 end-0 col-md-5 col-lg-6 d-none d-md-block">
+        <!-- Video Background -->
+        <div class="video-bg" style="min-height: 57rem;">
+          <div class="js-video-bg video-bg-content" data-hs-video-bg-options='{"videoId": "${base}/resources/unify-layout/video/our-business-is-growing"}'></div>
+        </div>
+        <!-- End Video Background -->
+      </div>
+      <!-- End Col -->
+    </div>
+    <!-- End Hero -->
+
+    <!-- Features -->
+    <div class="overflow-hidden">
+      <div class="container content-space-2 content-space-t-lg-3">
+        <!-- Heading -->
+        <div class="w-lg-65 text-center mx-lg-auto mb-5">
+          <h2>商业亲身体验</h2>
+          <p>我们与领先的技术解决方案集成，为您的客户提供最佳体验。</p>
+        </div>
+        <!-- End Heading -->
+
+        <div class="position-relative">
+          <!-- Devices -->
+          <div class="devices">
+            <!-- Mobile Device -->
+            <figure class="device-mobile">
+              <div class="device-mobile-frame">
+                <img class="device-mobile-img" src="${base}/resources/unify-layout/img/280x560/img1.jpg" alt="大风起·云向兮"/>
+              </div>
+            </figure>
+            <!-- End Mobile Device -->
+
+            <!-- Browser Device -->
+            <figure class="device-browser">
+              <div class="device-browser-header">
+                <div class="device-browser-header-btn-list">
+                  <span class="device-browser-header-btn-list-btn"></span>
+                  <span class="device-browser-header-btn-list-btn"></span>
+                  <span class="device-browser-header-btn-list-btn"></span>
+                </div>
+                <div class="device-browser-header-browser-bar">www.htmlstream.com/space/</div>
+              </div>
+
+              <div class="device-browser-frame">
+                <img class="device-browser-img" src="${base}/resources/unify-layout/img/1618x1010/img1.jpg" alt="大风起·云向兮"/>
+              </div>
+            </figure>
+            <!-- End Browser Device -->
+          </div>
+          <!-- End Devices -->
+          
+          <!-- SVG Shape -->
+          <figure class="position-absolute top-0 end-0 d-none d-md-block mt-10 me-n5" style="width: 4rem;">
+            <img class="img-fluid" src="${base}/resources/unify-layout/svg/components/pointer-up.svg" alt="大风起·云向兮"/>
+          </figure>
+          <!-- End SVG Shape -->
+
+          <!-- SVG Shape -->
+          <figure class="position-absolute bottom-0 start-0" style="width: 15rem;">
+            <img class="img-fluid" src="${base}/resources/unify-layout/svg/components/curved-shape.svg" alt="大风起·云向兮"/>
+          </figure>
+          <!-- End SVG Shape -->
+        </div>
+      </div>
+    </div>
+    <!-- End Features -->
+
+    <!-- Testimonials -->
+    <div class="container content-space-b-2 content-space-b-lg-3">
+      <div class="row justify-content-center">
+        <div class="col-6 col-md-4 col-lg mb-3 mb-lg-0">
+          <div class="text-center">
+            <img class="avatar avatar-xl" src="${base}/resources/unify-layout/svg/brands/sass-dark.svg" alt="大风起·云向兮"/>
+            <p>"真正先进的系统和客户支持"</p>
+
+            <div class="d-flex justify-content-center gap-1">
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+            </div>
+            <!-- End Rating -->
+          </div>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-6 col-md-4 col-lg mb-3 mb-lg-0">
+          <div class="text-center">
+            <img class="avatar avatar-xl" src="${base}/resources/unify-layout/svg/brands/business-insider-dark.svg" alt="大风起·云向兮"/>
+            <p>"这是我见过的最好的之一。"</p>
+
+            <div class="d-flex justify-content-center gap-1">
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star-half.svg" alt="Review rating" width="18"/>
+            </div>
+            <!-- End Rating -->
+          </div>
+        </div>
+        <!-- End Col -->
+        
+        <div class="col-6 col-md-4 col-lg mb-3 mb-lg-0">
+          <div class="text-center">
+            <img class="avatar avatar-xl" src="${base}/resources/unify-layout/svg/brands/forbes-dark.svg" alt="大风起·云向兮"/>
+            <p>"这是一个非常优秀的系统"</p>
+
+            <div class="d-flex justify-content-center gap-1">
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+            </div>
+            <!-- End Rating -->
+          </div>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-6 col-md-4 col-lg mb-3 mb-lg-0">
+          <div class="text-center">
+            <img class="avatar avatar-xl" src="${base}/resources/unify-layout/svg/brands/capsule-dark.svg" alt="大风起·云向兮"/>
+            <p>"总有一个系统是你需要的"</p>
+
+            <div class="d-flex justify-content-center gap-1">
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+            </div>
+            <!-- End Rating -->
+          </div>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-6 col-md-4 col-lg">
+          <div class="text-center">
+            <img class="avatar avatar-xl" src="${base}/resources/unify-layout/svg/brands/fitbit-dark.svg" alt="大风起·云向兮"/>
+            <p>"出色的设计和完整的文档"</p>
+
+            <div class="d-flex justify-content-center gap-1">
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star.svg" alt="Review rating" width="18"/>
+              <img src="${base}/resources/unify-layout/svg/illustrations/star-half.svg" alt="Review rating" width="18"/>
+            </div>
+            <!-- End Rating -->
+          </div>
+        </div>
+        <!-- End Col -->
+      </div>
+      <!-- End Row -->
+    </div>
+    <!-- End Testimonials -->
+
+    <!-- Features -->
+    <div class="bg-dark">
+      <div class="container content-space-2 content-space-lg-3">
+        <div class="row justify-content-center justify-content-lg-between align-items-lg-center mb-10">
+          <div class="col-9 col-sm-7 col-lg-5 mb-7 mb-lg-0">
+            <img class="img-fluid w-100 rounded-3" src="${base}/resources/unify-layout/img/mockups/img4.png" alt="大风起·云向兮"/>
+          </div>
+          <!-- End Col -->
+
+          <div class="col-lg-6">
+            <div class="mb-5">
+              <span class="badge bg-soft-light text-white text-wrap mb-3"><i class="bi-stars me-1"></i> 用创意增强中小微企业和人们的能力 🎉👋</span>
+              <h2 class="text-white">设计用户体验的协作工具</h2>
+              <p class="text-white-70">在对见解进行头脑风暴后，获得创造真实事物的能力。将您的想法付诸实践，并与具体元素分享您的愿景。使与您的团队或客户的协作和沟通更加容易。</p>
+            </div>
+
+            <h6 class="text-white">您将获得：</h6>
+
+            <!-- List Checked -->
+            <ul class="list-checked list-checked-light mb-0">
+              <li class="list-checked-item text-white-70">少一些"摸鱼" – 多一些执行力</li>
+              <li class="list-checked-item text-white-70">节省几十W费用</li>
+              <li class="list-checked-item text-white-70">有效地控制预算</li>
+            </ul>
+            <!-- End List Checked -->
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+
+        <div class="row">
+          <div class="col-sm-6 col-lg mb-5 mb-lg-0">
+            <!-- Icon Block -->
+            <div class="text-center">
+              <div class="mb-3">
+                <i class="bi-phone fs-1 text-white"></i>
+              </div>
+              
+              <h5 class="text-white">快速响应</h5>
+              <p class="text-white-70">响应快、移动优先的web项目</p>
+              <a class="link link-pointer" href="${base}/signup.xhtml">免费注册</a>
+            </div>
+            <!-- End Icon Block -->
+          </div>
+          <!-- End Col -->
+
+          <div class="col-sm-6 col-lg mb-5 mb-lg-0">
+            <!-- Icon Block -->
+            <div class="text-center">
+              <div class="mb-3">
+                <i class="bi-toggles2 fs-1 text-white"></i>
+              </div>
+              
+              <h5 class="text-white">可定制的</h5>
+              <p class="text-white-70">组件易于定制</p>
+              <a class="link link-pointer" href="${base}/signup.xhtml">免费注册</a>
+            </div>
+            <!-- End Icon Block -->
+          </div>
+          <!-- End Col -->
+
+          <div class="col-sm-6 col-lg mb-5 mb-sm-0">
+            <!-- Icon Block -->
+            <div class="text-center">
+              <div class="mb-3">
+                <i class="bi-file-earmark-text fs-1 text-white"></i>
+              </div>
+              
+              <h5 class="text-white">文件</h5>
+              <p class="text-white-70">每个组件和插件都有很好的文档记录</p>
+              <a class="link link-pointer" href="${base}/signup.xhtml">免费注册</a>
+            </div>
+            <!-- End Icon Block -->
+          </div>
+          <!-- End Col -->
+
+          <div class="col-sm-6 col-lg">
+            <!-- Icon Block -->
+            <div class="text-center">
+              <div class="mb-3">
+                <i class="bi-chat-right-dots fs-1 text-white"></i>
+              </div>
+              
+              <h5 class="text-white">24/7支持</h5>
+              <p class="text-white-70">每周7天，每天24小时与我们联系。</p>
+              <a class="link link-pointer" href="${base}/signup.xhtml">免费注册</a>
+            </div>
+            <!-- End Icon Block -->
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+      </div>
+    </div>
+    <!-- End Features -->
+
+    <!-- Icon Block -->
+    <div class="container content-space-1 content-space-lg-3">
+      <div class="row">
+        <div class="col-md-6 mb-7 mb-lg-0">
+          <div class="w-md-75 mb-5">
+            <h2>设计更好用户体验的协作工具</h2>
+            <p>我们帮助企业在数字世界中实现创意，设计并实施他们赢得成功所需的技术工具。</p>
+          </div>
+          
+          <a class="link link-pointer" href="#">联系销售人员了解更多信息</a>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-md-6">
+          <!-- Icon Blocks -->
+          <div class="d-grid gap-4">
+            <!-- Media -->
+            <div class="d-flex">
+              <div class="flex-shrink-0">
+                <i class="bi-file-earmark-text fs-2 text-dark"></i>
+              </div>
+              <div class="flex-grow-1 ms-5">
+                <h5>行业领先的文档</h5>
+                <p>我们的文档和广泛的组件库包含了企业在短时间内构建自定义集成所需的一切。</p>
+              </div>
+            </div>
+            <!-- End Media -->
+
+            <!-- Media -->
+            <div class="d-flex">
+              <div class="flex-shrink-0">
+                <i class="bi-chat-right-dots fs-2 text-dark"></i>
+              </div>
+              <div class="flex-grow-1 ms-5">
+                <h5>开发人员社区支持</h5>
+                <p>我们积极参与开源项目，通过开发、补丁和赞助回馈社区。</p>
+              </div>
+            </div>
+            <!-- End Media -->
+            
+            <!-- Media -->
+            <div class="d-flex">
+              <div class="flex-shrink-0">
+                <i class="bi-hand-thumbs-up fs-2 text-dark"></i>
+              </div>
+              <div class="flex-grow-1 ms-5">
+                <h5>简单实用</h5>
+                <p>从小家电到SaaS平台，几乎没有什么东西是你买不到的</p>
+              </div>
+            </div>
+            <!-- End Media -->
+          </div>
+          <!-- End Icon Blocks -->
+        </div>
+        <!-- End Col -->
+      </div>
+      <!-- End Row -->
+    </div>
+    <!-- End Icon Block -->
+
+    <!-- Card Grid -->
+    <div class="overflow-hidden">
+      <div class="container border-top content-space-t-1 content-space-t-lg-2">
+        <div class="row justify-content-lg-between">
+          <div class="col-md-4 mb-5 mb-md-0">
+            <div class="mt-md-10 mb-5">
+              <h2>探索有用的资源</h2>
+              <p>我们的自媒体中有大量文章和见解，帮助您了解身份验证的最新情况</p>
+            </div>
+
+            <!-- Alert -->
+            <div class="alert alert-soft-dark" role="alert">
+              <div class="d-flex">
+                <div class="flex-shrink-0">
+                  <i class="bi-instagram"></i>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                 在<a class="alert-link" href="#" target="_blank">抖音、快手、百度、小红书、微博、公众号等</a>上关注我们，了解大风起的动态
+                </div>
+              </div>
+            </div>
+            <!-- End Alert -->
+          </div>
+          <!-- End Col -->
+
+          <div class="col-md-7">
+            <!-- Swiper Slider -->
+            <div class="swiper-center-mode-end">
+              <div class="js-swiper-card-grid swiper swiper-equal-height ps-4">
+                <div class="swiper-wrapper">
+                  <!-- Slide -->
+                  <div class="swiper-slide pt-4 pb-8">
+                    <!-- Card -->
+                    <a class="card card-transition" href="#">
+                      <div class="card-pinned">
+                        <img class="card-img-top" src="${base}/resources/unify-layout/svg/components/card-3.svg" alt="大风起·云向兮"/>
+                        <span class="badge bg-dark text-white card-pinned-top-end">设计</span>
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">浏览代码段工具</h5>
+                        <p>回答几个简单的问题以了解您的需求。如果你需要帮助，请找一位代理。</p>
+                      </div>
+                      <div class="card-footer pt-0">
+                        <span class="card-link">更多</span>
+                      </div>
+                    </a>
+                    <!-- End Card -->
+                  </div>
+                  <!-- End Slide -->
+
+                  <!-- Slide -->
+                  <div class="swiper-slide pt-4 pb-8">
+                    <!-- Card -->
+                    <a class="card card-transition bg-primary" href="#" style="background-image: url(${base}/resources/unify-layout/svg/components/wave-pattern-light.svg);">
+                      <div class="card-body">
+                        <span class="card-subtitle text-white mb-3">产品</span>
+                        <h3 class="card-title text-white lh-base">评估约束：为所有用户制作产品</h3>
+                      </div>
+                      <div class="card-footer pt-0">
+                        <span class="card-link link-light">更多</span>
+                      </div>
+                    </a>
+                    <!-- End Card -->
+                  </div>
+                  <!-- End Slide -->
+
+                  <!-- Slide -->
+                  <div class="swiper-slide pt-4 pb-8">
+                    <!-- Card -->
+                    <a class="card card-transition" href="#">
+                      <div class="card-pinned">
+                        <img class="card-img-top" src="${base}/resources/unify-layout/svg/components/card-1.svg" alt="大风起·云向兮"/>
+                        <span class="badge bg-dark text-white card-pinned-top-end">设计</span>
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">产生有意义的影响</h5>
+                        <p>回答几个简单的问题以了解您的需求。如果你需要帮助，请找一位代理。</p>
+                      </div>
+                      <div class="card-footer pt-0">
+                        <span class="card-link">更多</span>
+                      </div>
+                    </a>
+                    <!-- End Card -->
+                  </div>
+                  <!-- End Slide -->
+
+                  <!-- Slide -->
+                  <div class="swiper-slide pt-4 pb-8">
+                    <!-- Card -->
+                    <a class="card card-transition bg-warning" href="#" style="background-image: url(${base}/resources/unify-layout/svg/components/wave-pattern-2-light.svg);">
+                      <div class="card-body">
+                        <span class="card-subtitle text-white mb-3">洞察</span>
+                        <h3 class="card-title text-white lh-base">打造品牌：大风起设计执行列表</h3>
+                      </div>
+                      <div class="card-footer pt-0">
+                        <span class="card-link link-light">更多</span>
+                      </div>
+                    </a>
+                    <!-- End Card -->
+                  </div>
+                  <!-- End Slide -->
+                </div>
+
+                <!-- Arrows -->
+                <div class="js-swiper-card-grid-button-prev swiper-button-prev swiper-static-button-prev"></div>
+                <div class="js-swiper-card-grid-button-next swiper-button-next swiper-static-button-next"></div>
+
+                <!-- Preloader -->
+                <div class="js-swiper-preloader swiper-preloader">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+                <!-- End Preloader -->
+              </div>
+            </div>
+            <!-- End Swiper Slider -->
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+      </div>
+    </div>
+    <!-- End Card Grid -->
+
+    <!-- CTA -->
+    <div class="container content-space-2 content-space-lg-3">
+      <div class="w-lg-75 text-center mx-lg-auto">
+        <figure class="mb-7">
+          <img class="img-fluid" src="${base}/resources/unify-layout/svg/illustrations/plane.svg" alt="Image Description" style="width: 10rem;"/>
+        </figure>
+        <h2 class="mb-7">我们一直在寻找有才华的自由职业者。如果你觉得自己很合适，请联系！</h2>
+        <a class="link link-pointer" href="${base}/careers.xhtml">查看所有公开职位</a>
+      </div>
+    </div>
+    <!-- End CTA -->
+  </main>
+  <!-- ========== END MAIN CONTENT ========== -->
+   <!-- JS Global Compulsory  -->
+  <script src="${base}/resources/unify-layout/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- JS Implementing Plugins -->
+  <script src="${base}/resources/unify-layout/vendor/hs-header/dist/hs-header.min.js"></script>
+  <script src="${base}/resources/unify-layout/vendor/hs-mega-menu/dist/hs-mega-menu.min.js"></script>
+  <script src="${base}/resources/unify-layout/vendor/hs-go-to/dist/hs-go-to.min.js"></script>
+  <script src="${base}/resources/unify-layout/vendor/hs-toggle-password/dist/js/hs-toggle-password.js"></script>
+  <script src="${base}/resources/unify-layout/vendor/hs-video-bg/dist/hs-video-bg.min.js"></script>
+  <script src="${base}/resources/unify-layout/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- JS Unify -->
+  <script src="${base}/resources/unify-layout/js/theme.min.js"></script>
+
+  <!-- JS Plugins Init. -->
+  <script>
+    (function() {
+      // INITIALIZATION OF NAVBAR
+      // =======================================================
+      new HSHeader('#header').init()
+
+
+      // INITIALIZATION OF MEGA MENU
+      // =======================================================
+      const megaMenu = new HSMegaMenu('.js-mega-menu', {
+        desktop: {
+          position: 'left'
+        }
+      })
+
+
+      // INITIALIZATION OF GO TO
+      // =======================================================
+      new HSGoTo('.js-go-to')
+
+
+      // INITIALIZATION OF TOGGLE PASSWORD
+      // =======================================================
+      new HSTogglePassword('.js-toggle-password')
+
+
+      // INITIALIZATION OF VIDEO BG
+      // =======================================================
+      document.querySelectorAll('.js-video-bg').forEach(item=> {
+        new HSVideoBg(item).init()
+      })
+
+
+      // INITIALIZATION OF SWIPER
+      // =======================================================
+      var swiper = new Swiper('.js-swiper-card-grid',{
+        navigation: {
+          nextEl: '.js-swiper-card-grid-button-next',
+          prevEl: '.js-swiper-card-grid-button-prev',
+        },
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: 1,
+        breakpoints: {
+          480: {
+            slidesPerView: 2
+          },
+          768: {
+            slidesPerView: 2
+          },
+          1024: {
+            slidesPerView: 3
+          },
+        },
+        on: {
+          'imagesReady': function (swiper) {
+            const preloader = swiper.el.querySelector('.js-swiper-preloader')
+            preloader.parentNode.removeChild(preloader)
+          }
+        }
+      });
+    })()
+  </script>
+</ui:define>
+</ui:composition>

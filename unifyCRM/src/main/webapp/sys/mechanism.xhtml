@@ -1,0 +1,128 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+    button.ui-button {
+        margin-right: .5rem;
+    }
+</style>
+	</ui:define>
+	<ui:define name="title">
+        机构
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="机构" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				<div class="card">
+					<h:form id="MechanismListForm">
+							<p:toolbar>
+									<!-- <p:toolbarGroup>
+											<p:commandButton action="#{mechanismController.prepareCreate}" value="新增" ajax="false"
+												icon="pi pi-file" style="width:auto;" id="add"
+												styleClass="btn btn-primary" > 
+												<f:param name="from" value="list" />
+											</p:commandButton>
+									</p:toolbarGroup>-->
+ 
+									<p:toolbarGroup align="right">
+
+										<p:commandButton id="toggler" type="button" value="显示列"
+											styleClass="light-btn" style="width:auto;"
+											icon="pi pi-cog" />
+										<p:columnToggler datasource="datalist" trigger="toggler" />
+
+									</p:toolbarGroup>
+								</p:toolbar>
+					            <p:treeTable id="datalist" value="#{mechanismController.items}" var="item" selectionMode="single"
+									resizableColumns="true" resizeMode="expand" scrollHeight="100%"
+									selection="#{mechanismController.selecteds}" rowKey="#{item.id}"
+									paginator="true" rows="100" emptyMessage="无记录" rowIndexVar="rowIndex">
+									<!--  <p:column>
+										<f:facet name="header">操作</f:facet>
+										<h:commandLink action="#{mechanismController.edit}"
+											style="color: gray;" styleClass="btn btn-default"> 
+											<f:param name="id" value="#{item.id}" />
+											<i class="pi pi-pencil"  style="font-size: 1rem"></i>
+										</h:commandLink>
+										<h:commandLink action="#{mechanismController.view}"
+											style="color: gray;" styleClass="btn btn-default"> 
+											<f:param name="id" value="#{item.id}" />
+											<i class="pi pi-search" style="font-size: 1rem"></i>
+										</h:commandLink>
+									</p:column> -->
+									<p:column sortBy="#{item.name}" filterBy="#{item.name}"
+										 >
+										<f:facet name="header">
+											<h:outputText value="机构名称" />
+										</f:facet>
+										<h:outputText value="#{item.name}" />
+									</p:column>
+									<p:column sortBy="#{item.fullName}" filterBy="#{item.fullName}"
+										>
+										<f:facet name="header">
+											<h:outputText value="机构全称" />
+										</f:facet>
+										<h:outputText value="#{item.fullName}" />
+									</p:column>
+									<p:column sortBy="#{item.mechanismTypeName}" filterBy="#{item.mechanismTypeName}"
+										 >
+										<f:facet name="header">
+											<h:outputText value="机构类型" />
+										</f:facet>
+										<h:outputText value="#{item.mechanismTypeName}" />
+									</p:column>
+									<p:column sortBy="#{item.updateDate}" filterBy="#{item.updateDate}"
+										 >
+										<f:facet name="header">
+											<h:outputText value="更新时间" />
+										</f:facet>
+										<h:outputText value="#{item.updateDate}" />
+									</p:column>
+									<p:column sortBy="#{item.remarks}" filterBy="#{item.remarks}"
+										>
+										<f:facet name="header">
+											<h:outputText value="备注信息" />
+										</f:facet>
+										<h:outputText value="#{item.remarks}" />
+									</p:column>
+									<p:column sortBy="#{item.email}" filterBy="#{item.email}"
+										 >
+										<f:facet name="header">
+											<h:outputText value="电子邮件" />
+										</f:facet>
+										<h:outputText value="#{item.email}" />
+									</p:column>
+									<p:column sortBy="#{item.status}" filterBy="#{item.status}" >
+										<f:facet name="header">
+											<h:outputText value="状态" />
+										</f:facet>
+										<h:outputText value="#{item.status}" />
+									</p:column>
+					            </p:treeTable>
+				            
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode">
+									<p:commandButton value="是" type="button"
+										styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+									<p:commandButton value="否" type="button"
+										styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+								</p:confirmDialog>
+					</h:form>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

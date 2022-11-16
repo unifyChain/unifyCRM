@@ -1,0 +1,136 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+    button.ui-button {
+        margin-right: .5rem;
+    }
+</style>
+	</ui:define>
+	<ui:define name="title">
+        销售回款排名报表
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="销售回款排名报表" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				            <div class="card">
+					<h:form id="ReportCxForm">
+						<div class="col-12">
+							<div class="card">
+								<div class="ui-fluid formgrid grid">
+									<div class="field col-12 md:col-4">
+										<p:outputLabel value="部门" for="departmentId" />
+										 <p:selectOneMenu  id="departmentId"
+											value="#{reportController.selectedReport.departmentId}" required="false">
+											<f:selectItem itemLabel="请选择"></f:selectItem>
+								            <f:selectItems value="#{departmentController.itemsDepartment}"  var="status" itemLabel="#{status.name}" itemValue="#{status.id}" />
+								            <p:ajax update="datalist" listener="#{reportController.calcs}" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</div>
+						</div>
+						<p:toolbar>
+							<p:toolbarGroup>
+							</p:toolbarGroup>
+
+							<p:toolbarGroup align="right">
+
+								<c:forEach items="#{reportController.modelsSalesCollectionRanking}" var="model">
+									<p:menuButton value="导出" icon="pi pi-upload" rendered="#{model.name eq '导出'}">
+										<p:menuitem value="XLS" >
+											<p:dataExporter type="xls" target="datalist"
+												fileName="销售回款排名报表"  />
+										</p:menuitem>
+										<p:menuitem value="XLSX" >
+											<p:dataExporter type="xlsxstream" target="datalist"
+												fileName="销售回款排名报表"  />
+										</p:menuitem>
+										<p:menuitem value="PDF" >
+											<p:dataExporter type="pdf" target="datalist"
+												fileName="销售回款排名报表"  />
+										</p:menuitem>
+										<p:menuitem value="CSV" >
+											<p:dataExporter type="csv" target="datalist"
+												fileName="销售回款排名报表"  />
+										</p:menuitem>
+										<p:menuitem value="XML" >
+											<p:dataExporter type="xml" target="datalist"
+												fileName="销售回款排名报表"  />
+										</p:menuitem>
+										<p:menuitem value="TXT" >
+											<p:dataExporter type="txt" target="datalist"
+												fileName="销售回款排名报表"  />
+										</p:menuitem>
+									</p:menuButton>
+								</c:forEach>
+								<p:commandButton id="toggler" type="button" value="显示列"
+									styleClass="light-btn" style="width:auto;margin-left:5px;"
+									icon="pi pi-cog" />
+								<p:columnToggler datasource="datalist" trigger="toggler" />
+							</p:toolbarGroup>
+						</p:toolbar>
+						<p:dataTable id="datalist" var="item"
+							value="#{reportController.itemsSalesCollectionRanking}"
+							selection="#{reportController.selectedReport}" editable="true"
+							style="margin-bottom:20px" rowKey="#{item.id}" reflow="true"
+							resizableColumns="true" showGridlines="true"
+							scrollHeight="100%" emptyMessage="无记录">
+							<p:column sortBy="#{item.ranking}" filterBy="#{item.ranking}"
+								filterMatchMode="contains" >
+								<f:facet name="header">
+									<h:outputText value="排名" />
+								</f:facet>
+								<h:outputText value="#{item.ranking}" />
+							</p:column>
+							<p:column sortBy="#{item.username}" filterBy="#{item.username}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="姓名" />
+								</f:facet>
+								<h:outputText value="#{item.username}" />
+							</p:column>
+							<p:column sortBy="#{item.departmentName}" filterBy="#{item.departmentName}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="所在部门" />
+								</f:facet>
+								<h:outputText value="#{item.departmentName}" />
+							</p:column>
+							<p:column sortBy="#{item.receivableAmount}" filterBy="#{item.receivableAmount}"
+								filterMatchMode="contains" >
+								<f:facet name="header">
+									<h:outputText value="回款金额" />
+								</f:facet>
+								<h:outputText value="#{item.receivableAmount}" />
+							</p:column>
+						</p:dataTable>
+						<p:confirmDialog global="true" showEffect="fade"
+							hideEffect="explode">
+							<p:commandButton value="是" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="否" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+						
+					</h:form>
+				
+				            
+			</div>       
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,703 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">
+        客户公海
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<c:if test="#{customerController.selected.type=='编辑'}">
+							<p:breadCrumb>
+								<p:menuitem value="Dashboard" url="../dashboard" />
+								<p:menuitem value="客户公海" url="customerhighseas" />
+								<p:menuitem value="编辑" url="#" />
+							</p:breadCrumb>
+						</c:if>
+						<c:if test="#{customerController.selected.type=='新增'}">
+							<p:breadCrumb>
+								<p:menuitem value="Dashboard" url="../dashboard" />
+								<p:menuitem value="客户公海" url="customerhighseas" />
+								<p:menuitem value="新增" url="#" />
+							</p:breadCrumb>
+						</c:if>
+						<c:if test="#{customerController.selected.type=='查看'}">
+							<p:breadCrumb>
+								<p:menuitem value="Dashboard" url="../dashboard" />
+								<p:menuitem value="客户公海" url="customerhighseas" />
+								<p:menuitem value="查看" url="#" />
+							</p:breadCrumb>
+						</c:if>
+					</div>
+				</h:form>
+				<h:form id="CustomerCreateForm">
+					<c:if test="#{customerController.selected.type=='编辑'}">
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton action="#{customerController.update}"
+									style="width:auto;" value="保存" id="add" update=":growl"
+									widgetVar="saveButton1" onclick="PF('saveButton1').disable()"
+									oncomplete="PF('saveButton1').enable();PF('dlg2').hide();handleSubmit(args,'CustomerCreateDialog');"
+									icon="pi pi-save" styleClass="btn btn-primary">
+									<f:param name="from" value="list" />
+								</p:commandButton>
+							</p:toolbarGroup>
+
+						</p:toolbar>
+					</c:if>
+					<c:if test="#{customerController.selected.type=='新增'}">
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton action="#{customerController.create}"
+									style="width:auto;" value="保存" id="add" update=":growl"
+									widgetVar="saveButton1" onclick="PF('saveButton1').disable()"
+									oncomplete="PF('saveButton1').enable();PF('dlg2').hide();handleSubmit(args,'CustomerCreateDialog');"
+									icon="pi pi-save" styleClass="btn btn-primary">
+									<f:param name="from" value="list" />
+								</p:commandButton>
+							</p:toolbarGroup>
+
+						</p:toolbar>
+					</c:if>
+					<div class="dashboard p-grid">
+						<div class="col-12 p-lg-12">
+							<div class="card widget-chat">
+								<c:if test="#{customerController.selected.type=='查看'}">
+									<div class="col-12">
+										<div class="card">
+											<h5>#{customerController.selected.name}</h5>
+											<p:panelGrid columns="4"
+												columnClasses="ui-grid-col-3,ui-grid-col-4,ui-grid-col-3,ui-grid-col-4"
+												layout="grid" styleClass="ui-panelgrid-blank"
+												style="border:0px none; background-color:transparent;">
+												<h:outputText value="公司名称：" for="corporateName" />
+												<h:outputText id="corporateName"
+													value="#{customerController.selected.corporateName}"
+													title="corporateName" required="false" disabled="true" />
+												<h:outputText value="客户类型：" for="customerTypeMc" />
+												<h:outputText id="customerTypeMc"
+													value="#{customerController.selected.customerTypeName}"
+													title="customerTypeMc" required="false" disabled="true" />
+												<h:outputText value="电话：" for="telephone" />
+												<h:outputText id="telephone"
+													value="#{customerController.selected.telephone}"
+													title="telephone" required="false" disabled="true" />
+												<h:outputText value="下次跟进时间：" for="nextFollowTime" />
+												<h:outputText id="nextFollowTime"
+													value="#{customerController.selected.nextFollowTime}"
+													showTime="true" required="false" disabled="true" />
+												<h:outputText value="负责人：" for="personName" />
+												<h:outputText id="personName"
+													value="#{customerController.selected.personName}"
+													title="personName" disabled="true" />
+												<h:outputText value="所属部门：" for="departmentName" />
+												<h:outputText id="departmentName"
+													value="#{customerController.selected.departmentName}"
+													title="departmentName" disabled="true" />
+											</p:panelGrid>
+
+										</div>
+									</div>
+								</c:if>
+
+							</div>
+							<div class="card">
+								<c:if test="#{customerController.selected.type=='查看'}">
+									<p:tabView style="margin-top:5px;">
+										<p:tab title="详细信息">
+											<div class="col-12">
+												<div class="card">
+													<div class="ui-fluid formgrid grid">
+														<div class="field col-12 md:col-6">
+															<p:outputLabel value="上级客户" for="parentCustomer" />
+															<p:selectOneMenu id="parentCustomer" disabled="true"
+																value="#{customerController.selected.parentCustomer}"
+																required="false">
+																<f:selectItem itemLabel="请选择"></f:selectItem>
+																<f:selectItems
+																	value="#{customerController.itemsOfMySupplier}"
+																	var="sjkh" itemLabel="#{sjkh.name}"
+																	itemValue="#{sjkh.id}!_#{sjkh.name}" />
+															</p:selectOneMenu>
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel value="手机号" for="phone" />
+															<p:inputText id="phone"
+																value="#{customerController.selected.phone}"
+																title="phone" required="false" disabled="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel value="微信号" for="wxid" />
+															<p:inputText id="wxid"
+																value="#{customerController.selected.wxid}"
+																title="telephone" disabled="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel value="QQ号" for="qq" />
+															<p:inputText id="qq"
+																value="#{customerController.selected.qq}"
+																title="address" disabled="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel value="旺旺号" for="wangwang" />
+															<p:inputText id="wangwang"
+																value="#{customerController.selected.wangwang}"
+																title="wangwang" disabled="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel value="邮箱" for="email" />
+															<p:inputText id="email"
+																value="#{customerController.selected.email}"
+																title="email" disabled="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel value="传真" for="fax" />
+															<p:inputText id="fax"
+																value="#{customerController.selected.fax}" title="fax"
+																disabled="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel value="网址" for="website" />
+															<p:inputText id="website"
+																value="#{customerController.selected.website}"
+																title="website" disabled="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel value="区域" for="region" />
+															<p:selectOneMenu id="region"
+																value="#{customerController.selected.region}"
+																required="false" disabled="true">
+																<f:selectItem itemLabel="请选择"></f:selectItem>
+																<f:selectItems value="#{dictController.regions}"
+																	var="region" itemLabel="#{region.dictLabel}"
+																	itemValue="#{region.dictLabel}" disabled="true" />
+															</p:selectOneMenu>
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel value="地址" for="address" />
+															<p:inputText id="address"
+																value="#{customerController.selected.address}"
+																title="address" disabled="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel value="邮编" for="zipCode" />
+															<p:inputText id="zipCode"
+																value="#{customerController.selected.zipCode}"
+																title="zipCode" disabled="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel value="跟进状态" for="followStatus" />
+															<p:selectOneMenu id="followStatus" disabled="true"
+																value="#{customerController.selected.followStatus}"
+																required="false">
+																<f:selectItem itemLabel="请选择"></f:selectItem>
+																<f:selectItems value="#{dictController.followStatuss}"
+																	var="followStatus"
+																	itemLabel="#{followStatus.dictLabel}"
+																	itemValue="#{followStatus.dictCode}!_#{followStatus.dictLabel}" />
+															</p:selectOneMenu>
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel value="客户来源" for="customerSource" />
+															<p:selectOneMenu id="customerSource" disabled="true"
+																value="#{customerController.selected.customerSource}"
+																required="false">
+																<f:selectItem itemLabel="请选择"></f:selectItem>
+																<f:selectItems value="#{dictController.customerFroms}"
+																	var="customer_from"
+																	itemLabel="#{customer_from.dictLabel}"
+																	itemValue="#{customer_from.dictCode}!_#{customer_from.dictLabel}" />
+															</p:selectOneMenu>
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel value="所属行业" for="industry" />
+															<p:selectOneMenu id="industry" disabled="true"
+																value="#{customerController.selected.industry}"
+																required="false">
+																<f:selectItem itemLabel="请选择"></f:selectItem>
+																<f:selectItems value="#{dictController.industrys}"
+																	var="industry" itemLabel="#{industry.dictLabel}"
+																	itemValue="#{industry.dictCode}!_#{industry.dictLabel}" />
+															</p:selectOneMenu>
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel value="人员规模" for="personnelSize" />
+															<p:selectOneMenu id="personnelSize" disabled="true"
+																value="#{customerController.selected.personnelSize}"
+																required="false">
+																<f:selectItem itemLabel="请选择"></f:selectItem>
+																<f:selectItems value="#{dictController.staffSizes}"
+																	var="staff_size" itemLabel="#{staff_size.dictLabel}"
+																	itemValue="#{staff_size.dictCode}!_#{staff_size.dictLabel}" />
+															</p:selectOneMenu>
+														</div>
+														<div class="p-field col-12 p-md-12">
+															<p:outputLabel value="备注信息" for="remarks" />
+															<p:inputTextarea rows="3" id="remarks"
+																value="#{customerController.selected.remarks}"
+																autoResize="false" disabled="true" />
+														</div>
+													</div>
+												</div>
+											</div>
+										</p:tab>
+										<p:tab title="联系人">
+											<p:dataTable id="contactsDatalist" var="item"
+												value="#{customerController.itemsContacts}" editable="true"
+												style="margin-bottom:20px" rowKey="#{item.id}" reflow="true"
+												resizableColumns="true" showGridlines="true"
+												scrollHeight="100%" tableStyle="width:auto"
+												emptyMessage="无记录">
+												<p:column sortBy="#{item.name}" filterBy="#{item.name}"
+													styleClass="singleLine" filterMatchMode="contains">
+
+													<f:facet name="header">
+														<h:outputText value="姓名" />
+													</f:facet>
+													<h:outputText value="#{item.name}" />
+												</p:column>
+												<p:column sortBy="#{item.customerName}"
+													filterBy="#{item.customerName}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="对应客户" />
+													</f:facet>
+													<h:outputText value="#{item.customerName}" />
+												</p:column>
+												<p:column sortBy="#{item.position}"
+													filterBy="#{item.position}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="职务" />
+													</f:facet>
+													<h:outputText value="#{item.position}" />
+												</p:column>
+												<p:column sortBy="#{item.telephone}"
+													filterBy="#{item.telephone}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="电话" />
+													</f:facet>
+													<h:outputText value="#{item.telephone}" />
+												</p:column>
+												<p:column sortBy="#{item.phone}" filterBy="#{item.phone}"
+													styleClass="singleLine" filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="手机" />
+													</f:facet>
+													<h:outputText value="#{item.phone}" />
+												</p:column>
+												<p:column sortBy="#{item.departmentName}"
+													filterBy="#{item.departmentName}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="部门" />
+													</f:facet>
+													<h:outputText value="#{item.departmentName}" />
+												</p:column>
+												<p:column sortBy="#{item.wxid}" filterBy="#{item.wxid}"
+													styleClass="singleLine" filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="微信" />
+													</f:facet>
+													<h:outputText value="#{item.wxid}" />
+												</p:column>
+												<p:column sortBy="#{item.qq}" filterBy="#{item.qq}"
+													styleClass="singleLine" filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="QQ" />
+													</f:facet>
+													<h:outputText value="#{item.qq}" />
+												</p:column>
+												<p:column sortBy="#{item.wangwang}"
+													filterBy="#{item.wangwang}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="旺旺" />
+													</f:facet>
+													<h:outputText value="#{item.wangwang}" />
+												</p:column>
+												<p:column sortBy="#{item.email}" filterBy="#{item.email}"
+													styleClass="singleLine" filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="邮箱" />
+													</f:facet>
+													<h:outputText value="#{item.email}" />
+												</p:column>
+												<p:column sortBy="#{item.website}"
+													filterBy="#{item.website}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="网址" />
+													</f:facet>
+													<h:outputText value="#{item.website}" />
+												</p:column>
+												<p:column sortBy="#{item.zipCode}"
+													filterBy="#{item.zipCode}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="邮编" />
+													</f:facet>
+													<h:outputText value="#{item.zipCode}" />
+												</p:column>
+												<p:column sortBy="#{item.address}"
+													filterBy="#{item.address}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="地址" />
+													</f:facet>
+													<h:outputText value="#{item.address}" />
+												</p:column>
+												<p:column sortBy="#{item.sex}" filterBy="#{item.sex}"
+													styleClass="singleLine" filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="性别" />
+													</f:facet>
+													<h:outputText value="#{item.sex}" />
+												</p:column>
+												<p:column sortBy="#{item.updateDate}"
+													filterBy="#{item.updateDate}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="修改时间" />
+													</f:facet>
+													<h:outputText value="#{item.updateDate}" />
+												</p:column>
+												<p:column sortBy="#{item.remarks}"
+													filterBy="#{item.remarks}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="备注" />
+													</f:facet>
+													<h:outputText value="#{item.remarks}" />
+												</p:column>
+												<p:column sortBy="#{item.createName}"
+													filterBy="#{item.createName}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="创建人" />
+													</f:facet>
+													<h:outputText value="#{item.createName}" />
+												</p:column>
+												<p:column sortBy="#{item.createDate}"
+													filterBy="#{item.createDate}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="创建时间" />
+													</f:facet>
+													<h:outputText value="#{item.createDate}" />
+												</p:column>
+											</p:dataTable>
+										</p:tab>
+										<p:tab title="商机">
+											<p:dataTable id="businessOpportunityDatalist" var="item"
+												value="#{customerController.itemsBusinessOpportunity}"
+												editable="true" style="margin-bottom:20px"
+												rowKey="#{item.id}" reflow="true" resizableColumns="true"
+												showGridlines="true" scrollHeight="100%"
+												tableStyle="width:auto" emptyMessage="无记录">
+												<p:column sortBy="#{item.businessOpportunityTitle}"
+													filterBy="#{item.businessOpportunityTitle}"
+													styleClass="singleLine" filterMatchMode="contains">
+
+													<f:facet name="header">
+														<h:outputText value="商机标题" />
+													</f:facet>
+													<h:outputText value="#{item.businessOpportunityTitle}" />
+												</p:column>
+												<p:column sortBy="#{item.customerName}"
+													filterBy="#{item.customerName}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="对应客户" />
+													</f:facet>
+													<h:outputText value="#{item.customerName}" />
+												</p:column>
+												<p:column sortBy="#{item.estimatedAmount}"
+													filterBy="#{item.estimatedAmount}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="预计销售金额" />
+													</f:facet>
+													<h:outputText value="#{item.estimatedAmount}" />
+												</p:column>
+												<p:column sortBy="#{item.expectedSigningDates}"
+													filterBy="#{item.expectedSigningDates}"
+													styleClass="singleLine" filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="预计签单日期" />
+													</f:facet>
+													<h:outputText value="#{item.expectedSigningDates}" />
+												</p:column>
+												<p:column field="salesStageMc" headerText="销售阶段"
+													filterMatchMode="exact" sortBy="#{item.salesStageMc}"
+													styleClass="singleLine">
+													<f:facet name="filter">
+														<p:selectOneMenu onchange="PF('dataTable').filter()"
+															styleClass="custom-filter">
+															<f:selectItem itemLabel="全部" itemValue="#{null}"
+																noSelectionOption="true" />
+															<f:selectItems
+																value="#{zdbusinessOpportunityController.salesStage}"
+																var="businessOpportunity_type"
+																itemLabel="#{businessOpportunity_type.dictLabel}"
+																itemValue="#{businessOpportunity_type.dictLabel}" />
+														</p:selectOneMenu>
+													</f:facet>
+													<h:outputText value="#{item.salesStageMc}" />
+												</p:column>
+												<p:column field="departmentName" headerText="所属部门"
+													filterMatchMode="exact" sortBy="#{item.departmentName}"
+													styleClass="singleLine">
+													<f:facet name="filter">
+														<p:selectOneMenu onchange="PF('dataTable').filter()"
+															styleClass="custom-filter">
+															<f:selectItem itemLabel="全部" itemValue="#{null}"
+																noSelectionOption="true" />
+															<f:selectItems
+																value="#{departmentController.itemsDepartment}"
+																var="status" itemLabel="#{status.name}"
+																itemValue="#{status.id}!_#{status.name}" />
+														</p:selectOneMenu>
+													</f:facet>
+													<h:outputText value="#{item.departmentName}" />
+												</p:column>
+												<p:column sortBy="#{item.updateDate}"
+													filterBy="#{item.updateDate}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="修改时间" />
+													</f:facet>
+													<h:outputText value="#{item.updateDate}" />
+												</p:column>
+												<p:column sortBy="#{item.remarks}"
+													filterBy="#{item.remarks}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="备注" />
+													</f:facet>
+													<h:outputText value="#{item.remarks}" />
+												</p:column>
+												<p:column sortBy="#{item.personName}"
+													filterBy="#{item.personName}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="负责人" />
+													</f:facet>
+													<h:outputText value="#{item.personName}" />
+												</p:column>
+												<p:column sortBy="#{item.nextFollowTimes}"
+													filterBy="#{item.nextFollowTimes}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="下次跟进时间" />
+													</f:facet>
+													<h:outputText value="#{item.nextFollowTimes}" />
+												</p:column>
+												<p:column sortBy="#{item.createName}"
+													filterBy="#{item.createName}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="创建人" />
+													</f:facet>
+													<h:outputText value="#{item.createName}" />
+												</p:column>
+												<p:column sortBy="#{item.createDate}"
+													filterBy="#{item.createDate}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="创建时间" />
+													</f:facet>
+													<h:outputText value="#{item.createDate}" />
+												</p:column>
+											</p:dataTable>
+										</p:tab>
+										<p:tab title="合同">
+											<p:dataTable id="contractDatalist" var="item"
+												value="#{customerController.itemsContract}" editable="true"
+												style="margin-bottom:20px" rowKey="#{item.id}" reflow="true"
+												resizableColumns="true" showGridlines="true"
+												scrollHeight="100%" tableStyle="width:auto"
+												emptyMessage="无记录">
+												<p:column sortBy="#{item.contractTitle}"
+													filterBy="#{item.contractTitle}" styleClass="singleLine"
+													filterMatchMode="contains">
+
+													<f:facet name="header">
+														<h:outputText value="合同标题" />
+													</f:facet>
+													<h:outputText value="#{item.contractTitle}" />
+												</p:column>
+												<p:column sortBy="#{item.customerName}"
+													filterBy="#{item.customerName}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="对应客户" />
+													</f:facet>
+													<h:outputText value="#{item.customerName}" />
+												</p:column>
+												<p:column sortBy="#{item.totalContractAmount}"
+													filterBy="#{item.totalContractAmount}"
+													styleClass="singleLine" filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="合同总金额" />
+													</f:facet>
+													<h:outputText value="#{item.totalContractAmount}" />
+												</p:column>
+												<p:column sortBy="#{item.signingDate}"
+													filterBy="#{item.signingDate}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="签约日期" />
+													</f:facet>
+													<h:outputText value="#{item.signingDate}" />
+												</p:column>
+												<p:column field="departmentName" headerText="所属部门"
+													filterMatchMode="exact" sortBy="#{item.departmentName}"
+													styleClass="singleLine">
+													<f:facet name="filter">
+														<p:selectOneMenu onchange="PF('dataTable').filter()"
+															styleClass="custom-filter">
+															<f:selectItem itemLabel="全部" itemValue="#{null}"
+																noSelectionOption="true" />
+															<f:selectItems
+																value="#{departmentController.itemsDepartment}"
+																var="status" itemLabel="#{status.name}"
+																itemValue="#{status.id}!_#{status.name}" />
+														</p:selectOneMenu>
+													</f:facet>
+													<h:outputText value="#{item.departmentName}" />
+												</p:column>
+												<p:column sortBy="#{item.updateDate}"
+													filterBy="#{item.updateDate}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="修改时间" />
+													</f:facet>
+													<h:outputText value="#{item.updateDate}" />
+												</p:column>
+												<p:column sortBy="#{item.remarks}"
+													filterBy="#{item.remarks}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="备注" />
+													</f:facet>
+													<h:outputText value="#{item.remarks}" />
+												</p:column>
+												<p:column sortBy="#{item.personName}"
+													filterBy="#{item.personName}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="负责人" />
+													</f:facet>
+													<h:outputText value="#{item.personName}" />
+												</p:column>
+												<p:column sortBy="#{item.nextFollowTime}"
+													filterBy="#{item.nextFollowTime}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="下次跟进时间" />
+													</f:facet>
+													<h:outputText value="#{item.nextFollowTime}" />
+												</p:column>
+												<p:column sortBy="#{item.createName}"
+													filterBy="#{item.createName}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="创建人" />
+													</f:facet>
+													<h:outputText value="#{item.createName}" />
+												</p:column>
+												<p:column sortBy="#{item.createDate}"
+													filterBy="#{item.createDate}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="创建时间" />
+													</f:facet>
+													<h:outputText value="#{item.createDate}" />
+												</p:column>
+											</p:dataTable>
+										</p:tab>
+										<p:tab title="费用">
+											<p:dataTable id="costDatalist" var="item"
+												value="#{customerController.itemsCost}" editable="true"
+												style="margin-bottom:20px" rowKey="#{item.id}" reflow="true"
+												resizableColumns="true" showGridlines="true"
+												scrollHeight="100%" tableStyle="width:auto"
+												emptyMessage="无记录">
+												<p:column sortBy="#{item.id}" filterBy="#{item.id}"
+													styleClass="singleLine" filterMatchMode="contains">
+
+													<f:facet name="header">
+														<h:outputText value="费用编号" />
+													</f:facet>
+													<h:outputText value="#{item.id}" />
+												</p:column>
+												<p:column sortBy="#{item.expenseTypeMc}"
+													filterBy="#{item.expenseTypeMc}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="费用类型" />
+													</f:facet>
+													<h:outputText value="#{item.expenseTypeMc}" />
+												</p:column>
+												<p:column sortBy="#{item.timeOfOccurrence}"
+													filterBy="#{item.timeOfOccurrence}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="发生时间" />
+													</f:facet>
+													<h:outputText value="#{item.timeOfOccurrence}" />
+												</p:column>
+												<p:column sortBy="#{item.expenseAmount}"
+													filterBy="#{item.expenseAmount}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="费用金额" />
+													</f:facet>
+													<h:outputText value="#{item.expenseAmount}" />
+												</p:column>
+												<p:column sortBy="#{item.costDescription}"
+													filterBy="#{item.costDescription}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="费用描述" />
+													</f:facet>
+													<h:outputText value="#{item.costDescription}" />
+												</p:column>
+												<p:column sortBy="#{item.personMc}"
+													filterBy="#{item.personMc}" styleClass="singleLine"
+													filterMatchMode="contains">
+													<f:facet name="header">
+														<h:outputText value="负责人" />
+													</f:facet>
+													<h:outputText value="#{item.personMc}" />
+												</p:column>
+											</p:dataTable>
+										</p:tab>
+									</p:tabView>
+								</c:if>
+
+
+							</div>
+						</div>
+
+
+					</div>
+
+
+				</h:form>
+			</div>
+		</div>
+
+		<p:dialog id="dlg2" widgetVar="dlg2" modal="true" resizable="false"
+			appendTo="@(body)" header="新增">
+		</p:dialog>
+	</ui:define>
+</ui:composition>

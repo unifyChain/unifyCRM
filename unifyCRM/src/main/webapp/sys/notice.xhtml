@@ -1,0 +1,289 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+	</ui:define>
+	<ui:define name="title">
+        通知
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="通知" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				<div class="card">
+					<h:form id="NoticeListForm">
+						<p:toolbar>
+							<p:toolbarGroup>
+								<c:forEach items="#{noticeController.modules}" var="model">
+									<p:commandButton id="createButton" value="新增"
+										actionListener="#{noticeController.prepareCreate}"
+										style="width:auto;" update=":NoticeCreateForm"
+										rendered="#{model.name eq '新增'}" icon="pi pi-file"
+										oncomplete="PF('NoticeCreateDialog').show()" scrollable="true"
+										scrollHeight="100"
+										styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines" />
+								</c:forEach>
+							</p:toolbarGroup>
+
+							<p:toolbarGroup align="right">
+
+								<c:forEach items="#{noticeController.modules}" var="model">
+									<p:menuButton value="导出" rendered="#{model.name eq '导出'}">
+										<p:menuitem value="XLS" icon="pi pi-cloud-download">
+											<p:dataExporter type="xls" target="datalist" fileName="通知"
+												pageOnly="true" />
+										</p:menuitem>
+										<p:menuitem value="XLSX" icon="pi pi-cloud-download">
+											<p:dataExporter type="xlsxstream" target="datalist"
+												fileName="通知" pageOnly="true" />
+										</p:menuitem>
+										<p:menuitem value="PDF" icon="pi pi-cloud-download">
+											<p:dataExporter type="pdf" target="datalist" fileName="通知"
+												pageOnly="true" />
+										</p:menuitem>
+										<p:menuitem value="CSV" icon="pi pi-cloud-download">
+											<p:dataExporter type="csv" target="datalist" fileName="通知"
+												pageOnly="true" />
+										</p:menuitem>
+										<p:menuitem value="XML" icon="pi pi-cloud-download">
+											<p:dataExporter type="xml" target="datalist" fileName="通知"
+												pageOnly="true" />
+										</p:menuitem>
+										<p:menuitem value="TXT" icon="pi pi-cloud-download">
+											<p:dataExporter type="txt" target="datalist" fileName="通知"
+												pageOnly="true" />
+										</p:menuitem>
+									</p:menuButton>
+								</c:forEach>
+								<p:commandButton id="toggler" type="button" value="显示列"
+									styleClass="light-btn" style="width:auto;margin-left:5px;"
+									icon="pi pi-cog" />
+								<p:columnToggler datasource="datalist" trigger="toggler" />
+
+							</p:toolbarGroup>
+						</p:toolbar>
+						<p:dataTable id="datalist" var="item" widgetVar="dataTable"
+							selectionMode="single" value="#{noticeController.items}"
+							resizableColumns="true" resizeMode="expand"
+							selection="#{noticeController.selected}" rowKey="#{item.id}"
+							paginator="true" emptyMessage="无记录" tableStyle="width:auto"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="100,500,1000,5000" reflow="true"
+							rowIndexVar="rowIndex" scrollable="true" scrollHeight="200">
+							<p:column headerText="操作">
+								<c:forEach items="#{noticeController.modules}" var="model">
+									<p:commandButton icon="pi pi-search" update=":NoticeViewForm"
+										action="#{noticeController.edit}"
+										rendered="#{model.name eq '查看'}"
+										oncomplete="PF('NoticeViewDialog').show()"
+										styleClass="edit-button rounded-button ui-button-success"
+										process="@this">
+										<f:param name="id" value="#{item.id}" />
+									</p:commandButton>
+									<p:commandButton class="ui-button-warning rounded-button"
+										update=":NoticeEditForm" icon="pi pi-pencil" process="@this"
+										rendered="#{model.name eq '编辑'}"
+										oncomplete="PF('NoticeEditDialog').show()"
+										action="#{noticeController.edit}">
+										<f:param name="id" value="#{item.id}" />
+									</p:commandButton>
+								</c:forEach>
+							</p:column>
+							<p:column headerText="序号">
+							                #{rowIndex+1}
+							            </p:column>
+							<p:column sortBy="#{item.name}" filterBy="#{item.name}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="标题" />
+								</f:facet>
+								<h:outputText value="#{item.name}" />
+							</p:column>
+							<p:column sortBy="#{item.expireDate}"
+								filterBy="#{item.expireDate}" filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="有效期" />
+								</f:facet>
+								<h:outputText value="#{item.expireDate}" />
+							</p:column>
+							<p:column sortBy="#{item.status}" filterBy="#{item.status}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="是否生效" />
+								</f:facet>
+								<h:outputText value="#{item.status}" />
+							</p:column>
+							<p:column sortBy="#{item.content}" filterBy="#{item.content}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="内容" />
+								</f:facet>
+								<h:outputText value="#{item.content}" />
+							</p:column>
+						</p:dataTable>
+						<p:confirmDialog global="true" showEffect="fade"
+							hideEffect="explode">
+							<p:commandButton value="是" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="否" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+					</h:form>
+					<p:dialog id="NoticeCreateDlg" widgetVar="NoticeCreateDialog"
+						style="height:auto;width:450px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;"
+						modal="true" resizable="false" appendTo="@(body)" header="新增">
+						<h:form id="NoticeCreateForm">
+							<h:panelGroup id="display">
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="p-field col-12 p-md-12">
+												<p:outputLabel value="标题" for="name" />
+												<p:inputText id="name"
+													value="#{noticeController.selected.name}" required="true"
+													maxlength="200" title="name" />
+											</div>
+											<div class="field col-12 md:col-12">
+												<p:outputLabel value="有效期" for="expireDate" />
+												<p:datePicker id="expireDate"
+													value="#{noticeController.selected.expireDate}"
+													required="true" />
+											</div>
+											<div class="field col-12 md:col-12">
+												<p:outputLabel value="是否生效" for="status" />
+												<p:selectOneMenu id="status"
+													value="#{noticeController.selected.status}" required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItem itemLabel="是" itemValue="是" />
+													<f:selectItem itemLabel="否" itemValue="否" />
+												</p:selectOneMenu>
+											</div>
+											<div class="p-field col-12 p-md-12">
+												<p:outputLabel value="内容" for="content" />
+												<p:inputTextarea rows="3" id="content"
+													value="#{noticeController.selected.content}"
+													autoResize="false" />
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<br />
+								<p:commandButton value="保存" styleClass="ui-confirmdialog-yes"
+									icon="pi pi-save" action="#{noticeController.create}"
+									style="width:auto;"
+									update=":growl,display,:NoticeListForm:datalist" ajax="true"
+									oncomplete="handleSubmit(args, 'NoticeCreateDialog');" />
+							</h:panelGroup>
+						</h:form>
+					</p:dialog>
+					<p:dialog id="NoticeEditDlg" widgetVar="NoticeEditDialog"
+						modal="true"
+						style="height:auto;width:450px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;"
+						resizable="false" appendTo="@(body)" header="编辑">
+						<h:form id="NoticeEditForm">
+							<h:panelGroup id="display">
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="p-field col-12 p-md-12">
+												<p:outputLabel value="标题" for="name" />
+												<p:inputText id="name"
+													value="#{noticeController.selected.name}" required="true"
+													maxlength="200" title="name" />
+											</div>
+											<div class="field col-12 md:col-12">
+												<p:outputLabel value="有效期" for="expireDate" />
+												<p:datePicker id="expireDate"
+													value="#{noticeController.selected.expireDate}"
+													required="true" />
+											</div>
+											<div class="field col-12 md:col-12">
+												<p:outputLabel value="是否生效" for="status" />
+												<p:selectOneMenu id="status"
+													value="#{noticeController.selected.status}" required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItem itemLabel="是" itemValue="是" />
+													<f:selectItem itemLabel="否" itemValue="否" />
+												</p:selectOneMenu>
+											</div>
+											<div class="p-field col-12 p-md-12">
+												<p:outputLabel value="内容" for="content" />
+												<p:inputTextarea rows="3" id="content"
+													value="#{noticeController.selected.content}"
+													autoResize="false" />
+											</div>
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="EmptyBox10"></div>
+								<p:commandButton value="保存" styleClass="ui-confirmdialog-yes"
+									icon="pi pi-save" action="#{noticeController.update}"
+									style="width:auto;"
+									update=":growl,display,:NoticeListForm:datalist" ajax="true"
+									oncomplete="handleSubmit(args, 'NoticeEditDialog');" />
+							</h:panelGroup>
+						</h:form>
+					</p:dialog>
+					<p:sidebar widgetVar="NoticeViewDialog" position="right"
+						style="width: 30%;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+						<h:form id="NoticeViewForm">
+							<h:panelGroup id="display">
+								<div class="col-12">
+									<div class="card">
+										<div class="ui-fluid formgrid grid">
+											<div class="p-field col-12 p-md-12">
+												<p:outputLabel value="标题" for="name" />
+												<p:inputText id="name"
+													value="#{noticeController.selected.name}" required="true"
+													maxlength="200" title="name"  disabled="true"/>
+											</div>
+											<div class="field col-12 md:col-12">
+												<p:outputLabel value="有效期" for="expireDate" />
+												<p:datePicker id="expireDate" disabled="true"
+													value="#{noticeController.selected.expireDate}"
+													required="true" />
+											</div>
+											<div class="field col-12 md:col-12">
+												<p:outputLabel value="是否生效" for="status" />
+												<p:selectOneMenu id="status" disabled="true"
+													value="#{noticeController.selected.status}" required="true">
+													<f:selectItem itemLabel="请选择"></f:selectItem>
+													<f:selectItem itemLabel="是" itemValue="是" />
+													<f:selectItem itemLabel="否" itemValue="否" />
+												</p:selectOneMenu>
+											</div>
+											<div class="p-field col-12 p-md-12">
+												<p:outputLabel value="内容" for="content" />
+												<p:inputTextarea rows="3" id="content" disabled="true"
+													value="#{noticeController.selected.content}"
+													autoResize="false" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</h:panelGroup>
+						</h:form>
+					</p:sidebar>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

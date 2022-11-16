@@ -1,0 +1,152 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+    button.ui-button {
+        margin-right: .5rem;
+    }
+</style>
+	</ui:define>
+	<ui:define name="title">
+        部门荣誉榜
+    </ui:define>
+	<ui:define name="content">
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="部门荣誉榜" />
+						</p:breadCrumb>
+					</div>
+				</h:form>
+				            <div class="card">
+					<h:form id="FollowupCxForm">
+						<div class="col-12">
+							<div class="card">
+								<div class="ui-fluid formgrid grid">
+									<div class="field col-12 md:col-4">
+										<p:outputLabel value="时间筛选"  />
+										 <p:selectOneMenu 
+											value="#{reportController.selectedReport.timeToScreen}" required="false">
+								            <f:selectItem itemLabel="上月" itemValue="上月"/>
+								            <f:selectItem itemLabel="本月" itemValue="本月"/>
+								            <f:selectItem itemLabel="下月" itemValue="下月"/>	
+								            <f:selectItem itemLabel="本年" itemValue="本年"/>	
+								            <f:selectItem itemLabel="上半年" itemValue="上半年"/>	
+								            <f:selectItem itemLabel="下半年" itemValue="下半年"/>	
+									        <p:ajax update="datalist,barModel" listener="#{reportController.calcs}" />
+										</p:selectOneMenu>
+									</div>
+									<div class="field col-12 md:col-4">
+										<p:outputLabel value="业绩类型"  />
+										 <p:selectOneMenu 
+											value="#{reportController.selectedReport.resultsType}" required="false">
+								            <f:selectItem itemLabel="合同金额" itemValue="合同金额"/>
+								            <f:selectItem itemLabel="合同回款金额" itemValue="合同回款金额"/>
+								            <f:selectItem itemLabel="合同数" itemValue="合同数"/>	
+								            <f:selectItem itemLabel="赢单商机数" itemValue="赢单商机数"/>	
+								            <f:selectItem itemLabel="赢单商机金额" itemValue="赢单商机金额"/>	
+									        <p:ajax update="datalist,barModel" listener="#{reportController.calcs}" />
+										</p:selectOneMenu>
+									</div>
+									<div class="field col-12 md:col-4">
+										<p:outputLabel value="部门" for="departmentId" />
+										<p:selectOneMenu  id="departmentId"
+											value="#{reportController.selectedReport.departmentId}" required="false">
+											<f:selectItem itemLabel="请选择"></f:selectItem>
+								            <f:selectItems value="#{departmentController.itemsDepartment}"  var="status" itemLabel="#{status.name}" itemValue="#{status.id}" />
+								            <p:ajax update="datalist,barModel" listener="#{reportController.calcs}" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</div>
+						</div>
+    					<p:barChart model="#{reportController.departmentHonorModel}" style="width: 100%; height: 500px;" id="barModel"/>
+						<p:toolbar>
+							<p:toolbarGroup>
+							</p:toolbarGroup>
+
+							<p:toolbarGroup align="right">
+
+								<c:forEach items="#{reportController.modelsDepartmentHonor}" var="model">
+									<p:menuButton value="导出" icon="pi pi-upload" rendered="#{model.name eq '导出'}">
+										<p:menuitem value="XLS" >
+											<p:dataExporter type="xls" target="datalist"
+												fileName="部门荣誉榜"  />
+										</p:menuitem>
+										<p:menuitem value="XLSX" >
+											<p:dataExporter type="xlsxstream" target="datalist"
+												fileName="部门荣誉榜"  />
+										</p:menuitem>
+										<p:menuitem value="PDF" >
+											<p:dataExporter type="pdf" target="datalist"
+												fileName="部门荣誉榜"  />
+										</p:menuitem>
+										<p:menuitem value="CSV" >
+											<p:dataExporter type="csv" target="datalist"
+												fileName="部门荣誉榜"  />
+										</p:menuitem>
+										<p:menuitem value="XML" >
+											<p:dataExporter type="xml" target="datalist"
+												fileName="部门荣誉榜"  />
+										</p:menuitem>
+										<p:menuitem value="TXT" >
+											<p:dataExporter type="txt" target="datalist"
+												fileName="部门荣誉榜"  />
+										</p:menuitem>
+									</p:menuButton>
+								</c:forEach>
+								<p:commandButton id="toggler" type="button" value="显示列"
+									styleClass="light-btn" style="width:auto;margin-left:5px;"
+									icon="pi pi-cog" />
+								<p:columnToggler datasource="datalist" trigger="toggler" />
+							</p:toolbarGroup>
+						</p:toolbar>
+						<p:dataTable id="datalist" var="item"
+							value="#{reportController.itemsDepartmentHonor}"
+							selection="#{reportController.selectedReport}" editable="true"
+							style="margin-bottom:20px" rowKey="#{item.id}" reflow="true"
+							resizableColumns="true" showGridlines="true"
+							scrollHeight="100%"  emptyMessage="无记录">
+							<p:column sortBy="#{item.ranking}" filterBy="#{item.ranking}"
+								filterMatchMode="contains" >
+								<f:facet name="header">
+									<h:outputText value="排名" />
+								</f:facet>
+								<h:outputText value="#{item.ranking}" />
+							</p:column>
+							<p:column sortBy="#{item.departmentName}" filterBy="#{item.departmentName}"
+								filterMatchMode="contains" >
+								<f:facet name="header">
+									<h:outputText value="部门" />
+								</f:facet>
+								<h:outputText value="#{item.departmentName}" />
+							</p:column>
+							<p:column sortBy="#{item.aggregateAmount}" filterBy="#{item.aggregateAmount}"
+								filterMatchMode="contains">
+								<f:facet name="header">
+									<h:outputText value="业绩类型" />
+								</f:facet>
+								<h:outputText value="#{item.aggregateAmount}" />
+							</p:column>
+						</p:dataTable>
+						<p:confirmDialog global="true" showEffect="fade"
+							hideEffect="explode">
+							<p:commandButton value="是" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="否" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+					</h:form>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

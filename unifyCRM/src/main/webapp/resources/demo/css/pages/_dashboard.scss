@@ -1,0 +1,392 @@
+.dashboard-banking {
+
+    .overview-boxes {        
+        .overview {
+            height: 100%;
+            box-sizing: border-box;
+            min-height: 50px;
+            border-radius: 4px;
+            @include background-gradient-left2right(#457fca, #5691c8);
+        }
+
+        .overview-icon, 
+        .overview-text {
+            display: block;
+            @include pull-to(left);
+            margin-left: 5px;
+        }
+
+        .overview-text span {
+            display: block;
+            height: auto;
+        }
+
+        .overview-text {
+            padding-top: 9px;
+            padding-bottom: 9px;
+        }
+
+        .overview-title {
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 15px;
+            color: #d9edf7;
+        }
+
+        .overview-subtitle {
+            line-height: 16px;
+            color: #ffffff;
+        }
+    }
+    
+    .currency-panel {
+        height: 100%;
+        
+        .dashboard-currency {
+            @include clearfix();
+            min-height: 85px;
+            height: 100%;
+            padding: 23px 10px;
+            border: 1px solid rgba(67, 69, 96, .1);
+            border-radius: 4px;
+            background-color: #ffffff;
+
+            img {
+                width: 30px;
+                height: 30px;
+                object-fit: contain;
+            }
+        }
+
+        .dashboard-currency-icon, 
+        .dashboard-currency-label {
+            @include pull-to(left);
+        }
+
+        .dashboard-currency-rates {
+            @include pull-to(right);
+        }
+
+        .dashboard-currency-rates .dashboard-currency-rate {
+            @include pull-to(left);
+            margin-left: 15px;
+            text-align: right;
+
+            &:first-child {
+                margin-left: 0;
+            }
+        }
+
+        .currency-rate-title {
+            font-size: 12px;
+            line-height: 20px;
+            display: block;
+            color: $textSecondaryColor;
+        }
+
+        .currency-rate-value {
+            font-weight: 600;
+            line-height: 17px;
+            display: block;
+        }
+
+        .dashboard-currency-icon {
+            margin-right: 10px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
+
+        .dashboard-currency-title {
+            font-size: 17px;
+            font-weight: 600;
+            line-height: 22px;
+            text-align: left;
+        }
+
+        .dashboard-currency-subtitle {
+            font-size: 13.5px;
+            font-weight: 500;
+            color: $textSecondaryColor;
+        }
+
+        .currency-gold {
+            margin-top: 8px;
+        } 
+    }
+    
+    .financial-overview { 
+        overflow: hidden;
+
+        .financial-overview-total {
+            line-height: 36px;
+            padding: 17px 14px 15px 14px;
+            border-bottom: 1px solid #ddd;
+            background-color: #fbfbfb;
+        }
+
+        .financial-overview-total-label {
+            @include pull-to(left);
+            font-weight: 600;
+            color: #777;
+            font-size: 16px;
+        }
+
+        .financial-overview-total-value {
+            @include pull-to(right);
+            font-size: 19px;
+            font-weight: bold;
+            text-align: right;
+            color: #337ab7;
+
+            &::before {
+                font-size: 14px;
+                font-weight: bold;
+                line-height: 17px;
+                content: '$';
+                color: #6ba6d9;
+            }
+        }
+
+        .financial-overview-line {
+            line-height: 20px;
+            margin-bottom: 4px;
+
+            .line-left {
+                @include pull-to(left);
+                color: #777;
+            }
+
+            .line-right {
+                @include pull-to(right);
+                text-align: right;
+            }
+
+            .line-icon, 
+            .line-label, 
+            .line-value {
+                display: inline-block;
+                margin-bottom: 8px;
+            }
+
+            .line-icon {
+                display: inline-block;
+                width: 16px;
+                margin-right: 12px;
+                text-align: center;
+                font-size: 16px;
+            }
+
+            .line-value {
+                font-weight: 600;
+            }
+
+            .line-caret {
+                font-size: 16px;
+                display: inline-block;
+                margin-left: 10px;
+                color: $textSecondaryColor;
+            }
+        }
+        
+        .thumbnail img {
+            display: block;
+            width: 100%;
+        }
+
+        .progress {
+            margin-top: 6px;
+            margin-bottom: 6px;
+            background-color: yellow;
+        }
+
+        .progress-explaination {
+            font-size: 14px;
+            line-height: 20px;
+            color: $textSecondaryColor;
+        }
+
+        .button-link {
+            line-height: 2em; 
+        }
+
+        .panel-inner { 
+            padding: 15px;
+
+            &.no-padding-top {
+                padding-top: 0 !important;
+            }
+        }
+    }
+    
+    .expenses {
+
+        .chart-expenses {
+            padding-top: 10px;
+            padding-left: 0;
+        }
+
+        .chart-label {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 19px;
+            margin-bottom: 3px;
+            text-align: right;
+        }
+
+        .chart-label-name {
+            font-size: 14px;
+            line-height: 16px;
+            margin-bottom: 3px;
+            text-align: right;
+            color: $textSecondaryColor;
+        }
+
+        .chart-status {
+            font-size: 12px;
+            line-height: 14px;
+            margin-bottom: 16px;
+            text-align: right;
+            
+            i {
+                margin-right: 5px;
+            }
+        }
+
+        .status1 {
+            color: #8ad88a;
+        }
+
+        .status2 {
+            color: #de7470;
+        }
+
+        .shape {
+            margin-right: 10px;
+        }
+
+        .shape1 {
+            @extend .shape;
+            color: #d9edf7;
+        }
+
+        .shape2 {
+            @extend .shape;
+            color: #6ba6d9;
+        }
+
+        .shape3 {
+            @extend .shape;
+            color: #0154a3;
+        }
+    }
+    
+    .asset-graph {
+        width: 90%;
+        margin-left: 5%;
+        height: 240px;
+    }
+    
+    .transaction {
+        border-bottom: 1px solid yellow;
+        
+        &:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-title {         
+            font-weight: 500;
+            display: block;
+        }
+
+        .transaction-subtitle {
+            display: block;
+            color: $textSecondaryColor;
+        }
+
+        .transaction-button {
+            @include pull-to(right);
+            margin-top: 5px;
+        }
+    }
+    
+    .customer-support {        
+        .support-estimation {
+            @include pull-to(left);
+            margin-top: 10px;
+
+            span {
+                display: block;
+            }
+        }
+
+        .form-contact {
+            margin-top: 15px;
+        }
+
+        .form-contact button {
+            margin-top: 25px;
+        }
+
+        .support-top {
+            width: 200px;
+            margin:0 auto;
+            margin-bottom: 10px;
+        }
+
+        .btn-padding {
+            margin-top: 13px;
+            margin-bottom: 17px;
+        }
+    }
+
+    .pull-right {
+        float: right;
+    }
+}
+
+@media (min-width:1025px) and (max-width:1250px) {
+    .overview-boxes {
+        .overview {
+            text-align: center;
+
+            .overview-icon {
+                float: none;
+            }
+
+            .overview-text {
+                padding-top: 0;
+                float: none;
+            }
+        }
+    }
+
+    .currency-panel {
+        .dashboard-currency {
+            text-align: center;
+            
+            .dashboard-currency-icon {
+                float: none;
+            }
+            
+            .dashboard-currency-label {
+                float: none;
+                margin-bottom: 4px;
+                
+                > div {
+                    text-align: center;
+                }
+            }
+            
+            .dashboard-currency-rates {
+                float: none;
+                
+                .dashboard-currency-rate {
+                    float: none;
+                    text-align: center;
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+            }
+        }
+    }
+}

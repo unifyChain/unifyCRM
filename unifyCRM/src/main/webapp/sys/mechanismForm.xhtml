@@ -1,0 +1,521 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">
+        机构
+    </ui:define>
+	<ui:define name="content">
+			<div class="ui-g ui-fluid">
+			<div class="ui-g-12">
+				<h:form>
+					<div class="card">
+								<c:if test="#{mechanismController.selected.from=='编辑'}">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="/机构/" url="mechanism" />
+							<p:menuitem value="编辑" url="#" />
+						</p:breadCrumb>
+								</c:if>
+								<c:if test="#{mechanismController.selected.from=='新增'}">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="/机构/" url="mechanism" />
+							<p:menuitem value="新增" url="#" />
+						</p:breadCrumb>
+								</c:if>
+								<c:if test="#{mechanismController.selected.from=='查看'}">
+						<p:breadCrumb>
+							<p:menuitem value="Dashboard" url="../dashboard" />
+							<p:menuitem value="/机构/" url="mechanism" />
+							<p:menuitem value="查看" url="#" />
+						</p:breadCrumb>
+								</c:if>
+					</div>
+				</h:form> 
+				<div class="card">
+						<h:form id="MechanismCreateForm">
+								<c:if test="#{mechanismController.selected.from=='编辑'}">
+									<p:toolbar>
+							            <p:toolbarGroup>
+												<p:commandButton action="#{mechanismController.update}"
+													style="width:auto;" value="保存" id="add"
+													update=":growl" 
+					 								widgetVar="saveButton1"  onclick="PF('saveButton1').disable()" oncomplete="PF('saveButton1').enable();PF('dlg2').hide();handleSubmit(args,'MechanismCreateDialog');"
+													icon="fa fa-save" styleClass="btn btn-primary">
+													<f:param name="from" value="list" />
+												</p:commandButton>
+							            </p:toolbarGroup>
+							
+							        </p:toolbar>
+								</c:if>
+							<c:if test="#{mechanismController.selected.from=='新增'}">	
+									<p:toolbar>
+							            <p:toolbarGroup>
+												<p:commandButton action="#{mechanismController.create}"
+													style="width:auto;" value="保存" id="add"
+													update=":growl" 
+					 								widgetVar="saveButton1"  onclick="PF('saveButton1').disable()" oncomplete="PF('saveButton1').enable();PF('dlg2').hide();handleSubmit(args,'MechanismCreateDialog');"
+													icon="fa fa-save" styleClass="btn btn-primary">
+													<f:param name="from" value="list" />
+												</p:commandButton>
+							            </p:toolbarGroup>
+							
+							        </p:toolbar>
+							</c:if>
+							<p:fieldset legend="基本信息" style="margin-top:5px;">
+								<c:if test="#{mechanismController.selected.from=='新增'}">
+						            <div class="col-12">
+						                <div class="card">
+						                    <div class="ui-fluid formgrid grid">
+						                        <div class="field col-12 md:col-12">
+													<p:outputLabel value="上级机构" for="mechanismName" />
+	                								<div class="ui-inputgroup">
+									                    <p:inputText id="mechanismName" value="#{mechanismController.selected.mechanismName}"
+															title="mechanismName"  disabled="true"/>
+									                    <p:commandButton icon="pi pi-search" styleClass="ui-button-warning"
+															update=":mechanismItemsSelectedForm" 
+															oncomplete="PF('MechanismSelectedDialog').show()" style="width:30px;"/>
+								                    </div>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+								</c:if>
+								<c:if test="#{mechanismController.selected.from=='查看'}">
+						            <div class="col-12">
+						                <div class="card">
+						                    <div class="ui-fluid formgrid grid">
+						                        <div class="field col-12 md:col-12">
+													<p:outputLabel value="上级机构" for="mechanismName" />
+								                    <p:inputText id="mechanismName" value="#{mechanismController.selected.mechanismName}"
+														title="mechanismName"  disabled="true"/>
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="名称" for="name" />
+													<p:inputText id="name" value="#{mechanismController.selected.name}"
+														title="name" required="true"   disabled="true"/>
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="全称" for="full_name" />
+													<p:inputText id="full_name" value="#{mechanismController.selected.fullName}" title="full_name" required="true"  disabled="true"/>
+													
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="机构类型" for="mechanism_type" />
+													 <p:selectOneMenu  id="mechanism_type"
+														value="#{mechanismController.selected.mechanismType}" disabled="true">
+														<f:selectItem itemLabel="请选择"></f:selectItem>
+											            <f:selectItems value="#{dictController.mechanism_type}"  var="sqgl" itemLabel="#{sqgl.dictLabel}" itemValue="#{sqgl.dictCode}!_#{sqgl.dictLabel}" />
+													</p:selectOneMenu>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+								</c:if>
+								<c:if test="#{mechanismController.selected.from!='查看'}">
+									<div class="col-12">
+						                <div class="card">
+						                    <div class="ui-fluid formgrid grid">
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="名称" for="name" />
+													<p:inputText id="name" value="#{mechanismController.selected.name}"
+														title="name" required="true"   />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="全称" for="full_name" />
+													<p:inputText id="full_name" value="#{mechanismController.selected.fullName}" title="full_name" required="true"  />
+													
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="机构类型" for="mechanism_type" />
+													 <p:selectOneMenu  id="mechanism_type"
+														value="#{mechanismController.selected.mechanismType}"  >
+														<f:selectItem itemLabel="请选择"></f:selectItem>
+											            <f:selectItems value="#{dictController.mechanism_type}"  var="sqgl" itemLabel="#{sqgl.dictLabel}" itemValue="#{sqgl.dictCode}!_#{sqgl.dictLabel}" />
+													</p:selectOneMenu>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+								</c:if>
+					        </p:fieldset>
+
+							<p:fieldset legend="详细信息" style="margin-top:5px;">
+								<c:if test="#{mechanismController.selected.from=='查看'}">
+								
+						            <div class="col-12">
+						                <div class="card">
+						                    <div class="ui-fluid formgrid grid">
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="联系人" for="contacts" />
+													<p:inputText id="contacts" value="#{mechanismController.selected.contacts}" title="contacts"  required="true" disabled="true"/>
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="手机号" for="phonenumber" />
+													<p:inputText id="phonenumber" value="#{mechanismController.selected.phonenumber}" title="phonenumber"  required="true" disabled="true"/>
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="办公电话" for="telephone" />
+													<p:inputText id="telephone" value="#{mechanismController.selected.telephone}" title="telephone"   disabled="true"/>
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="联系地址" for="address" /> 
+													<p:inputText id="address" value="#{mechanismController.selected.address}" title="address"   disabled="true"/>
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="传真" for="fax" />
+													<p:inputText id="fax" value="#{mechanismController.selected.fax}" title="fax"   disabled="true"/>
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="电子邮件" for="email" />
+													<p:inputText id="email" value="#{mechanismController.selected.email}" title="email"   disabled="true"/>
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="邮编" for="zipCode" />
+													<p:inputText id="zipCode" value="#{mechanismController.selected.zipCode}" title="zipCode"   disabled="true"/>
+						                        </div>
+						                        <div class="field col-12 md:col-12">
+													<p:outputLabel value="备注信息" for="remarks" />
+					                  				<p:inputTextarea rows="3"  id="remarks" value="#{mechanismController.selected.remarks}" autoResize="false" disabled="true"/>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+								</c:if>
+								<c:if test="#{mechanismController.selected.from=='编辑'}">
+									<div class="col-12">
+						                <div class="card">
+						                    <div class="ui-fluid formgrid grid">
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="联系人" for="contacts" />
+													<p:inputText id="contacts" value="#{mechanismController.selected.contacts}" title="contacts"  required="true" />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="手机号" for="phonenumber" />
+													<p:inputText id="phonenumber" value="#{mechanismController.selected.phonenumber}" title="phonenumber"  required="true" />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="办公电话" for="telephone" />
+													<p:inputText id="telephone" value="#{mechanismController.selected.telephone}" title="telephone"   />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="联系地址" for="address" /> 
+													<p:inputText id="address" value="#{mechanismController.selected.address}" title="address"   />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="传真" for="fax" />
+													<p:inputText id="fax" value="#{mechanismController.selected.fax}" title="fax"   />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="电子邮件" for="email" />
+													<p:inputText id="email" value="#{mechanismController.selected.email}" title="email"   />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="邮编" for="zipCode" />
+													<p:inputText id="zipCode" value="#{mechanismController.selected.zipCode}" title="zipCode"   />
+						                        </div>
+						                        <div class="field col-12 md:col-12">
+													<p:outputLabel value="备注信息" for="remarks" />
+					                  				<p:inputTextarea rows="3"  id="remarks" value="#{mechanismController.selected.remarks}" autoResize="false" />
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+								</c:if>
+								<c:if test="#{mechanismController.selected.from=='新增'}">
+									<div class="col-12">
+						                <div class="card">
+						                    <div class="ui-fluid formgrid grid">
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="联系人" for="contacts" />
+													<p:inputText id="contacts" value="#{mechanismController.selected.contacts}" title="contacts"  required="true" />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="手机号" for="phonenumber" />
+													<p:inputText id="phonenumber" value="#{mechanismController.selected.phonenumber}" title="phonenumber"  required="true" />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="办公电话" for="telephone" />
+													<p:inputText id="telephone" value="#{mechanismController.selected.telephone}" title="telephone"   />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="联系地址" for="address" /> 
+													<p:inputText id="address" value="#{mechanismController.selected.address}" title="address"   />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="传真" for="fax" />
+													<p:inputText id="fax" value="#{mechanismController.selected.fax}" title="fax"   />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="电子邮件" for="email" />
+													<p:inputText id="email" value="#{mechanismController.selected.email}" title="email"   />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="邮编" for="zipCode" />
+													<p:inputText id="zipCode" value="#{mechanismController.selected.zipCode}" title="zipCode" />
+						                        </div>
+						                        <div class="field col-12 md:col-12">
+													<p:outputLabel value="备注信息" for="remarks" />
+					                  				<p:inputTextarea rows="3"  id="remarks" value="#{mechanismController.selected.remarks}" autoResize="false" />
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+								</c:if>
+					        </p:fieldset>
+					        <p:fieldset legend="机构参数信息" style="margin-top:5px;">
+								<c:if test="#{mechanismController.selected.from!='查看'}">
+									<div class="col-12">
+						                <div class="card">
+						                    <div class="ui-fluid formgrid grid">
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="启用时间" for="enableDate" />
+													<p:datePicker id="enableDate" value="#{mechanismController.selected.enableDate}" />		                        
+												</div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="本位币" for="baseCurrency" />
+													<p:inputText id="baseCurrency" value="#{mechanismController.selected.baseCurrency}" title="baseCurrency"  />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="数量小数位" for="numberOfDecimalPlaces" />
+													<p:inputText id="numberOfDecimalPlaces" value="#{mechanismController.selected.numberOfDecimalPlaces}" title="numberOfDecimalPlaces"   />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="单价小数位" for="priceOfDecimalPlaces" /> 
+													<p:inputText id="priceOfDecimalPlaces" value="#{mechanismController.selected.priceOfDecimalPlaces}" title="priceOfDecimalPlaces"   />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="存货计价方法" for="inventoryValuationMethod" />
+													<p:selectOneMenu  id="inventoryValuationMethod"   rendered="true"
+														value="#{mechanismController.selected.inventoryValuationMethod}" >
+														<f:selectItem itemLabel="请选择"></f:selectItem>
+														<f:selectItem itemLabel="移动平均法" itemValue="移动平均法"></f:selectItem>
+														<f:selectItem itemLabel="先进先出法" itemValue="先进先出法"></f:selectItem>
+													</p:selectOneMenu>
+						                        </div>
+						                        
+						                        <div class="field col-12 md:col-4">
+						                        </div>
+						                        
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="不允许负库存" for="enableNegativeInventoryNotAllowed" />
+													<p:selectBooleanCheckbox id="enableNegativeInventoryNotAllowed" value="#{mechanismController.selected.enableNegativeInventoryNotAllowed}" style="margin-left:15px;"/>
+						                        </div>
+						                        
+						                        	                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用税金" for="enableTaxes" />
+													<p:selectBooleanCheckbox id="enableTaxes" value="#{mechanismController.selected.enableTaxes}" style="margin-left:15px;"/>
+													<p:inputText id="taxePrice" value="#{mechanismController.selected.taxePrice}" title="taxePrice" style="width:60px;margin-left:15px;"/>%
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+															
+													<p:outputLabel value="商品价格是否含税" for="enableWhetherTheCommodityPriceIncludesTax" />
+													<p:selectBooleanCheckbox id="enableWhetherTheCommodityPriceIncludesTax" value="#{mechanismController.selected.enableCannotUpdateOrderDate}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+															
+													<p:outputLabel value="启用辅助属性" for="enableAuxiliaryProperties" />
+													<p:selectBooleanCheckbox id="enableAuxiliaryProperties" value="#{mechanismController.selected.enableRetail}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用智慧微店" for="enableSmartMicroStore" />
+													<p:selectBooleanCheckbox id="enableSmartMicroStore" value="#{mechanismController.selected.enableSeparateWarehouseAccounting}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用序列号" for="enableSerialNumber" />
+													<p:selectBooleanCheckbox id="enableSerialNumber" value="#{mechanismController.selected.enableAutoFillSettlementAmount}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用批次保质期管理" for="enableBatchShelfLifeManagement" />
+													<p:selectBooleanCheckbox id="enableBatchShelfLifeManagement" value="#{mechanismController.selected.enableEarliestBatchOfAutomaticDelivery}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用自动出库最早批次" for="enableEarliestBatchOfAutomaticDelivery" />
+													<p:selectBooleanCheckbox id="enableEarliestBatchOfAutomaticDelivery" value="#{mechanismController.selected.enableBatchShelfLifeManagement}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用自动填充结算金额" for="enableAutoFillSettlementAmount" />
+													<p:selectBooleanCheckbox id="enableAutoFillSettlementAmount" value="#{mechanismController.selected.enableSerialNumber}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用分仓核算" for="enableSeparateWarehouseAccounting" />
+													<p:selectBooleanCheckbox id="enableSeparateWarehouseAccounting" value="#{mechanismController.selected.enableSmartMicroStore}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用零售" for="enableRetail" />
+													<p:selectBooleanCheckbox id="enableRetail" value="#{mechanismController.selected.enableAuxiliaryProperties}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="销售类单据不允许修改单据日期" for="enableCannotUpdateOrderDate" />
+													<p:selectBooleanCheckbox id="enableCannotUpdateOrderDate" value="#{mechanismController.selected.enableWhetherTheCommodityPriceIncludesTax}" style="margin-left:15px;"/>
+												</div>
+
+						                    </div>
+						                </div>
+						            </div>
+								</c:if>
+								<c:if test="#{mechanismController.selected.from=='查看'}">
+									<div class="col-12">
+						                <div class="card">
+						                    <div class="ui-fluid formgrid grid">
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="启用时间" for="enableDate" />
+													<p:datePicker id="enableDate" value="#{mechanismController.selected.enableDate}" disabled="true"/>		                        
+												</div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="本位币" for="baseCurrency" />
+													<p:inputText id="baseCurrency" value="#{mechanismController.selected.baseCurrency}" title="baseCurrency"   disabled="true"/>
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="数量小数位" for="numberOfDecimalPlaces" />
+													<p:inputText id="numberOfDecimalPlaces" value="#{mechanismController.selected.numberOfDecimalPlaces}" title="numberOfDecimalPlaces"   disabled="true" />
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="单价小数位" for="priceOfDecimalPlaces" /> 
+													<p:inputText id="priceOfDecimalPlaces" value="#{mechanismController.selected.priceOfDecimalPlaces}" title="priceOfDecimalPlaces"    disabled="true"/>
+						                        </div>
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="存货计价方法" for="inventoryValuationMethod" />
+													<p:selectOneMenu  id="inventoryValuationMethod"   rendered="true" disabled="true"
+														value="#{mechanismController.selected.inventoryValuationMethod}" >
+														<f:selectItem itemLabel="请选择"></f:selectItem>
+														<f:selectItem itemLabel="移动平均法" itemValue="移动平均法"></f:selectItem>
+														<f:selectItem itemLabel="先进先出法" itemValue="先进先出法"></f:selectItem>
+													</p:selectOneMenu>
+						                        </div>
+						                        
+						                        <div class="field col-12 md:col-4">
+						                        </div>
+						                        
+						                        <div class="field col-12 md:col-4">
+													<p:outputLabel value="不允许负库存" for="enableNegativeInventoryNotAllowed" />
+													<p:selectBooleanCheckbox disabled="true" id="enableNegativeInventoryNotAllowed" value="#{mechanismController.selected.enableNegativeInventoryNotAllowed}" style="margin-left:15px;"/>
+						                        </div>
+						                        
+						                        	                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用税金" for="enableTaxes" />
+													<p:selectBooleanCheckbox  disabled="true" id="enableTaxes" value="#{mechanismController.selected.enableTaxes}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+															
+													<p:outputLabel value="商品价格是否含税" for="enableWhetherTheCommodityPriceIncludesTax" />
+													<p:selectBooleanCheckbox  disabled="true"  id="enableWhetherTheCommodityPriceIncludesTax" value="#{mechanismController.selected.enableCannotUpdateOrderDate}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+															
+													<p:outputLabel value="启用辅助属性" for="enableAuxiliaryProperties" />
+													<p:selectBooleanCheckbox  disabled="true"  id="enableAuxiliaryProperties" value="#{mechanismController.selected.enableRetail}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用智慧微店" for="enableSmartMicroStore" />
+													<p:selectBooleanCheckbox  disabled="true"  id="enableSmartMicroStore" value="#{mechanismController.selected.enableSeparateWarehouseAccounting}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用序列号" for="enableSerialNumber" />
+													<p:selectBooleanCheckbox  disabled="true"  id="enableSerialNumber" value="#{mechanismController.selected.enableAutoFillSettlementAmount}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用批次保质期管理" for="enableBatchShelfLifeManagement" />
+													<p:selectBooleanCheckbox  disabled="true"  id="enableBatchShelfLifeManagement" value="#{mechanismController.selected.enableEarliestBatchOfAutomaticDelivery}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用自动出库最早批次" for="enableEarliestBatchOfAutomaticDelivery" />
+													<p:selectBooleanCheckbox  disabled="true"  id="enableEarliestBatchOfAutomaticDelivery" value="#{mechanismController.selected.enableBatchShelfLifeManagement}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用自动填充结算金额" for="enableAutoFillSettlementAmount" />
+													<p:selectBooleanCheckbox  disabled="true"  id="enableAutoFillSettlementAmount" value="#{mechanismController.selected.enableSerialNumber}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用分仓核算" for="enableSeparateWarehouseAccounting" />
+													<p:selectBooleanCheckbox  disabled="true"  id="enableSeparateWarehouseAccounting" value="#{mechanismController.selected.enableSmartMicroStore}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="启用零售" for="enableRetail" />
+													<p:selectBooleanCheckbox  disabled="true"  id="enableRetail" value="#{mechanismController.selected.enableAuxiliaryProperties}" style="margin-left:15px;"/>
+												</div>
+																		                        
+												<div class="field col-12 md:col-4">
+														
+													<p:outputLabel value="销售类单据不允许修改单据日期" for="enableCannotUpdateOrderDate" />
+													<p:selectBooleanCheckbox  disabled="true"  id="enableCannotUpdateOrderDate" value="#{mechanismController.selected.enableWhetherTheCommodityPriceIncludesTax}" style="margin-left:15px;"/>
+												</div>
+
+						                    </div>
+						                </div>
+						            </div>
+								</c:if>
+					        </p:fieldset>
+						</h:form>
+					</div>
+					
+					<c:if test="#{mechanismController.selected.from=='新增'}">
+						<p:dialog id="MechanismSelectedDlg" widgetVar="MechanismSelectedDialog"
+							modal="true" resizable="false" appendTo="@(body)" header="选择上级机构"
+							style="max-height:550px;max-width:850px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;">
+							<h:panelGroup id="selectSpPG">
+								<h:form id="mechanismItemsSelectedForm">
+									<p:panelGrid columns="1">
+				                        <p:tree value="#{mechanismController.root}" var="doc"
+				                                selectionMode="single" selection="#{mechanismController.selectedNode}"  filterBy="#{doc}">
+				                            <p:treeNode collapsedIcon="ui-icon ui-icon-folder-collapsed">
+				                                <h:outputText value="#{doc}" />
+				                            </p:treeNode>
+				                        </p:tree>
+								    	<p:commandButton value="确定" update=":growl,:MechanismCreateForm:mechanismName" oncomplete="handleSubmit(args, 'MechanismSelectedDialog');" style="width:auto;margin-top:10px;"  actionListener="#{mechanismController.displaySelectedMultiple(mechanismController.selectedNode)}"/>
+									</p:panelGrid>
+								</h:form>
+								<div class="EmptyBox10"></div>
+							</h:panelGroup>
+						</p:dialog>
+					</c:if>
+				</div>
+				
+			</div>
+					<p:dialog id="dlg2" widgetVar="dlg2"
+						modal="true" resizable="false" appendTo="@(body)" header="新增">
+					</p:dialog>
+	</ui:define>
+</ui:composition>

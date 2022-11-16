@@ -1,0 +1,653 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Dashboard Banking</ui:define>
+
+    <ui:define name="content">
+        <div class="dashboard-banking">
+            <div class="grid overview-boxes">
+                <div class="col-12 md:col-4 lg:col-2">
+                    <div class="overview clearfix">
+                        <div class="overview-icon">
+                            <p:graphicImage name="images/dashboard-banking/icon-transfer.png" library="avalon-layout" width="52" styleClass="icon-transfer" />
+                        </div>
+                        
+                        <div class="overview-text">
+                            <span class="overview-title">Make</span>
+                            <span class="overview-subtitle">Swift Transfer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-4 lg:col-2">
+                    <div class="overview clearfix">
+                        <div class="overview-icon">
+                            <p:graphicImage name="images/dashboard-banking/icon-creditcards.png" library="avalon-layout" width="52" styleClass="icon-creditcards" />
+                        </div>
+                        
+                        <div class="overview-text">
+                            <span class="overview-title">Pay</span>
+                            <span class="overview-subtitle">Credit Cards</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-4 lg:col-2">
+                    <div class="overview clearfix">
+                        <div class="overview-icon">
+                            <p:graphicImage name="images/dashboard-banking/icon-cardtransfer.png" library="avalon-layout" width="52" styleClass="icon-cardtransfer" />
+                        </div>
+                        
+                        <div class="overview-text">
+                            <span class="overview-title">Make</span>
+                            <span class="overview-subtitle">Card Transfer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-4 lg:col-2">
+                    <div class="overview clearfix">
+                        <div class="overview-icon">
+                            <p:graphicImage name="images/dashboard-banking/icon-receivemoney.png" library="avalon-layout" width="52" styleClass="icon-receivemoney" />
+                        </div>
+                        
+                        <div class="overview-text">
+                            <span class="overview-title">Receive</span>
+                            <span class="overview-subtitle">Money</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-4 lg:col-2">
+                    <div class="overview clearfix">
+                        <div class="overview-icon">
+                            <p:graphicImage name="images/dashboard-banking/icon-transactions.png" library="avalon-layout" width="52" styleClass="icon-transactions" />
+                        </div>
+                        
+                        <div class="overview-text">
+                            <span class="overview-title">See</span>
+                            <span class="overview-subtitle">Transactions</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-4 lg:col-2">
+                    <div class="overview clearfix">
+                        <div class="overview-icon">
+                            <p:graphicImage name="images/dashboard-banking/icon-ticket.png" library="avalon-layout" width="52" styleClass="icon-ticket" />
+                        </div>
+                        
+                        <div class="overview-text">
+                            <span class="overview-title">Open</span>
+                            <span class="overview-subtitle">Ticket</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid currency-panel">
+                <div class="col-12 md:col-6 lg:col-3 clearfix">
+                    <div class="dashboard-currency">
+                        <div class="dashboard-currency-icon">
+                            <p:graphicImage name="images/dashboard-banking/icon-dollar.png" library="avalon-layout" width="30" styleClass="icon-dollar" />
+                        </div>
+                        
+                        <div class="dashboard-currency-label">
+                            <div class="dashboard-currency-title">USD</div>
+                            <div class="dashboard-currency-subtitle">US Dollar</div>
+                        </div>
+                        
+                        <div class="dashboard-currency-rates">
+                            <div class="dashboard-currency-rate">
+                                <span class="currency-rate-title">Latest</span>
+                                <span class="currency-rate-value">3,5232</span>
+                            </div>
+                            
+                            <div class="dashboard-currency-rate">
+                                <span class="currency-rate-title">Change</span>
+                                <span class="currency-rate-value">-0.85</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-6 lg:col-3 clearfix">
+                    <div class="dashboard-currency">
+                        <div class="dashboard-currency-icon">
+                            <p:graphicImage name="images/dashboard-banking/icon-euro.png" library="avalon-layout" width="30" styleClass="icon-euro" />
+                        </div>
+                        
+                        <div class="dashboard-currency-label">
+                            <div class="dashboard-currency-title">EUR</div>
+                            <div class="dashboard-currency-subtitle">Euro</div>
+                        </div>
+                        
+                        <div class="dashboard-currency-rates">
+                            <div class="dashboard-currency-rate">
+                                <span class="currency-rate-title">Latest</span>
+                                <span class="currency-rate-value">4,1246</span>
+                            </div>
+                            
+                            <div class="dashboard-currency-rate">
+                                <span class="currency-rate-title">Change</span>
+                                <span class="currency-rate-value">-0.16</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-6 lg:col-3 clearfix">
+                    <div class="dashboard-currency">
+                        <div class="dashboard-currency-icon">
+                            <p:graphicImage name="images/dashboard-banking/icon-gbp.png" library="avalon-layout" width="30" styleClass="icon-gbp" />
+                        </div>
+                        
+                        <div class="dashboard-currency-label">
+                            <div class="dashboard-currency-title">GBP</div>
+                            <div class="dashboard-currency-subtitle">Pound</div>
+                        </div>
+                        
+                        <div class="dashboard-currency-rates">
+                            <div class="dashboard-currency-rate">
+                                <span class="currency-rate-title">Latest</span>
+                                <span class="currency-rate-value">4,6300</span>
+                            </div>
+                            
+                            <div class="dashboard-currency-rate">
+                                <span class="currency-rate-title">Change</span>
+                                <span class="currency-rate-value">-0.25</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-6 lg:col-3 clearfix">
+                    <div class="dashboard-currency">
+                        <div class="dashboard-currency-icon">
+                            <p:graphicImage name="images/dashboard-banking/icon-gold.png" library="avalon-layout" width="30" styleClass="icon-gold" />
+                        </div>
+                        
+                        <div class="dashboard-currency-label">
+                            <div class="dashboard-currency-title currency-gold">GOLD</div>
+                        </div>
+                        
+                        <div class="dashboard-currency-rates">
+                            <div class="dashboard-currency-rate">
+                                <span class="currency-rate-title">Latest</span>
+                                <span class="currency-rate-value">143,059</span>
+                            </div>
+                            
+                            <div class="dashboard-currency-rate">
+                                <span class="currency-rate-title">Change</span>
+                                <span class="currency-rate-value">-0.85</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid financial-overview">
+                <div class="col-12 md:col-12 lg:col-4">
+                    <div class="card">
+                        <h5>Accounts</h5>
+                        <div class="financial-overview-total">
+                            <span class="financial-overview-total-label">Grand Total</span>
+                            <span class="financial-overview-total-value">624,504.00</span>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="panel-inner">
+                            <div class="financial-overview-line">
+                                <div class="line-left">
+                                    <span class="line-icon">
+                                        <i class="pi pi-money-bill"/>
+                                    </span>
+                                    <span class="line-label">Bank Accounts</span>
+                                </div>
+
+                                <div class="line-right">
+                                    <span class="line-value">$320,521.25</span>
+                                    <a href="#" class="line-caret"><i class="pi pi-angle-double-right"/></a>
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="financial-overview-line">
+                                <div class="line-left pull-left">
+                            <span class="line-icon">
+                                <i class="pi pi-briefcase"/>
+                            </span>
+                                    <span class="line-label">Savings</span>
+                                </div>
+
+                                <div class="line-right pull-right ">
+                                    <span class="line-value">$94,305.00</span>
+                                    <a href="#" class="line-caret"><i class="pi pi-angle-double-right"/></a>
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="financial-overview-line">
+                                <div class="line-left pull-left">
+                            <span class="line-icon">
+                                <i class="pi pi-globe"/>
+                            </span>
+                                    <span class="line-label">Stocks</span>
+                                </div>
+
+                                <div class="line-right pull-right ">
+                                    <span class="line-value">$5,000.00</span>
+                                    <a href="#" class="line-caret"><i class="pi pi-angle-double-right"/></a>
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="financial-overview-line">
+                                <div class="line-left pull-left">
+                            <span class="line-icon">
+                                <i class="pi pi-dollar"/>
+                            </span>
+                                    <span class="line-label">Profit</span>
+                                </div>
+
+                                <div class="line-right pull-right ">
+                                    <span class="line-value">$21.25</span>
+                                    <a href="#" class="line-caret"><i class="pi pi-angle-double-right"/></a>
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-12 lg:col-4 ">
+                    <div class="card">
+                        <h5>Debts</h5>
+                        <div class="financial-overview-total">
+                            <span class="financial-overview-total-label">Grand Total</span>
+                            <span class="financial-overview-total-value">125,330.00</span>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="panel-inner">
+                            <div class="financial-overview-line">
+                                <div class="line-left pull-left">
+                            <span class="line-icon">
+                                <i class="pi pi-briefcase"/>
+                            </span>
+                                    <span class="line-label">Used Credits</span>
+                                </div>
+
+                                <div class="line-right pull-right">
+                                    <span class="line-value">$100,240.00</span>
+                                    <a href="#" class="line-caret"><i class="pi pi-angle-double-right"/></a>
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="financial-overview-line">
+                                <div class="line-left pull-left">
+                            <span class="line-icon">
+                                <i class="pi pi-calendar"/>
+                            </span>
+                                    <span class="line-label">Loans</span>
+                                </div>
+
+                                <div class="line-right pull-right ">
+                                    <span class="line-value">$25,090.00</span>
+                                    <a href="#" class="line-caret"><i class="pi pi-angle-double-right"/></a>
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="financial-overview-line">
+                                <div class="line-left pull-left">
+                            <span class="line-icon">
+                                <i class="pi pi-ticket"/>
+                            </span>
+                                    <span class="line-label">Overdrafts</span>
+                                </div>
+
+                                <div class="line-right pull-right ">
+                                    <span class="line-value">$0</span>
+                                    <a href="#" class="line-caret"><i class="pi pi-angle-double-right"/></a>
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-12 lg:col-4">
+                    <div class="card">
+                        <a href="#" class="thumbnail nopadding">
+                            <p:graphicImage name="images/dashboard-banking/asset-japan.png" library="avalon-layout" width="30" styleClass="asset-japan " />
+                        </a>
+                        <div class="panel-inner no-padding-top">
+                            <h3><strong>Journey to Japan</strong></h3>
+                            <div class="progress">
+                                <p:progressBar value="30" labelTemplate="{value}%" />
+                            </div>
+
+                            <div class="progress-explaination">
+                                <p><span style="color:#292b2c"><b>$3,000.00</b></span> from $10,000.00</p>
+                            </div>
+
+                            <div class="progress-buttons">
+                                <p:button value="Deposit" />
+                                <p:link value="Withdraw" styleClass="pull-right button-link" />
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="col-12 md:col-12 lg:col-4">
+                    <div class="card expenses">
+                        <h5>Expenses</h5>
+                        <p:graphicImage name="images/dashboard-banking/chart-expenses.png" library="avalon-layout" styleClass="chart-expenses" />
+
+                        <div class="chart-details pull-right">
+                            <div class="chart-label">
+                                <i class="pi pi-circle-on shape1"/>Segment 1</div>
+                            <div class="chart-label-name">Advertisement</div>
+                            <div class="chart-status status1">
+                                <i class="pi pi-angle-up"/>5% increased</div>
+                                
+                            <div class="chart-label">
+                                <i class="pi pi-circle-on shape2"/>Segment 2</div>
+                            <div class="chart-label-name">Bills</div>
+                            <div class="chart-status status1">
+                                <i class="pi pi-angle-up"/>12% increased</div>
+                                
+                            <div class="chart-label">
+                                <i class="pi pi-circle-on shape3"/>Segment 3</div>
+                            <div class="chart-label-name">Salaries</div>
+                            <div class="chart-status status2">
+                                <i class="pi pi-angle-down"/>3% decreased</div>
+                        </div>
+                        
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <div class=" col-12 md:col-12 lg:col-8">
+                    <div class="card widget-messages">
+                        <h5>Messages</h5>
+
+                        <div class="flex-row">
+                            <div class="message-box">
+                                
+                               <!--1st message row-->
+
+                                <div class="message">
+                                    <p:graphicImage name="images/dashboard-banking/profile.png" library="avalon-layout" styleClass="messager-img" />
+
+                                    <div class="messager">Joshua Williams
+                                        <i class="pi pi-circle-on online"/>
+                                        <span class="date pull-right">Today</span>
+                                    </div>
+                                    
+                                    <div class="message-text">Paenitet me quod tu me rogas? Oh, sic, qui stultus plastic continentis rogavi te ut emas. Vides non manducare acidum hydrofluoric per plastic. </div>
+                                </div>
+                            
+                               <div class="clearfix"></div>
+                            </div>
+                            
+                            <div class="message-box">
+                                
+                                <!--2nd message row-->
+                                
+                                <div class="message">
+                                    <p:graphicImage name="images/dashboard-banking/profile1.png" library="avalon-layout" styleClass="messager-img" />
+
+                                    <div class="messager">Adelle Charles
+                                        <i class="pi pi-circle-on offline"/>
+                                        <span class="date pull-right">Today</span>
+                                    </div>
+                                    
+                                    <div class="message-text">Quinquaginta septem est - pars tua, triginta quinque millia. Est autem extra plus quindecim, tota tua est, quom meruisset.</div>
+                                </div>
+                            
+                                <div class="clearfix"></div>
+                            </div>
+                            
+                            <div class="message-box">
+                                
+                                <!--3rd message row-->
+                                
+                                <div class="message">
+                                    <p:graphicImage name="images/dashboard-banking/profile2.png" library="avalon-layout" styleClass="messager-img" />
+
+                                    <div class="messager">Marcos Moralez
+                                        <i class="pi pi-circle-on online"/>
+                                        <span class="date pull-right">Yesterday</span>
+                                    </div>
+                                    
+                                    <div class="message-text">Fac nos fecit. SIC.</div>
+                                </div>
+                                
+                                <div class="clearfix"></div>
+                            </div>
+                            
+                            <div class="message-box">
+                                
+                                <!--4th message row-->
+                                
+                                <div class="message">
+                                    <p:graphicImage name="images/dashboard-banking/profile3.png" library="avalon-layout" styleClass="messager-img" />
+
+                                    <div class="messager">Matt Litherland
+                                        <i class="pi pi-circle-on online"/>
+                                        <span class="date pull-right">3 days ago</span>
+                                    </div>
+                                    
+                                    <div class="message-text">Puto quia una res potest - venimus in cognitionem. Vide pretium in manibus.</div>
+                                </div>
+                                
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="col-12 md:col-12 lg:col-6">
+                    <div class="card">
+                        <h5>Monthly Statistics</h5>
+
+                        <p:graphicImage name="images/dashboard-banking/asset-graph.png" library="avalon-layout" styleClass="asset-graph ui-grid-responsive" />
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-12 lg:col-6">
+                    <div class="card">
+
+                        <h5>Transactions</h5>
+
+                        <table style="width:100%">
+                            
+                              <!--trans1-->
+                              
+                            <tr class="transaction">
+                                <td>
+                                    <p:graphicImage name="images/dashboard-banking/asset-visa.png" library="avalon-layout" styleClass="asset-visa ui-grid-responsive" />
+                                </td>
+                                
+                                <td class="transaction-date-cont transaction-item ">
+                                    <span class="transaction-title">07 July 2017</span>
+                                    <span class="transaction-subtitle">16.21</span>
+                                </td>
+                                
+                                <td class="transaction-name transaction-item ">
+                                    <span class="transaction-title"><strong>Recharge Card</strong></span>
+                                    <span class="transaction-subtitle">Card *8076</span>
+                                </td>
+
+                                <td class="transaction-button transaction-item ">
+                                    <p:button value="See Details" styleClass="secondary-btn"/>
+                                </td>
+                            </tr>
+
+                            <!--trans2-->
+                            
+                            <tr class="transaction">
+                                <td class="transaction-img ">
+                                    <p:graphicImage name="images/dashboard-banking/asset-netflix.png" library="avalon-layout" styleClass=" ui-grid-responsive" />
+                                </td>
+                                
+                                <td class="transaction-date-cont transaction-item">
+                                    <span class="transaction-title">06 July 2017</span>
+                                    <span class="transaction-subtitle">11.05</span>
+                                </td>
+
+                                <td class="transaction-name transaction-item ">
+                                    <span class="transaction-title"><strong>Online Payment</strong></span>
+                                    <span class="transaction-subtitle">Netflix</span>
+                                </td>
+                                
+                                <td class="transaction-button transaction-item ">
+                                    <p:button value="See Details" styleClass="secondary-btn"/>
+                                </td>
+                            </tr>
+
+                            <!--trans3-->
+                            
+                            <tr class="transaction">
+                                <td class="transaction-img ">
+                                    <p:graphicImage name="images/dashboard-banking/asset-spotify.png" library="avalon-layout" styleClass=" ui-grid-responsive" />
+                                </td>
+                                
+                                <td class="transaction-date-cont transaction-item ">
+                                    <span class="transaction-title">05 July 2017</span>
+                                    <span class="transaction-subtitle">08.59</span>
+                                </td>
+
+                                <td class="transaction-name transaction-item ">
+                                    <span class="transaction-title"><strong>Online Payment</strong></span>
+                                    <span class="transaction-subtitle">Spotify</span>
+                                </td>
+                                
+                                <td class="transaction-button transaction-item ">
+                                    <p:button value="See Details" styleClass="secondary-btn"/>
+                                </td>
+                            </tr>
+                            
+                            <!--trans4-->
+                            
+                            <tr class="transaction">
+                                <td class="transaction-img ">
+                                    <p:graphicImage name="images/dashboard-banking/asset-newyorker.png" library="avalon-layout" styleClass="ui-grid-responsive" />
+                                </td>
+                                
+                                <td class="transaction-date-cont transaction-item ">
+                                    <span class="transaction-title">05 July 2017</span>
+                                    <span class="transaction-subtitle">14.49</span>
+                                </td>
+
+                                <td class="transaction-name transaction-item ">
+                                    <span class="transaction-title"><strong>Purchase</strong></span>
+                                    <span class="transaction-subtitle">The New Yorker</span>
+                                </td>
+                                
+                                <td class="transaction-button transaction-item ">
+                                    <p:button value="See Details" styleClass="secondary-btn"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="col-12 md:col-12 lg:col-8 ">
+                    <div class="card assets">
+                        <h5>Products</h5>
+
+                        <p:dataTable var="product" value="#{dataTableDemoView.products1}" reflow="true" rows="5"
+                                     paginator="true" paginatorPosition="bottom">
+
+                            <p:column headerText="Image">
+                                <p:graphicImage name="images/product/#{product.image}" library="demo" alt="#{product.image}"
+                                                style="width: 50px"/>
+                            </p:column>
+                            <p:column headerText="Name" sortBy="#{product.name}">
+                                <h:outputText value="#{product.name}"/>
+                            </p:column>
+                            <p:column headerText="Category" sortBy="#{product.category}">
+                                <h:outputText value="#{product.category}"/>
+                            </p:column>
+                            <p:column headerText="Price" sortBy="#{product.price}">
+                                <h:outputText value="$#{product.price}"/>
+                            </p:column>
+                            <p:column headerText="View">
+                                <p:button icon="pi pi-search" styleClass="ui-button-success mr-2"/>
+                                <p:button icon="pi pi-times" styleClass="ui-button-danger"/>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-12 lg:col-4 no-margin-top">
+                    <div class="card customer-support">
+                        <h5>Customer Support</h5>
+                        <div class="support-top">
+                            <p:graphicImage name="images/dashboard-banking/icon-customersupport.png" library="avalon-layout" styleClass="pull-left" />
+
+                            <div class="support-estimation">
+                                <span class="est-title"><strong>Estimated Wait Time</strong></span>
+                                <span class="est-time">21 minutes</span>
+                            </div>
+                            
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="ui-fluid">
+                            <div class="col-12">
+                                <p:selectOneMenu id="console" autoWidth="false">
+                                    <f:selectItem itemLabel="Select One" itemValue="" />
+                                    <f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+                                    <f:selectItem itemLabel="PS4" itemValue="PS4" />
+                                    <f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+                                </p:selectOneMenu>
+                            </div>
+
+                            <div class="col-12">
+                                <p:inputText placeholder="Name"/>
+                            </div>
+
+                            <div class="col-12">
+                                <p:inputText placeholder="Subject"/>
+                            </div>
+
+                            <div class="col-12">
+                                <p:inputTextarea placeholder="Message" rows="3" autoResize="false"/>
+                            </div>
+
+                            <div class="col-12 btn-padding">
+                                <p:button value="Submit" icon="pi pi-check" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
